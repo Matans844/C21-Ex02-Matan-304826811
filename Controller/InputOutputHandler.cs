@@ -3,6 +3,7 @@ using System.Text;
 
 using C21_Ex02_Matan_304826811.UserInterface;
 using C21_Ex02_Matan_304826811.Controller;
+using C21_Ex02_Matan_304826811.Players;
 using C21_Ex02_Matan_304826811.GameLogic;
 using C21_Ex02_Matan_304826811.Presets;
 using Ex02.ConsoleUtils;
@@ -52,11 +53,11 @@ namespace C21_Ex02_Matan_304826811.Controller
 			}
 		}
 
-		private static string getFirstNotNullInputFromUser(string o_PromptToUser)
+		private static string getFirstNotNullInputFromUser(string i_PromptToUser)
 		{
 			Screen.Clear();
-			Console.Write(o_PromptToUser);
-			return Console.ReadLine() ?? getNotNullInputFromUserAfterError(o_PromptToUser);
+			Console.Write(i_PromptToUser);
+			return Console.ReadLine() ?? getNotNullInputFromUserAfterError(i_PromptToUser);
 		}
 
 		// Updates DisplayLogic's GameMode field.
@@ -88,16 +89,16 @@ namespace C21_Ex02_Matan_304826811.Controller
 			}
 		}
 
-		private static string getNotNullInputFromUserAfterError(string o_PromptToUser)
+		private static string getNotNullInputFromUserAfterError(string i_PromptToUser)
 		{
-			return getNewInputAfterError(o_PromptToUser) ?? getNotNullInputFromUserAfterError(o_PromptToUser);
+			return getNewInputAfterError(i_PromptToUser) ?? getNotNullInputFromUserAfterError(i_PromptToUser);
 		}
 
-		private static string getNewInputAfterError(string o_PromptToUser)
+		private static string getNewInputAfterError(string i_PromptToUser)
 		{
 			Screen.Clear();
 			Console.WriteLine(sr_InvalidInputMessage);
-			Console.Write(o_PromptToUser);
+			Console.Write(i_PromptToUser);
 			return Console.ReadLine();
 		}
 	}

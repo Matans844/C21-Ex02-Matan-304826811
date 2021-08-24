@@ -12,6 +12,7 @@ namespace C21_Ex02_Matan_304826811
 		public static void Main()
 		{
 			Game game = UserInterfaceAdmin.Init();
+			game.StartGame();
 			Console.WriteLine("Press Enter to exist...");
 			Console.ReadLine();
 		}

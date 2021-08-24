@@ -6,9 +6,38 @@ using C21_Ex02_Matan_304826811.UserInterface;
 using C21_Ex02_Matan_304826811.Controller;
 using C21_Ex02_Matan_304826811.GameLogic;
 using C21_Ex02_Matan_304826811.Presets;
+using C21_Ex02_Matan_304826811.Players;
+using Ex02.ConsoleUtils;
 
 namespace C21_Ex02_Matan_304826811.GameLogic
 {
+	public class Game
+	{
+		private readonly eGameMode r_GameMode;
+		private readonly Board r_GameBoard;
+		private readonly Player r_Player1;
+		private readonly Player r_Player2;
+
+		public eGameMode Mode => r_GameMode;
+
+		public Game(eGameMode i_ChosenGameMode, GameBoardDimensions i_ChosenGameDimensions)
+		{
+			this.r_GameMode = i_ChosenGameMode;
+			this.r_GameBoard = new Board(i_ChosenGameDimensions);
+			this.r_Player1 = new PlayerHuman(ePlayerType.Human, eBoardCellType.XDisc);
+
+			this.r_Player2 = i_ChosenGameMode == eGameMode.PlayerVsPlayer
+								? new PlayerHuman(ePlayerType.Human, eBoardCellType.ODisc)
+								: new PlayerHuman(ePlayerType.Computer, eBoardCellType.ODisc);
+		}
+
+		public void StartGame()
+		{
+			generatePlayers();
+			startPlaying();
+		}
+	}
+
 	public enum eGameMode
 	{
 		NotInitiated = 0,
@@ -16,19 +45,5 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 		PlayerVsComputer = 2
 	}
 
-	public class Game
-	{
-		private readonly eGameMode r_GameMode;
-		private readonly GameBoardDimensions r_GameDimensions;
 
-		public eGameMode Mode => r_GameMode;
-
-		public GameBoardDimensions BoardDimensions => r_GameDimensions;
-
-		public Game(eGameMode o_ChosenGameMode, GameBoardDimensions o_ChosenGameDimensions)
-		{
-			this.r_GameMode = o_ChosenGameMode;
-			this.r_GameDimensions = o_ChosenGameDimensions;
-		}
-	}
 }

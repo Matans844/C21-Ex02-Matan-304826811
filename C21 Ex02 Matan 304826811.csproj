@@ -32,13 +32,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GameLogic\Board.cs" />
+    <Compile Include="Players\Player.cs" />
     <Compile Include="Presets\Constraints.cs" />
     <Compile Include="Controller\InputOutputHandler.cs" />
-    <Compile Include="GameLogic\Disc.cs" />
+    <Compile Include="GameLogic\BoardCell.cs" />
     <Compile Include="GameLogic\DisplayLogic.cs" />
     <Compile Include="GameLogic\Game.cs" />
-    <Compile Include="GameLogic\PlayerComputer.cs" />
-    <Compile Include="GameLogic\PlayerHuman.cs" />
+    <Compile Include="Players\PlayerComputer.cs" />
+    <Compile Include="Players\PlayerHuman.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="UserInterface\ScreenCreator.cs" />
     <Compile Include="UserInterface\UserInterfaceAdmin.cs" />
@@ -50,5 +52,6 @@
       <HintPath>..\..\..\..\..\..\..\..\Temp\Ex02.ConsoleUtils.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
