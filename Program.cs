@@ -11,8 +11,7 @@ namespace C21_Ex02_Matan_304826811
 	{
 		public static void Main()
 		{
-			UserInterfaceAdmin uiAdminUnit = new UserInterfaceAdmin();
-			uiAdminUnit.StartGame();
+			Game game = UserInterfaceAdmin.Init();
 			Console.WriteLine("Press Enter to exist...");
 			Console.ReadLine();
 		}

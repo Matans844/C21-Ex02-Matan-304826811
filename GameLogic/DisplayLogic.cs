@@ -10,8 +10,17 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 {
 	public class DisplayLogic
 	{
-		// Had to use access modifier public because property set method accepts at most 1 argument.
+		// Had to use access modifier public because:
+		// 1. We are trying to set values in a struct with more than 1 value.
+		// 2. The property set method accepts at most 1 argument.
 		public static GameBoardDimensions s_BoardDimensions;
+		private static eGameMode s_GameMode;
+
+		public static eGameMode GameMode
+		{
+			get => s_GameMode;
+			set => s_GameMode = value;
+		}
 	}
 }
 
@@ -75,4 +84,11 @@ public enum eBoardDimension
 	NotInitiated = 0,
 	Height = 1,
 	Width = 2
+}
+
+public enum eInputsToGame
+{
+	NotInitiated = 0,
+	Dimensions = 1,
+	GameMode = 2
 }

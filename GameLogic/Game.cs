@@ -11,22 +11,24 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 {
 	public enum eGameMode
 	{
-		Default = 0,
+		NotInitiated = 0,
 		PlayerVsPlayer = 1,
 		PlayerVsComputer = 2
 	}
 
-	class Game
+	public class Game
 	{
-		private static readonly eGameMode sr_GameMode;
-		private static readonly GameBoardDimensions r_GameDimensions;
-		private object chosenGameMode;
-		private object chosenGameDimensions;
+		private readonly eGameMode r_GameMode;
+		private readonly GameBoardDimensions r_GameDimensions;
 
-		public Game(object chosenGameMode, object chosenGameDimensions)
+		public eGameMode Mode => r_GameMode;
+
+		public GameBoardDimensions BoardDimensions => r_GameDimensions;
+
+		public Game(eGameMode o_ChosenGameMode, GameBoardDimensions o_ChosenGameDimensions)
 		{
-			this.chosenGameMode = chosenGameMode;
-			this.chosenGameDimensions = chosenGameDimensions;
+			this.r_GameMode = o_ChosenGameMode;
+			this.r_GameDimensions = o_ChosenGameDimensions;
 		}
 	}
 }

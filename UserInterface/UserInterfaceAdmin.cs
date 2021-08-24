@@ -7,17 +7,12 @@ using C21_Ex02_Matan_304826811.Presets;
 
 namespace C21_Ex02_Matan_304826811.UserInterface
 {
-	public class UserInterfaceAdmin
+	public static class UserInterfaceAdmin
 	{
-		public UserInterfaceAdmin()
+		public static Game Init()
 		{
-			ViewInit initialView = new ViewInit();
-			Game game = new Game(DisplayLogic.ChosenGameMode, DisplayLogic.ChosenGameDimensions);
-		}
-
-		public void StartGame()
-		{
-
+			ViewInit.Build();
+			return new Game(DisplayLogic.GameMode, DisplayLogic.s_BoardDimensions);
 		}
 	}
 }
