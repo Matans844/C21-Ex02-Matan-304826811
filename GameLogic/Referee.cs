@@ -14,6 +14,8 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 {
 	public class Referee
 	{
+		public Player Winner { get; set; }
+
 		public Board BoardToReferee { get; }
 
 		public Referee(Board i_Board)
@@ -49,10 +51,23 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 				if (isLastDiscInConnectionValid(i_LastDiscPlaced, direction))
 				{
 					hasWinnerConnection = isWinningConnection(i_LastDiscPlaced, direction);
+
+					if (hasWinnerConnection)
+					{
+						this.updateWinner(i_LastDiscPlaced);
+					}
 				}
 			}
 
 			return hasWinnerConnection;
+		}
+
+		private void updateWinner(BoardCell i_WinningDiscPlaced)
+		{
+			this.Winner = (i_WinningDiscPlaced.CellType == eBoardCellType.XDisc)
+							? this.BoardToReferee.GameForBoard.Player1WithXs
+							: this.BoardToReferee.GameForBoard.Player2WithOs;
+			this.BoardToReferee.BoardState = eBoardState.FinishedInWin;
 		}
 
 		private bool isWinningConnection(BoardCell i_FocalBoardCell, eDirectionOfDiscConnection i_DirectionOfConnection)

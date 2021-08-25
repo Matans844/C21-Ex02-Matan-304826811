@@ -18,6 +18,8 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 	public class Board
 	{
 		// Auto properties are used. They contain class fields.
+		public Game GameForBoard { get; }
+
 		public eBoardState BoardState { get; set; } = eBoardState.NotFinished;
 
 		public int NumOfCellVacanciesInBoard { get; set; }
@@ -32,8 +34,9 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		public BoardCell LastCellOccupied { get; set; }
 
-		public Board(GameBoardDimensions i_ChosenGameDimensions)
+		public Board(GameBoardDimensions i_ChosenGameDimensions, Game i_GameForBoard)
 		{
+			this.GameForBoard = i_GameForBoard;
 			this.Dimensions = i_ChosenGameDimensions;
 			this.BoardCellMatrix = new BoardCell[i_ChosenGameDimensions.Height, i_ChosenGameDimensions.Width];
 			this.BoardReferee = new Referee(this);
@@ -61,9 +64,14 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		private eBoardState calculateBoardState(BoardCell i_LastDiscPlayed)
 		{
-			return this.BoardReferee.IsGameFinished(i_LastDiscPlayed)
-						? this.BoardReferee.IsGameDrawn(i_LastDiscPlayed) ? eBoardState.FinishedInDraw : eBoardState.FinishedInWin
-						: this.BoardState;
+			if (this.BoardReferee.IsGameFinished(i_LastDiscPlayed))
+			{
+				this.BoardState = this.BoardReferee.IsGameDrawn(i_LastDiscPlayed)
+									? eBoardState.FinishedInDraw
+									: eBoardState.FinishedInWin;
+			}
+
+			return this.BoardState;
 		}
 	}
 

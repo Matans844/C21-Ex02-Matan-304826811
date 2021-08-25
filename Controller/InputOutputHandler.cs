@@ -10,11 +10,9 @@ using Ex02.ConsoleUtils;
 
 namespace C21_Ex02_Matan_304826811.Controller
 {
-	using System.Security.Policy;
-
-	class InputOutputHandler
+	public class InputOutputHandler
 	{
-		private const string k_QuitKey = "Q";
+		public const string k_QuitKey = "Q";
 		private static readonly string sr_InvalidInputMessage = $"Invalid input!{Environment.NewLine}";
 
 		private static readonly string sr_PromptBoardHeightMessage =
@@ -56,6 +54,11 @@ namespace C21_Ex02_Matan_304826811.Controller
 					io_BoardDimensions.SetterByChoice(i_DimensionToSet, dimensionChosen);
 				}
 			}
+		}
+
+		internal static int PromptForMove()
+		{
+			throw new NotImplementedException();
 		}
 
 		private static string getFirstNotNullInputFromUser(string i_PromptToUser)

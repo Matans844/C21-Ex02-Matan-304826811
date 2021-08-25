@@ -15,5 +15,15 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			ViewOfInitialScreen.Build();
 			return new Game(DisplayLogic.GameMode, DisplayLogic.s_BoardDimensions);
 		}
+
+		internal static bool WantsAnotherGame()
+		{
+			throw new NotImplementedException();
+		}
+
+		internal static bool HasPlayerQuitGame()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

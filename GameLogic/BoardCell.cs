@@ -18,7 +18,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		public uint Row { get; }
 
-		public eBoardCellType CellType { get; set; };
+		public eBoardCellType CellType { get; set; }
 
 		public BoardCell(uint i_Column, uint i_Row, eBoardCellType i_CellType)
 		{
