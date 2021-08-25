@@ -28,11 +28,29 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 		{
 			this.MyGameDisplayLogic = new DisplayLogic(this);
 			this.MyInitialScreenView = new ViewOfInitialScreen(this);
-			this.MyGameLogicUnit = new Game(this.MyGameDisplayLogic.GameMode, this.MyGameDisplayLogic.m_BoardDimensions, this);
 		}
 
 		public void InitializeGame()
 		{
+			this.initializeGame();
+
+			if (this.HasPlayerQuitGame())
+			{
+				return;
+			}
+		}
+
+		private void initializeGame()
+		{
+			this.MyInitialScreenView.GetInitialInputsFromUser();
+
+			if (this.HasPlayerQuitGame())
+			{
+				return;
+			}
+
+			this.MyGameLogicUnit = new Game(this.MyGameDisplayLogic.GameMode, this.MyGameDisplayLogic.m_BoardDimensions, this);
+
 			this.MyGameLogicUnit.StartGame();
 		}
 

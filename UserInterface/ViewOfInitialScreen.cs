@@ -19,8 +19,23 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 		public ViewOfInitialScreen(UserInterfaceAdmin i_MyUserInterfaceAdmin)
 		{
 			this.GameUserInterfaceAdmin = i_MyUserInterfaceAdmin;
-			this.GameUserInterfaceAdmin.MyInputOutputHandler.GetDimensions();
-			this.GameUserInterfaceAdmin.MyInputOutputHandler.GetGameMode();
+		}
+
+		public void GetInitialInputsFromUser()
+		{
+			this.GameUserInterfaceAdmin.MyInputOutputHandler.GetAndSetValidDimensionsFromUser();
+
+			if (this.GameUserInterfaceAdmin.HasPlayerQuitGame())
+			{
+				return;
+			}
+
+			this.GameUserInterfaceAdmin.MyInputOutputHandler.GetAndSetValidGameModeFromUser();
+
+			if (this.GameUserInterfaceAdmin.HasPlayerQuitGame())
+			{
+				return;
+			}
 		}
 	}
 }

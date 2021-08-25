@@ -35,16 +35,21 @@ namespace C21_Ex02_Matan_304826811.Controller
 		}
 
 		// Updates DisplayLogic's GameDimensions struct.
-		public void GetDimensions()
+		public void GetAndSetValidDimensionsFromUser()
 		{
-			getDimensionFromUser(ref this.GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions, eBoardDimension.Height);
-			getDimensionFromUser(ref this.GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions, eBoardDimension.Width);
+			this.getAndSetValidDimensionsFromUser(ref this.GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions, eBoardDimension.Height);
+			this.getAndSetValidDimensionsFromUser(ref this.GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions, eBoardDimension.Width);
 		}
 
-		private void getDimensionFromUser(ref GameBoardDimensions io_BoardDimensions, eBoardDimension i_DimensionToSet)
+		private void getAndSetValidDimensionsFromUser(ref GameBoardDimensions io_BoardDimensions, eBoardDimension i_DimensionToSet)
 		{
 			string promptToUser = i_DimensionToSet == eBoardDimension.Height ? sr_PromptBoardHeightMessage : sr_PromptBoardWidthMessage;
 			string responseFromUser = getFirstNotNullInputFromUser(promptToUser);
+
+			if (this.GameUserInterfaceAdmin.HasPlayerQuitGame())
+			{
+				return;
+			}
 
 			if (int.TryParse(responseFromUser, out var dimensionChosen))
 			{
@@ -54,6 +59,11 @@ namespace C21_Ex02_Matan_304826811.Controller
 			while (io_BoardDimensions.GetterByChoice(i_DimensionToSet) == (int)eBoardDimension.NotInitiated)
 			{
 				responseFromUser = getNotNullInputFromUserAfterError(promptToUser);
+
+				if (this.GameUserInterfaceAdmin.HasPlayerQuitGame())
+				{
+					return;
+				}
 
 				if (int.TryParse(responseFromUser, out dimensionChosen))
 				{
@@ -89,15 +99,20 @@ namespace C21_Ex02_Matan_304826811.Controller
 			return Console.ReadLine() ?? getNotNullInputFromUserAfterError(i_PromptToUser);
 		}
 
-		public void GetGameMode()
+		public void GetAndSetValidGameModeFromUser()
 		{
-			this.getGameMode();
+			this.getAndSetValidGameModeFromUser();
 		}
 
 		// Updates DisplayLogic's GameMode field.
-		private void getGameMode()
+		private void getAndSetValidGameModeFromUser()
 		{
-			var responseFromUser = getFirstNotNullInputFromUser(sr_EnterModePromptMessage);
+			string responseFromUser = getFirstNotNullInputFromUser(sr_EnterModePromptMessage);
+
+			if (this.GameUserInterfaceAdmin.HasPlayerQuitGame())
+			{
+				return;
+			}
 
 			Screen.Clear();
 			Console.Write(sr_EnterModePromptMessage);
@@ -112,7 +127,12 @@ namespace C21_Ex02_Matan_304826811.Controller
 			{
 				do
 				{
-					responseFromUser = getNotNullInputFromUserAfterError(sr_EnterModePromptMessage);
+					responseFromUser = this.getNotNullInputFromUserAfterError(sr_EnterModePromptMessage);
+
+					if (this.GameUserInterfaceAdmin.HasPlayerQuitGame())
+					{
+						return;
+					}
 				}
 				while (!(int.TryParse(responseFromUser, out gameModeChosenByUser)
 						&& Enum.IsDefined(typeof(eGameMode), gameModeChosenByUser)
@@ -124,7 +144,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 
 		private string getNotNullInputFromUserAfterError(string i_PromptToUser)
 		{
-			return getNewInputAfterError(i_PromptToUser) ?? getNotNullInputFromUserAfterError(i_PromptToUser);
+			return this.getNewInputAfterError(i_PromptToUser) ?? getNotNullInputFromUserAfterError(i_PromptToUser);
 		}
 
 		private string getNewInputAfterError(string i_PromptToUser)
