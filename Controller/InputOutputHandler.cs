@@ -12,7 +12,8 @@ namespace C21_Ex02_Matan_304826811.Controller
 {
 	public class InputOutputHandler
 	{
-		public const string k_QuitKey = "Q";
+		public UserInterfaceAdmin GameUserInterfaceAdmin { get; }
+
 		private static readonly string sr_InvalidInputMessage = $"Invalid input!{Environment.NewLine}";
 
 		private static readonly string sr_PromptBoardHeightMessage =
@@ -28,14 +29,19 @@ namespace C21_Ex02_Matan_304826811.Controller
 			arg1: eGameMode.PlayerVsPlayer,
 			arg2: eGameMode.PlayerVsComputer);
 
-		// Updates DisplayLogic's GameDimensions struct.
-		internal static void GetDimensions()
+		public InputOutputHandler(UserInterfaceAdmin i_GameUserInterfaceAdmin)
 		{
-			getDimensionFromUser(ref DisplayLogic.s_BoardDimensions, eBoardDimension.Height);
-			getDimensionFromUser(ref DisplayLogic.s_BoardDimensions, eBoardDimension.Width);
+			this.GameUserInterfaceAdmin = i_GameUserInterfaceAdmin;
 		}
 
-		private static void getDimensionFromUser(ref GameBoardDimensions io_BoardDimensions, eBoardDimension i_DimensionToSet)
+		// Updates DisplayLogic's GameDimensions struct.
+		public void GetDimensions()
+		{
+			getDimensionFromUser(ref this.GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions, eBoardDimension.Height);
+			getDimensionFromUser(ref this.GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions, eBoardDimension.Width);
+		}
+
+		private void getDimensionFromUser(ref GameBoardDimensions io_BoardDimensions, eBoardDimension i_DimensionToSet)
 		{
 			string promptToUser = i_DimensionToSet == eBoardDimension.Height ? sr_PromptBoardHeightMessage : sr_PromptBoardWidthMessage;
 			string responseFromUser = getFirstNotNullInputFromUser(promptToUser);
@@ -56,20 +62,40 @@ namespace C21_Ex02_Matan_304826811.Controller
 			}
 		}
 
-		internal static int PromptForMove()
+		public int PromptForMove()
+		{
+			return this.promptForMove();
+		}
+
+		private int promptForMove()
 		{
 			throw new NotImplementedException();
 		}
 
-		private static string getFirstNotNullInputFromUser(string i_PromptToUser)
+		private ePhaseOfUserInterface identifyExitKey(string i_ResponseFromUser)
+		{
+			if (i_ResponseFromUser == UserInterfaceAdmin.k_QuitKey)
+			{
+				this.GameUserInterfaceAdmin.PhaseOfUserInterface = ePhaseOfUserInterface.Terminated;
+			}
+
+			return this.GameUserInterfaceAdmin.PhaseOfUserInterface;
+		}
+
+		private string getFirstNotNullInputFromUser(string i_PromptToUser)
 		{
 			Screen.Clear();
 			Console.Write(i_PromptToUser);
 			return Console.ReadLine() ?? getNotNullInputFromUserAfterError(i_PromptToUser);
 		}
 
+		public void GetGameMode()
+		{
+			this.getGameMode();
+		}
+
 		// Updates DisplayLogic's GameMode field.
-		internal static void GetGameMode()
+		private void getGameMode()
 		{
 			var responseFromUser = getFirstNotNullInputFromUser(sr_EnterModePromptMessage);
 
@@ -80,7 +106,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 				&& Enum.IsDefined(typeof(eGameMode), gameModeChosenByUser)
 				&& gameModeChosenByUser != (int)eGameMode.NotInitiated)
 			{
-				DisplayLogic.GameMode = (eGameMode)gameModeChosenByUser;
+				this.GameUserInterfaceAdmin.MyGameDisplayLogic.GameMode = (eGameMode)gameModeChosenByUser;
 			}
 			else
 			{
@@ -92,16 +118,16 @@ namespace C21_Ex02_Matan_304826811.Controller
 						&& Enum.IsDefined(typeof(eGameMode), gameModeChosenByUser)
 						&& gameModeChosenByUser != (int)eGameMode.NotInitiated));
 
-				DisplayLogic.GameMode = (eGameMode)gameModeChosenByUser;
+				this.GameUserInterfaceAdmin.MyGameDisplayLogic.GameMode = (eGameMode)gameModeChosenByUser;
 			}
 		}
 
-		private static string getNotNullInputFromUserAfterError(string i_PromptToUser)
+		private string getNotNullInputFromUserAfterError(string i_PromptToUser)
 		{
 			return getNewInputAfterError(i_PromptToUser) ?? getNotNullInputFromUserAfterError(i_PromptToUser);
 		}
 
-		private static string getNewInputAfterError(string i_PromptToUser)
+		private string getNewInputAfterError(string i_PromptToUser)
 		{
 			Screen.Clear();
 			Console.WriteLine(sr_InvalidInputMessage);

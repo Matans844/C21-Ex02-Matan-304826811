@@ -15,9 +15,10 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 	{
 		public const int k_ZeroPoints = 0;
 		public const int k_LengthOfWinningConnection = 4;
-		private readonly object[] r_BoxingPlayersInGame = new object[2];
 
-		public object[] BoxignPlayersInGame => r_BoxingPlayersInGame;
+		public UserInterfaceAdmin GameUserInterfaceAdmin { get; }
+
+		public object[] BoxingPlayersInGame { get; } = new object[2];
 
 		public Board GameBoard { get; set; }
 
@@ -29,8 +30,9 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		public uint GameNumber { get; set; } = 0;
 
-		public Game(eGameMode i_ChosenGameMode, GameBoardDimensions i_ChosenGameDimensions)
+		public Game(eGameMode i_ChosenGameMode, GameBoardDimensions i_ChosenGameDimensions, UserInterfaceAdmin i_MyUserInterfaceAdmin)
 		{
+			this.GameUserInterfaceAdmin = i_MyUserInterfaceAdmin;
 			this.Mode = i_ChosenGameMode;
 			this.GameBoard = new Board(i_ChosenGameDimensions, this);
 			this.Player1WithXs = new PlayerHuman(this.GameBoard, eBoardCellType.XDisc, eTurnState.YourTurn);
@@ -47,8 +49,8 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 				this.Player2WithOs = new PlayerComputer(this.GameBoard, eBoardCellType.ODisc, eTurnState.NotYourTurn);
 			}
 
-			this.BoxignPlayersInGame[0] = (object)this.Player1WithXs;
-			this.BoxignPlayersInGame[1] = (object)this.Player2WithOs;
+			this.BoxingPlayersInGame[0] = (object)this.Player1WithXs;
+			this.BoxingPlayersInGame[1] = (object)this.Player2WithOs;
 		}
 
 		private void continueWithAnotherGame()
@@ -80,11 +82,13 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		public void StartGame()
 		{
-			while (!UserInterfaceAdmin.HasPlayerQuitGame())
+			this.GameUserInterfaceAdmin.PhaseOfUserInterface = ePhaseOfUserInterface.BoardScreen;
+
+			while (!this.GameUserInterfaceAdmin.HasPlayerQuitGame())
 			{
-				foreach (Player playerOfGame in this.BoxignPlayersInGame)
+				foreach (Player playerOfGame in this.BoxingPlayersInGame)
 				{
-					playerOfGame.MakeMove(InputOutputHandler.PromptForMove());
+					playerOfGame.MakeMove(this.GameUserInterfaceAdmin.MyInputOutputHandler.PromptForMove());
 
 					if (this.hasGameEnded())
 					{
@@ -98,10 +102,12 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 				this.GameBoard.BoardReferee.Winner.Point++;
 			}
 
-			if (UserInterfaceAdmin.WantsAnotherGame())
+			if (this.GameUserInterfaceAdmin.WantsAnotherGame())
 			{
 				this.continueWithAnotherGame();
 			}
+
+			this.GameUserInterfaceAdmin.PhaseOfUserInterface = ePhaseOfUserInterface.Terminated;
 		}
 	}
 

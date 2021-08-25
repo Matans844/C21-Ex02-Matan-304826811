@@ -8,22 +8,61 @@ using C21_Ex02_Matan_304826811.Presets;
 
 namespace C21_Ex02_Matan_304826811.UserInterface
 {
-	public static class UserInterfaceAdmin
+	public class UserInterfaceAdmin
 	{
-		public static Game Init()
+		public const string k_QuitKey = "Q";
+
+		public DisplayLogic MyGameDisplayLogic { get; set; }
+
+		public InputOutputHandler MyInputOutputHandler { get; set; }
+
+		public ViewOfInitialScreen MyInitialScreenView { get; set; }
+
+		public Game MyGameLogicUnit { get; set; }
+
+		public ePhaseOfUserInterface PhaseOfUserInterface { get; set; } = ePhaseOfUserInterface.Initiated;
+
+		public eQuitFlag QuitFlag { get; set; } = eQuitFlag.DoNotQuit;
+
+		public UserInterfaceAdmin()
 		{
-			ViewOfInitialScreen.Build();
-			return new Game(DisplayLogic.GameMode, DisplayLogic.s_BoardDimensions);
+			this.MyGameDisplayLogic = new DisplayLogic(this);
+			this.MyInitialScreenView = new ViewOfInitialScreen(this);
+			this.MyGameLogicUnit = new Game(this.MyGameDisplayLogic.GameMode, this.MyGameDisplayLogic.m_BoardDimensions, this);
 		}
 
-		internal static bool WantsAnotherGame()
+		public void InitializeGame()
+		{
+			this.MyGameLogicUnit.StartGame();
+		}
+
+		private bool isUserInterfaceTerminating()
+		{
+			return this.PhaseOfUserInterface == ePhaseOfUserInterface.Terminated;
+		}
+
+		public bool HasPlayerQuitGame()
+		{
+			return this.isUserInterfaceTerminating();
+		}
+
+		internal bool WantsAnotherGame()
 		{
 			throw new NotImplementedException();
 		}
+	}
 
-		internal static bool HasPlayerQuitGame()
-		{
-			throw new NotImplementedException();
-		}
+	public enum eQuitFlag
+	{
+		DoNotQuit = 0,
+		Quit = 1
+	}
+
+	public enum ePhaseOfUserInterface
+	{
+		Initiated = 0,
+		InitialScreen = 1,
+		BoardScreen = 2,
+		Terminated = 3
 	}
 }

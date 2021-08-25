@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using C21_Ex02_Matan_304826811.UserInterface;
 using C21_Ex02_Matan_304826811.Controller;
 using C21_Ex02_Matan_304826811.Players;
@@ -12,9 +13,6 @@ using Ex02.ConsoleUtils;
 
 namespace C21_Ex02_Matan_304826811.GameLogic
 {
-	using System.Runtime.CompilerServices;
-	using System.Runtime.InteropServices;
-
 	public class Board
 	{
 		// Auto properties are used. They contain class fields.
