@@ -82,21 +82,14 @@ namespace C21_Ex02_Matan_304826811.Controller
 			throw new NotImplementedException();
 		}
 
-		private ePhaseOfUserInterface identifyExitKey(string i_ResponseFromUser)
+		private string identifyExitKey(string i_ResponseFromUser)
 		{
-			if (i_ResponseFromUser == UserInterfaceAdmin.k_QuitKey)
+			if (i_ResponseFromUser.ToUpper() == UserInterfaceAdmin.k_QuitKey)
 			{
 				this.GameUserInterfaceAdmin.PhaseOfUserInterface = ePhaseOfUserInterface.Terminated;
 			}
 
-			return this.GameUserInterfaceAdmin.PhaseOfUserInterface;
-		}
-
-		private string getFirstNotNullInputFromUser(string i_PromptToUser)
-		{
-			Screen.Clear();
-			Console.Write(i_PromptToUser);
-			return Console.ReadLine() ?? getNotNullInputFromUserAfterError(i_PromptToUser);
+			return i_ResponseFromUser;
 		}
 
 		public void GetAndSetValidGameModeFromUser()
@@ -152,7 +145,14 @@ namespace C21_Ex02_Matan_304826811.Controller
 			Screen.Clear();
 			Console.WriteLine(sr_InvalidInputMessage);
 			Console.Write(i_PromptToUser);
-			return Console.ReadLine();
+			return this.identifyExitKey(Console.ReadLine());
+		}
+
+		private string getFirstNotNullInputFromUser(string i_PromptToUser)
+		{
+			Screen.Clear();
+			Console.Write(i_PromptToUser);
+			return this.identifyExitKey(Console.ReadLine()) ?? getNotNullInputFromUserAfterError(i_PromptToUser);
 		}
 	}
 }
