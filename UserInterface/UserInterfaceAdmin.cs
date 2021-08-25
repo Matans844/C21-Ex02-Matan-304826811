@@ -5,6 +5,7 @@ using C21_Ex02_Matan_304826811.Players;
 using C21_Ex02_Matan_304826811.Controller;
 using C21_Ex02_Matan_304826811.GameLogic;
 using C21_Ex02_Matan_304826811.Presets;
+using Ex02.ConsoleUtils;
 
 namespace C21_Ex02_Matan_304826811.UserInterface
 {
@@ -27,6 +28,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 		public UserInterfaceAdmin()
 		{
 			this.MyGameDisplayLogic = new DisplayLogic(this);
+			this.MyInputOutputHandler = new InputOutputHandler(this);
 			this.MyInitialScreenView = new ViewOfInitialScreen(this);
 		}
 
@@ -49,6 +51,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 				return;
 			}
 
+			this.PhaseOfUserInterface = ePhaseOfUserInterface.InitialScreen;
 			this.MyGameLogicUnit = new Game(this.MyGameDisplayLogic.GameMode, this.MyGameDisplayLogic.m_BoardDimensions, this);
 
 			this.MyGameLogicUnit.StartGame();
@@ -61,6 +64,11 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 
 		public bool HasPlayerQuitGame()
 		{
+			if (this.isUserInterfaceTerminating())
+			{
+				this.MyInputOutputHandler.SayGoodbye(this.PhaseOfUserInterface);
+			}
+
 			return this.isUserInterfaceTerminating();
 		}
 

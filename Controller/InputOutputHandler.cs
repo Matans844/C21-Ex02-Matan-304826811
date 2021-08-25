@@ -29,6 +29,14 @@ namespace C21_Ex02_Matan_304826811.Controller
 			arg1: eGameMode.PlayerVsPlayer,
 			arg2: eGameMode.PlayerVsComputer);
 
+		public static readonly string sr_GoodbyeMessage = string.Format(
+			"I see You have chosen to postpone your defeat.{0}It is brave to be honest.{0}Goodbye, brave friend!{0}{0}",
+			Environment.NewLine);
+
+		public static readonly string sr_GoodbyeMessageAfterGameStart = string.Format(
+			"It is no shame to admit defeat. Dust yourself up, and try again.{0}I will be waiting.{0}Goodbye for now!{0}{0}",
+			Environment.NewLine);
+
 		public InputOutputHandler(UserInterfaceAdmin i_GameUserInterfaceAdmin)
 		{
 			this.GameUserInterfaceAdmin = i_GameUserInterfaceAdmin;
@@ -38,6 +46,12 @@ namespace C21_Ex02_Matan_304826811.Controller
 		public void GetAndSetValidDimensionsFromUser()
 		{
 			this.getAndSetValidDimensionsFromUser(ref this.GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions, eBoardDimension.Height);
+
+			if (this.GameUserInterfaceAdmin.HasPlayerQuitGame())
+			{
+				return;
+			}
+
 			this.getAndSetValidDimensionsFromUser(ref this.GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions, eBoardDimension.Width);
 		}
 
@@ -153,6 +167,16 @@ namespace C21_Ex02_Matan_304826811.Controller
 			Screen.Clear();
 			Console.Write(i_PromptToUser);
 			return this.identifyExitKey(Console.ReadLine()) ?? getNotNullInputFromUserAfterError(i_PromptToUser);
+		}
+
+		public void SayGoodbye(ePhaseOfUserInterface i_PhaseOfUserInterface)
+		{
+			Screen.Clear();
+
+			Console.Write(
+				i_PhaseOfUserInterface == ePhaseOfUserInterface.InitialScreen
+					? sr_GoodbyeMessageAfterGameStart
+					: sr_GoodbyeMessage);
 		}
 	}
 }

@@ -13,7 +13,7 @@ namespace C21_Ex02_Matan_304826811
 		{
 			UserInterfaceAdmin userInterfaceAdmin = new UserInterfaceAdmin();
 			userInterfaceAdmin.InitializeGame();
-			Console.WriteLine("Press Enter to exist...");
+			Console.WriteLine("Press Enter to exit...");
 			Console.ReadLine();
 		}
 	}
