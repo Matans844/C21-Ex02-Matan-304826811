@@ -13,22 +13,24 @@ namespace C21_Ex02_Matan_304826811.Players
 {
 	public abstract class Player
 	{
-		private const int k_ZeroPoints = 0;
+		public Board BoardOfPlayer { get; }
 
-		public int Points { get; set; }
+		public int Point { get; set; } = Game.k_ZeroPoints;
 
 		public eBoardCellType DiscType { get; }
 
 		public eTurnState TurnState { get; set; }
 
-		protected Player(eBoardCellType i_DiscType, eTurnState i_TurnState)
+		protected Player(Board i_BoardOfPlayer, eBoardCellType i_DiscType, eTurnState i_TurnState)
 		{
-			this.Points = k_ZeroPoints;
 			this.DiscType = i_DiscType;
+			this.BoardOfPlayer = i_BoardOfPlayer;
 			this.TurnState = i_TurnState;
 		}
 
-		public abstract BoardCell PickBoardColumnForDisc(Board i_Board, int i_Column);
+		public abstract BoardCell MakeMove(int i_ChosenColumn);
+
+		public abstract int ChooseColumnForMove();
 	}
 
 	public enum ePlayerType

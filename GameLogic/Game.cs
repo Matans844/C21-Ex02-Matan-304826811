@@ -13,27 +13,51 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 {
 	public class Game
 	{
-		private readonly Board r_GameBoard;
-		private readonly Player r_Player1;
-		private readonly Player r_Player2;
+		public const int k_ZeroPoints = 0;
+		public const int k_LengthOfWinningConnection = 4;
+
+		public Board GameBoard { get; }
+
+		public Player Player1WithXs { get; }
+
+		public Player Player2WithOs { get; }
 
 		public eGameMode Mode { get; }
 
 		public Game(eGameMode i_ChosenGameMode, GameBoardDimensions i_ChosenGameDimensions)
 		{
 			this.Mode = i_ChosenGameMode;
-			this.r_GameBoard = new Board(i_ChosenGameDimensions);
-			this.r_Player1 = new PlayerHuman(ePlayerType.Human, eBoardCellType.XDisc, eTurnState.YourTurn);
+			this.GameBoard = new Board(i_ChosenGameDimensions);
+			this.Player1WithXs = new PlayerHuman(this.GameBoard, eBoardCellType.XDisc, eTurnState.YourTurn);
 
-			this.r_Player2 = i_ChosenGameMode == eGameMode.PlayerVsPlayer
-								? new PlayerHuman(ePlayerType.Human, eBoardCellType.ODisc, eTurnState.NotYourTurn)
-								: new PlayerHuman(ePlayerType.Computer, eBoardCellType.ODisc, eTurnState.NotYourTurn);
+			// In this case, there is no choice for 1-line condition expression.
+			// Fore more details: https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-9.0/target-typed-conditional-expression
+			if (i_ChosenGameMode == eGameMode.PlayerVsPlayer)
+			{
+				this.Player2WithOs = new PlayerHuman(this.GameBoard, eBoardCellType.ODisc, eTurnState.NotYourTurn);
+			}
+			else
+			{
+				this.Player2WithOs = new PlayerComputer(this.GameBoard, eBoardCellType.ODisc, eTurnState.NotYourTurn);
+			}
+		}
+
+		private eBoardState getGameState(Board i_BoardOfGame)
+		{
+			return i_BoardOfGame.BoardState;
+		}
+
+		private bool hasGameEnded()
+		{
+			return getGameState(this.GameBoard) != eBoardState.NotFinished;
 		}
 
 		public void StartGame()
 		{
-			generatePlayers();
-			startPlaying();
+			while (!this.hasGameEnded())
+			{
+				Player1WithXs.MakeMove()
+			}
 		}
 	}
 

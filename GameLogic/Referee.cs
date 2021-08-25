@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using C21_Ex02_Matan_304826811.UserInterface;
+using C21_Ex02_Matan_304826811.Controller;
+using C21_Ex02_Matan_304826811.GameLogic;
+using C21_Ex02_Matan_304826811.Presets;
+using C21_Ex02_Matan_304826811.Players;
+using Ex02.ConsoleUtils;
+
 namespace C21_Ex02_Matan_304826811.GameLogic
 {
 	public class Referee
@@ -14,25 +21,153 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			this.BoardToReferee = i_Board;
 		}
 
-		public bool IsGameDrawn()
+		public bool IsGameDrawn(BoardCell i_LastDiscPlaced)
 		{
-			return isBoardExhausted() && !hasGameWinnerForBoard();
+			return this.isBoardExhausted() && !this.hasGameWinnerForBoard(i_LastDiscPlaced);
 		}
 
-		public bool IsGameFinished()
+		public bool IsGameFinished(BoardCell i_LastDiscPlaced)
 		{
-			return hasGameWinnerForBoard() || isBoardExhausted();
+			return this.hasGameWinnerForBoard(i_LastDiscPlaced) || this.isBoardExhausted();
 		}
 
 		private bool isBoardExhausted()
 		{
-			// This was a foreach loop that was upgraded to a LINQ statement
-			return this.BoardToReferee.NumOfCellVacanciesInColumn.All(i_ColumnVacancy => i_ColumnVacancy == 0);
+			return this.BoardToReferee.NumOfCellVacanciesInBoard == 0;
+
+			// Another possibility was to loop over the available column vacancies.
+			// It can be implemented with a foreach loop that can be upgraded to the following LINQ statement:
+			// return this.BoardToReferee.NumOfCellVacanciesInColumn.All(i_ColumnVacancy => i_ColumnVacancy == 0);
 		}
 
-		private bool hasGameWinnerForBoard()
+		private bool hasGameWinnerForBoard(BoardCell i_LastDiscPlaced)
 		{
+			bool hasWinnerConnection = false;
 
+			foreach (eDirectionOfDiscConnection direction in Enum.GetValues(typeof(eDirectionOfDiscConnection)))
+			{
+				if (isLastDiscInConnectionValid(i_LastDiscPlaced, direction))
+				{
+					hasWinnerConnection = isWinningConnection(i_LastDiscPlaced, direction);
+				}
+			}
+
+			return hasWinnerConnection;
 		}
+
+		private bool isWinningConnection(BoardCell i_FocalBoardCell, eDirectionOfDiscConnection i_DirectionOfConnection)
+		{
+			bool hasWinningConnection = false;
+			uint focalRow = i_FocalBoardCell.Row;
+			uint focalColumn = i_FocalBoardCell.Column;
+			int numOfMatrixRows = BoardToReferee.BoardCellMatrix.GetLength(0);
+			int numOfMatrixColumns = BoardToReferee.BoardCellMatrix.GetLength(1);
+
+			switch (i_DirectionOfConnection)
+			{
+				case eDirectionOfDiscConnection.Right:
+					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
+						BoardToReferee.BoardCellMatrix[focalRow, focalColumn + 1],
+						BoardToReferee.BoardCellMatrix[focalRow, focalColumn + 2],
+						BoardToReferee.BoardCellMatrix[focalRow, focalColumn + 3]);
+					break;
+				case eDirectionOfDiscConnection.UpRight:
+					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
+						BoardToReferee.BoardCellMatrix[focalRow - 1, focalColumn + 1],
+						BoardToReferee.BoardCellMatrix[focalRow - 2, focalColumn + 2],
+						BoardToReferee.BoardCellMatrix[focalRow - 3, focalColumn + 3]);
+					break;
+				case eDirectionOfDiscConnection.Up:
+					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
+						BoardToReferee.BoardCellMatrix[focalRow - 1, focalColumn],
+						BoardToReferee.BoardCellMatrix[focalRow - 2, focalColumn],
+						BoardToReferee.BoardCellMatrix[focalRow - 3, focalColumn]);
+					break;
+				case eDirectionOfDiscConnection.UpLeft:
+					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
+						BoardToReferee.BoardCellMatrix[focalRow - 1, focalColumn - 1],
+						BoardToReferee.BoardCellMatrix[focalRow - 2, focalColumn - 2],
+						BoardToReferee.BoardCellMatrix[focalRow - 3, focalColumn - 3]);
+					break;
+				case eDirectionOfDiscConnection.Left:
+					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
+						BoardToReferee.BoardCellMatrix[focalRow, focalColumn - 1],
+						BoardToReferee.BoardCellMatrix[focalRow, focalColumn - 2],
+						BoardToReferee.BoardCellMatrix[focalRow, focalColumn - 3]);
+					break;
+				case eDirectionOfDiscConnection.DownLeft:
+					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
+						BoardToReferee.BoardCellMatrix[focalRow + 1, focalColumn - 1],
+						BoardToReferee.BoardCellMatrix[focalRow + 2, focalColumn - 2],
+						BoardToReferee.BoardCellMatrix[focalRow + 3, focalColumn - 3]);
+					break;
+				case eDirectionOfDiscConnection.Down:
+					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
+						BoardToReferee.BoardCellMatrix[focalRow + 1, focalColumn],
+						BoardToReferee.BoardCellMatrix[focalRow + 2, focalColumn],
+						BoardToReferee.BoardCellMatrix[focalRow + 3, focalColumn]);
+					break;
+				case eDirectionOfDiscConnection.DownRight:
+					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
+						BoardToReferee.BoardCellMatrix[focalRow + 1, focalColumn + 1],
+						BoardToReferee.BoardCellMatrix[focalRow + 2, focalColumn + 2],
+						BoardToReferee.BoardCellMatrix[focalRow + 3, focalColumn + 3]);
+					break;
+			}
+
+			return hasWinningConnection;
+		}
+
+		private bool isLastDiscInConnectionValid(BoardCell i_FocalBoardCell, eDirectionOfDiscConnection i_DirectionOfConnection)
+		{
+			bool isDistantDiscAvailable = false;
+			uint focalRow = i_FocalBoardCell.Row;
+			uint focalColumn = i_FocalBoardCell.Column;
+			int numOfMatrixRows = BoardToReferee.BoardCellMatrix.GetLength(0);
+			int numOfMatrixColumns = BoardToReferee.BoardCellMatrix.GetLength(1);
+
+			switch (i_DirectionOfConnection)
+			{
+				case eDirectionOfDiscConnection.Right:
+					isDistantDiscAvailable = numOfMatrixColumns > focalColumn + Game.k_LengthOfWinningConnection;
+					break;
+				case eDirectionOfDiscConnection.UpRight:
+					isDistantDiscAvailable = (numOfMatrixColumns > focalColumn + Game.k_LengthOfWinningConnection) && (numOfMatrixRows > focalRow - Game.k_LengthOfWinningConnection);
+					break;
+				case eDirectionOfDiscConnection.Up:
+					isDistantDiscAvailable = numOfMatrixRows > focalRow - Game.k_LengthOfWinningConnection;
+					break;
+				case eDirectionOfDiscConnection.UpLeft:
+					isDistantDiscAvailable = (numOfMatrixColumns > focalColumn - Game.k_LengthOfWinningConnection) && (numOfMatrixRows > focalRow - Game.k_LengthOfWinningConnection);
+					break;
+				case eDirectionOfDiscConnection.Left:
+					isDistantDiscAvailable = numOfMatrixColumns > focalColumn - Game.k_LengthOfWinningConnection;
+					break;
+				case eDirectionOfDiscConnection.DownLeft:
+					isDistantDiscAvailable = (numOfMatrixColumns > focalColumn - Game.k_LengthOfWinningConnection) && (numOfMatrixRows > focalRow + Game.k_LengthOfWinningConnection);
+					break;
+				case eDirectionOfDiscConnection.Down:
+					isDistantDiscAvailable = numOfMatrixRows > focalRow + Game.k_LengthOfWinningConnection;
+					break;
+				case eDirectionOfDiscConnection.DownRight:
+					isDistantDiscAvailable = (numOfMatrixRows > focalRow + Game.k_LengthOfWinningConnection) && (numOfMatrixRows > focalRow + Game.k_LengthOfWinningConnection);
+					break;
+			}
+
+			return isDistantDiscAvailable;
+		}
+	}
+
+	// Counterclockwise
+	public enum eDirectionOfDiscConnection
+	{
+		Right = 0,
+		UpRight = 1,
+		Up = 2,
+		UpLeft = 3,
+		Left = 4,
+		DownLeft = 5,
+		Down = 6,
+		DownRight = 7
 	}
 }

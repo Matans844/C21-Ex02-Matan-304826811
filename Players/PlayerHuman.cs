@@ -9,18 +9,23 @@ namespace C21_Ex02_Matan_304826811.Players
 {
 	public class PlayerHuman : Player
 	{
-		private const ePlayerType r_PlayerType = ePlayerType.Human;
+		private const ePlayerType k_PlayerType = ePlayerType.Human;
 
-		public ePlayerType PlayerType => r_PlayerType;
+		public ePlayerType PlayerType => k_PlayerType;
 
-		public PlayerHuman(ePlayerType i_PlayerType, eBoardCellType i_DiscType, eTurnState i_TurnState)
-			: base(i_PlayerType, i_DiscType, i_TurnState)
+		public PlayerHuman(Board i_BoardOfPlayer, eBoardCellType i_DiscType, eTurnState i_TurnState)
+			: base(i_BoardOfPlayer, i_DiscType, i_TurnState)
 		{
 		}
 
-		public override BoardCell PickBoardColumnForDisc(Board i_Board, int i_Column)
+		public override BoardCell MakeMove(int i_ChosenColumn)
 		{
-			return i_Board.SlideDisk(i_Column);
+			return this.BoardOfPlayer.SlideDisk(i_ChosenColumn, this.DiscType);
+		}
+
+		public override int ChooseColumnForMove()
+		{
+			throw new System.NotImplementedException()
 		}
 	}
 }

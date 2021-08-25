@@ -17,6 +17,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 	public class Board
 	{
+		// Auto properties are used. They contain class fields.
 		public eBoardState BoardState { get; set; } = eBoardState.NotFinished;
 
 		public int NumOfCellVacanciesInBoard { get; set; }
@@ -29,6 +30,8 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		public Referee BoardReferee { get; }
 
+		public BoardCell LastCellOccupied { get; set; }
+
 		public Board(GameBoardDimensions i_ChosenGameDimensions)
 		{
 			this.Dimensions = i_ChosenGameDimensions;
@@ -40,25 +43,28 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 				i_ChosenGameDimensions.Width, i_ChosenGameDimensions.Height).ToArray();
 		}
 
-		public BoardCell SlideDisk(int i_Column, eBoardCellType i_CellType)
+		public BoardCell SlideDisk(int i_Column, eBoardCellType i_PlayerDiscType)
 		{
-			int lastVacantCell = this.Dimensions.Height - NumOfCellVacanciesInColumn[i_Column];
-			BoardCell chosenCell = new BoardCell((uint)i_Column, (uint)lastVacantCell, i_CellType);
-			return updateBoardWithDisc(lastVacantCell, i_Column, chosenCell);
+			return insertToBoard(i_Column, ref i_PlayerDiscType);
 		}
 
-		private BoardCell updateBoardWithDisc(int i_RowToUpdate, int i_ColumnToUpdate, BoardCell io_ChosenCell)
+		private BoardCell insertToBoard(int i_Column, ref eBoardCellType i_PlayerDiscType)
 		{
-			this.NumOfCellVacanciesInColumn[i_ColumnToUpdate]--;
+			var lastVacantCellInColumn = this.Dimensions.Height - this.NumOfCellVacanciesInColumn[i_Column];
+
+			this.NumOfCellVacanciesInColumn[i_Column]--;
 			this.NumOfCellVacanciesInBoard--;
-			BoardCellMatrix[i_RowToUpdate, i_ColumnToUpdate] = io_ChosenCell;
-			return io_ChosenCell;
+			this.BoardCellMatrix[lastVacantCellInColumn, i_Column].CellType = i_PlayerDiscType;
+			this.LastCellOccupied = this.BoardCellMatrix[lastVacantCellInColumn, i_Column].ShallowCopy();
+			this.BoardState = this.calculateBoardState(LastCellOccupied);
+
+			return this.LastCellOccupied;
 		}
 
-		public eBoardState CalculateBoardState()
+		private eBoardState calculateBoardState(BoardCell i_LastDiscPlayed)
 		{
-			return BoardReferee.IsGameFinished()
-						? BoardReferee.IsGameDrawn() ? eBoardState.FinishedInDraw : eBoardState.FinishedInWin
+			return this.BoardReferee.IsGameFinished(i_LastDiscPlayed)
+						? this.BoardReferee.IsGameDrawn(i_LastDiscPlayed) ? eBoardState.FinishedInDraw : eBoardState.FinishedInWin
 						: this.BoardState;
 		}
 	}

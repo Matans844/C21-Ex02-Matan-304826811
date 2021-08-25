@@ -9,21 +9,21 @@ namespace C21_Ex02_Matan_304826811.Players
 {
 	public class PlayerComputer : Player
 	{
-		private const ePlayerType r_PlayerType = ePlayerType.Computer;
+		private const ePlayerType k_PlayerType = ePlayerType.Computer;
 
-		public ePlayerType PlayerType => r_PlayerType;
+		public ePlayerType PlayerType => k_PlayerType;
 
-		public PlayerComputer(ePlayerType i_Type)
-			: base(i_Type)
+		public PlayerComputer(Board i_BoardOfPlayer, eBoardCellType i_DiscType, eTurnState i_TurnState)
+			: base(i_BoardOfPlayer, i_DiscType, i_TurnState)
 		{
 		}
 
-		public BoardCell PickBoardCell(Board i_Board)
+		public override BoardCell MakeMove(int i_ChosenColumn)
 		{
-			throw new System.NotImplementedException();
+			return this.BoardOfPlayer.SlideDisk(this.chooseColumnForMove(), this.DiscType);
 		}
 
-		public override BoardCell PickBoardColumnForDisc(Board i_Board, int i_Column)
+		public override int ChooseColumnForMove()
 		{
 			throw new System.NotImplementedException();
 		}
