@@ -9,6 +9,10 @@ namespace C21_Ex02_Matan_304826811.Players
 {
 	public class PlayerComputer : Player
 	{
+		private const ePlayerType r_PlayerType = ePlayerType.Computer;
+
+		public ePlayerType PlayerType => r_PlayerType;
+
 		public PlayerComputer(ePlayerType i_Type)
 			: base(i_Type)
 		{

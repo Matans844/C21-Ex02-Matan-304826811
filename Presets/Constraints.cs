@@ -34,12 +34,3 @@ namespace C21_Ex02_Matan_304826811.Presets
 		Limit2 = 8
 	}
 }
-
-
-
-//{
-//private static BoardDimensionsConfiguration s_BoardDimensionsConfiguration =
-//	new BoardDimensionsConfiguration();
-
-//public static BoardDimensionsConfiguration BoardDimensions => s_BoardDimensionsConfiguration;
-//}

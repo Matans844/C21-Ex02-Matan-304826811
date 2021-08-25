@@ -14,21 +14,17 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 {
 	public class BoardCell
 	{
-		private readonly uint r_Column;
-		private readonly uint r_Row;
-		private readonly eBoardCellType r_CellType;
+		public uint Column { get; }
 
-		public uint Column => this.r_Column;
+		public uint Row { get; }
 
-		public uint Row => this.r_Row;
-
-		public eBoardCellType CellType => this.r_CellType;
+		public eBoardCellType CellType { get; }
 
 		public BoardCell(uint i_Column, uint i_Row, eBoardCellType i_CellType)
 		{
-			this.r_Column = i_Column;
-			this.r_Row = i_Row;
-			this.r_CellType = i_CellType;
+			this.Column = i_Column;
+			this.Row = i_Row;
+			this.CellType = i_CellType;
 		}
 
 		//public BoardCell(eBoardCellType i_CellType)

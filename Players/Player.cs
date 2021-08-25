@@ -11,30 +11,21 @@ using Ex02.ConsoleUtils;
 
 namespace C21_Ex02_Matan_304826811.Players
 {
-	using C21_Ex02_Matan_304826811.GameLogic;
-
 	public abstract class Player
 	{
 		private const int k_ZeroPoints = 0;
-		private readonly ePlayerType r_PlayerType;
-		private readonly eBoardCellType r_DiscType;
-		private int m_Score;
 
-		public int Points
-		{
-			get => this.m_Score;
-			set => this.m_Score = value;
-		}
+		public int Points { get; set; }
 
-		public ePlayerType PlayerType => this.r_PlayerType;
+		public eBoardCellType DiscType { get; }
 
-		public eBoardCellType DiscType => this.r_DiscType;
+		public eTurnState TurnState { get; set; }
 
-		protected Player(ePlayerType i_PlayerType, eBoardCellType i_DiscType)
+		protected Player(eBoardCellType i_DiscType, eTurnState i_TurnState)
 		{
 			this.Points = k_ZeroPoints;
-			this.r_PlayerType = i_PlayerType;
-			this.r_DiscType = i_DiscType;
+			this.DiscType = i_DiscType;
+			this.TurnState = i_TurnState;
 		}
 
 		public abstract BoardCell PickBoardColumnForDisc(Board i_Board, int i_Column);
@@ -45,5 +36,12 @@ namespace C21_Ex02_Matan_304826811.Players
 		NotInit = 0,
 		Human = 1,
 		Computer = 2
+	}
+
+	public enum eTurnState
+	{
+		NotInit = 0,
+		YourTurn = 1,
+		NotYourTurn = 2
 	}
 }

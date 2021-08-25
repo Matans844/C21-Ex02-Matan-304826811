@@ -16,13 +16,19 @@ namespace C21_Ex02_Matan_304826811.Controller
 	{
 		private const string k_QuitKey = "Q";
 		private static readonly string sr_InvalidInputMessage = $"Invalid input!{Environment.NewLine}";
+
 		private static readonly string sr_PromptBoardHeightMessage =
 			$"Enter board height, between {Constraints.BoardDimensions.HeightLowerLimit} and {Constraints.BoardDimensions.HeightUpperLimit}: ";
+
 		private static readonly string sr_PromptBoardWidthMessage =
 			$"Enter board width, between {Constraints.BoardDimensions.WidthLowerLimit} and {Constraints.BoardDimensions.WidthUpperLimit}: ";
+
 		private static readonly string sr_EnterModePromptMessage = string.Format(
+			format:
 			"Choose game mode: {0}Enter {1:D} to play against a human. {0}Enter {2:D} to play against a computer. {0}",
-			Environment.NewLine, eGameMode.PlayerVsPlayer, eGameMode.PlayerVsComputer);
+			Environment.NewLine,
+			arg1: eGameMode.PlayerVsPlayer,
+			arg2: eGameMode.PlayerVsComputer);
 
 		// Updates DisplayLogic's GameDimensions struct.
 		internal static void GetDimensions()
@@ -33,11 +39,10 @@ namespace C21_Ex02_Matan_304826811.Controller
 
 		private static void getDimensionFromUser(ref GameBoardDimensions io_BoardDimensions, eBoardDimension i_DimensionToSet)
 		{
-			int dimensionChosen;
 			string promptToUser = i_DimensionToSet == eBoardDimension.Height ? sr_PromptBoardHeightMessage : sr_PromptBoardWidthMessage;
 			string responseFromUser = getFirstNotNullInputFromUser(promptToUser);
 
-			if (int.TryParse(responseFromUser, out dimensionChosen))
+			if (int.TryParse(responseFromUser, out var dimensionChosen))
 			{
 				io_BoardDimensions.SetterByChoice(i_DimensionToSet, dimensionChosen);
 			}

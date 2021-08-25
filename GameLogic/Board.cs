@@ -13,25 +13,30 @@ using Ex02.ConsoleUtils;
 namespace C21_Ex02_Matan_304826811.GameLogic
 {
 	using System.Runtime.CompilerServices;
+	using System.Runtime.InteropServices;
 
 	public class Board
 	{
-		private readonly GameBoardDimensions r_BoardDimensions;
-		private int[] m_NumOfCellVacanciesInColumn;
-		private BoardCell[,] m_BoardCellMatrix;
+		public eBoardState BoardState { get; set; } = eBoardState.NotFinished;
 
-		public int[] NumOfCellVacanciesInColumn => this.m_NumOfCellVacanciesInColumn;
+		public int NumOfCellVacanciesInBoard { get; set; }
 
-		public GameBoardDimensions Dimensions => this.r_BoardDimensions;
+		public int[] NumOfCellVacanciesInColumn { get; }
 
-		public BoardCell[,] BoardCellMatrix => this.m_BoardCellMatrix;
+		public GameBoardDimensions Dimensions { get; }
+
+		public BoardCell[,] BoardCellMatrix { get; }
+
+		public Referee BoardReferee { get; }
 
 		public Board(GameBoardDimensions i_ChosenGameDimensions)
 		{
-			this.r_BoardDimensions = i_ChosenGameDimensions;
-			this.m_BoardCellMatrix = new BoardCell[i_ChosenGameDimensions.Height, i_ChosenGameDimensions.Width];
+			this.Dimensions = i_ChosenGameDimensions;
+			this.BoardCellMatrix = new BoardCell[i_ChosenGameDimensions.Height, i_ChosenGameDimensions.Width];
+			this.BoardReferee = new Referee(this);
+			this.NumOfCellVacanciesInBoard = i_ChosenGameDimensions.Height * i_ChosenGameDimensions.Width;
 
-			this.m_NumOfCellVacanciesInColumn = Enumerable.Repeat(
+			this.NumOfCellVacanciesInColumn = Enumerable.Repeat(
 				i_ChosenGameDimensions.Width, i_ChosenGameDimensions.Height).ToArray();
 		}
 
@@ -45,15 +50,23 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 		private BoardCell updateBoardWithDisc(int i_RowToUpdate, int i_ColumnToUpdate, BoardCell io_ChosenCell)
 		{
 			this.NumOfCellVacanciesInColumn[i_ColumnToUpdate]--;
+			this.NumOfCellVacanciesInBoard--;
 			BoardCellMatrix[i_RowToUpdate, i_ColumnToUpdate] = io_ChosenCell;
 			return io_ChosenCell;
 		}
+
+		public eBoardState CalculateBoardState()
+		{
+			return BoardReferee.IsGameFinished()
+						? BoardReferee.IsGameDrawn() ? eBoardState.FinishedInDraw : eBoardState.FinishedInWin
+						: this.BoardState;
+		}
 	}
 
-	public enum eColumnVacancy
+	public enum eBoardState
 	{
-		Empty = 0,
-		NotFull = 1,
-		Full = 2
+		NotFinished = 0,
+		FinishedInDraw = 1,
+		FinishedInWin = 2
 	}
 }

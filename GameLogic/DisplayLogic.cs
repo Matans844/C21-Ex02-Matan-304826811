@@ -16,13 +16,8 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 		// 1. We are trying to set values in a struct with more than 1 value.
 		// 2. The property set method accepts at most 1 argument.
 		public static GameBoardDimensions s_BoardDimensions;
-		private static eGameMode s_GameMode;
 
-		public static eGameMode GameMode
-		{
-			get => s_GameMode;
-			set => s_GameMode = value;
-		}
+		public static eGameMode GameMode { get; set; }
 	}
 }
 

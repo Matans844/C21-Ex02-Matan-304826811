@@ -9,8 +9,12 @@ namespace C21_Ex02_Matan_304826811.Players
 {
 	public class PlayerHuman : Player
 	{
-		public PlayerHuman(ePlayerType i_PlayerType, eBoardCellType i_DiscType)
-			: base(i_PlayerType, i_DiscType)
+		private const ePlayerType r_PlayerType = ePlayerType.Human;
+
+		public ePlayerType PlayerType => r_PlayerType;
+
+		public PlayerHuman(ePlayerType i_PlayerType, eBoardCellType i_DiscType, eTurnState i_TurnState)
+			: base(i_PlayerType, i_DiscType, i_TurnState)
 		{
 		}
 
