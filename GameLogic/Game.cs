@@ -56,8 +56,18 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 		{
 			while (!this.hasGameEnded())
 			{
-				Player1WithXs.MakeMove()
+				this.Player1WithXs.MakeMove();
+
+				if (this.hasGameEnded())
+				{
+
+				}
 			}
+		}
+
+		private eBoardState singleMove(Player io_PlayerToMove)
+		{
+			return Player.MakeMove();
 		}
 	}
 

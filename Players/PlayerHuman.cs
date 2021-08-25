@@ -18,14 +18,14 @@ namespace C21_Ex02_Matan_304826811.Players
 		{
 		}
 
-		public override BoardCell MakeMove(int i_ChosenColumn)
+		public override eBoardState MakeMove(int i_ChosenColumn)
 		{
 			return this.BoardOfPlayer.SlideDisk(i_ChosenColumn, this.DiscType);
 		}
 
-		public override int ChooseColumnForMove()
+		protected override int ChooseColumnForMove()
 		{
-			throw new System.NotImplementedException()
+			throw new System.NotImplementedException();
 		}
 	}
 }

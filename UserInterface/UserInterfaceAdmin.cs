@@ -12,7 +12,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 	{
 		public static Game Init()
 		{
-			ViewInit.Build();
+			ViewOfInitialScreen.Build();
 			return new Game(DisplayLogic.GameMode, DisplayLogic.s_BoardDimensions);
 		}
 	}

@@ -43,12 +43,12 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 				i_ChosenGameDimensions.Width, i_ChosenGameDimensions.Height).ToArray();
 		}
 
-		public BoardCell SlideDisk(int i_Column, eBoardCellType i_PlayerDiscType)
+		public eBoardState SlideDisk(int i_Column, eBoardCellType i_PlayerDiscType)
 		{
 			return insertToBoard(i_Column, ref i_PlayerDiscType);
 		}
 
-		private BoardCell insertToBoard(int i_Column, ref eBoardCellType i_PlayerDiscType)
+		private eBoardState insertToBoard(int i_Column, ref eBoardCellType i_PlayerDiscType)
 		{
 			var lastVacantCellInColumn = this.Dimensions.Height - this.NumOfCellVacanciesInColumn[i_Column];
 
@@ -56,9 +56,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			this.NumOfCellVacanciesInBoard--;
 			this.BoardCellMatrix[lastVacantCellInColumn, i_Column].CellType = i_PlayerDiscType;
 			this.LastCellOccupied = this.BoardCellMatrix[lastVacantCellInColumn, i_Column].ShallowCopy();
-			this.BoardState = this.calculateBoardState(LastCellOccupied);
-
-			return this.LastCellOccupied;
+			return this.calculateBoardState(LastCellOccupied);
 		}
 
 		private eBoardState calculateBoardState(BoardCell i_LastDiscPlayed)

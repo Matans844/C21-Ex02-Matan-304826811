@@ -45,8 +45,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="UserInterface\ScreenCreator.cs" />
     <Compile Include="UserInterface\UserInterfaceAdmin.cs" />
-    <Compile Include="UserInterface\ViewBoard.cs" />
-    <Compile Include="UserInterface\ViewInit.cs" />
+    <Compile Include="UserInterface\ViewOfBoardScreen.cs" />
+    <Compile Include="UserInterface\ViewOfInitialScreen.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Ex02.ConsoleUtils">

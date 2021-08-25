@@ -57,11 +57,10 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		private bool isWinningConnection(BoardCell i_FocalBoardCell, eDirectionOfDiscConnection i_DirectionOfConnection)
 		{
-			bool hasWinningConnection = false;
-			uint focalRow = i_FocalBoardCell.Row;
-			uint focalColumn = i_FocalBoardCell.Column;
-			int numOfMatrixRows = BoardToReferee.BoardCellMatrix.GetLength(0);
-			int numOfMatrixColumns = BoardToReferee.BoardCellMatrix.GetLength(1);
+			// To improve readability, 'var' type is used instead of the built-in types 'bool', 'uint'.
+			var hasWinningConnection = false;
+			var focalRow = i_FocalBoardCell.Row;
+			var focalColumn = i_FocalBoardCell.Column;
 
 			switch (i_DirectionOfConnection)
 			{

@@ -68,17 +68,16 @@ namespace C21_Ex02_Matan_304826811.Controller
 		// Updates DisplayLogic's GameMode field.
 		internal static void GetGameMode()
 		{
-			int gameModeChosen;
-			string responseFromUser = getFirstNotNullInputFromUser(sr_EnterModePromptMessage);
+			var responseFromUser = getFirstNotNullInputFromUser(sr_EnterModePromptMessage);
 
 			Screen.Clear();
 			Console.Write(sr_EnterModePromptMessage);
 
-			if (int.TryParse(responseFromUser, out gameModeChosen)
-				&& Enum.IsDefined(typeof(eGameMode), gameModeChosen)
-				&& gameModeChosen != (int)eGameMode.NotInitiated)
+			if (int.TryParse(responseFromUser, out var gameModeChosenByUser)
+				&& Enum.IsDefined(typeof(eGameMode), gameModeChosenByUser)
+				&& gameModeChosenByUser != (int)eGameMode.NotInitiated)
 			{
-				DisplayLogic.GameMode = (eGameMode)gameModeChosen;
+				DisplayLogic.GameMode = (eGameMode)gameModeChosenByUser;
 			}
 			else
 			{
@@ -86,11 +85,11 @@ namespace C21_Ex02_Matan_304826811.Controller
 				{
 					responseFromUser = getNotNullInputFromUserAfterError(sr_EnterModePromptMessage);
 				}
-				while (!(int.TryParse(responseFromUser, out gameModeChosen)
-						&& Enum.IsDefined(typeof(eGameMode), gameModeChosen)
-						&& gameModeChosen != (int)eGameMode.NotInitiated));
+				while (!(int.TryParse(responseFromUser, out gameModeChosenByUser)
+						&& Enum.IsDefined(typeof(eGameMode), gameModeChosenByUser)
+						&& gameModeChosenByUser != (int)eGameMode.NotInitiated));
 
-				DisplayLogic.GameMode = (eGameMode)gameModeChosen;
+				DisplayLogic.GameMode = (eGameMode)gameModeChosenByUser;
 			}
 		}
 

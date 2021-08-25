@@ -11,7 +11,7 @@ using C21_Ex02_Matan_304826811.Presets;
 
 namespace C21_Ex02_Matan_304826811.UserInterface
 {
-	class ViewBoard
+	class ViewOfBoardScreen
 	{
 	}
 }

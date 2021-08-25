@@ -11,7 +11,7 @@ using C21_Ex02_Matan_304826811.Presets;
 
 namespace C21_Ex02_Matan_304826811.UserInterface
 {
-	public static class ViewInit
+	public static class ViewOfInitialScreen
 	{
 		// The initial screen is the Console
 		// The InputOutputHandler updates DisplayLogic fields for Game dimensions and Game mode.

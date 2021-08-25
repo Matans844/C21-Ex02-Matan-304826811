@@ -28,9 +28,9 @@ namespace C21_Ex02_Matan_304826811.Players
 			this.TurnState = i_TurnState;
 		}
 
-		public abstract BoardCell MakeMove(int i_ChosenColumn);
+		public abstract eBoardState MakeMove(int i_ChosenColumn);
 
-		public abstract int ChooseColumnForMove();
+		protected abstract int ChooseColumnForMove();
 	}
 
 	public enum ePlayerType
