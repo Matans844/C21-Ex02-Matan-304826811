@@ -2,10 +2,12 @@
 using System.Text;
 
 using C21_Ex02_Matan_304826811.UserInterface;
-using C21_Ex02_Matan_304826811.Controller;
 using C21_Ex02_Matan_304826811.Players;
+using C21_Ex02_Matan_304826811.Controller;
 using C21_Ex02_Matan_304826811.GameLogic;
 using C21_Ex02_Matan_304826811.Presets;
+using C21_Ex02_Matan_304826811.Views;
+using C21_Ex02_Matan_304826811.Toolkit;
 using Ex02.ConsoleUtils;
 
 namespace C21_Ex02_Matan_304826811.Controller
@@ -15,27 +17,6 @@ namespace C21_Ex02_Matan_304826811.Controller
 		public UserInterfaceAdmin GameUserInterfaceAdmin { get; }
 
 		private static readonly string sr_InvalidInputMessage = $"Invalid input!{Environment.NewLine}";
-
-		private static readonly string sr_PromptBoardHeightMessage =
-			$"Enter board height, between {Constraints.BoardDimensions.HeightLowerLimit} and {Constraints.BoardDimensions.HeightUpperLimit}: ";
-
-		private static readonly string sr_PromptBoardWidthMessage =
-			$"Enter board width, between {Constraints.BoardDimensions.WidthLowerLimit} and {Constraints.BoardDimensions.WidthUpperLimit}: ";
-
-		private static readonly string sr_EnterModePromptMessage = string.Format(
-			format:
-			"Choose game mode: {0}Enter {1:D} to play against a human. {0}Enter {2:D} to play against a computer. {0}",
-			Environment.NewLine,
-			arg1: eGameMode.PlayerVsPlayer,
-			arg2: eGameMode.PlayerVsComputer);
-
-		public static readonly string sr_GoodbyeMessageBeforeFirstGame = string.Format(
-			"I see You have chosen to postpone your defeat.{0}It is brave to be honest.{0}Goodbye, brave friend!{0}{0}",
-			Environment.NewLine);
-
-		public static readonly string sr_GoodbyeMessageAfterFirstGameStart = string.Format(
-			"It is no shame to admit defeat. Dust yourself up, and try again.{0}I will be waiting.{0}Goodbye for now!{0}{0}",
-			Environment.NewLine);
 
 		public InputOutputHandler(UserInterfaceAdmin i_GameUserInterfaceAdmin)
 		{
@@ -51,7 +32,10 @@ namespace C21_Ex02_Matan_304826811.Controller
 
 		private void getAndSetValidDimensionsFromUser(ref GameBoardDimensions io_BoardDimensions, eBoardDimension i_DimensionToSet)
 		{
-			string promptToUser = i_DimensionToSet == eBoardDimension.Height ? sr_PromptBoardHeightMessage : sr_PromptBoardWidthMessage;
+			string promptToUser = i_DimensionToSet == eBoardDimension.Height
+									? ScreenCreator.PromptForBoardHeight
+									: ScreenCreator.PromptForBoardWidth;
+
 			string responseFromUser = getFirstNotNullInputFromUser(promptToUser);
 
 			if (int.TryParse(responseFromUser, out var dimensionChosen))
@@ -77,6 +61,8 @@ namespace C21_Ex02_Matan_304826811.Controller
 
 		private int askForAnotherMove()
 		{
+			this.GameUserInterfaceAdmin.MyBoardScreenView.DrawBoard();
+
 			// TODO: Before each move prompt, create draw (implement ScreenCreator) board screen (ViewOfBoardScreen). Get input. Checks required: null, int, validity (does board support this int?).
 			throw new NotImplementedException();
 		}
@@ -117,10 +103,10 @@ namespace C21_Ex02_Matan_304826811.Controller
 		// Updates DisplayLogic's GameMode field.
 		private void getAndSetValidGameModeFromUser()
 		{
-			string responseFromUser = getFirstNotNullInputFromUser(sr_EnterModePromptMessage);
+			string responseFromUser = getFirstNotNullInputFromUser(ScreenCreator.PromptForGameMode);
 
 			Screen.Clear();
-			Console.Write(sr_EnterModePromptMessage);
+			Console.Write(ScreenCreator.PromptForGameMode);
 
 			if (int.TryParse(responseFromUser, out var gameModeChosenByUser)
 				&& Enum.IsDefined(typeof(eGameMode), gameModeChosenByUser)
@@ -132,7 +118,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 			{
 				do
 				{
-					responseFromUser = this.getNotNullInputFromUserAfterError(sr_EnterModePromptMessage);
+					responseFromUser = this.getNotNullInputFromUserAfterError(ScreenCreator.PromptForGameMode);
 				}
 				while (!(int.TryParse(responseFromUser, out gameModeChosenByUser)
 						&& Enum.IsDefined(typeof(eGameMode), gameModeChosenByUser)
@@ -169,11 +155,11 @@ namespace C21_Ex02_Matan_304826811.Controller
 			switch (i_PhaseOfUserInterface)
 			{
 				case ePhaseOfUserInterface.InitialScreen:
-					Console.Write(sr_GoodbyeMessageBeforeFirstGame);
+					Console.Write(ScreenCreator.GoodbyeMessageBeforeFirstGame);
 					break;
 
 				case ePhaseOfUserInterface.BoardScreen:
-					Console.Write(sr_GoodbyeMessageAfterFirstGameStart);
+					Console.Write(ScreenCreator.GoodbyeMessageAfterFirstGameStart);
 					break;
 
 				case ePhaseOfUserInterface.Terminated:

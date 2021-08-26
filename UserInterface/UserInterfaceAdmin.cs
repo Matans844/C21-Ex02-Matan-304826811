@@ -5,10 +5,14 @@ using C21_Ex02_Matan_304826811.Players;
 using C21_Ex02_Matan_304826811.Controller;
 using C21_Ex02_Matan_304826811.GameLogic;
 using C21_Ex02_Matan_304826811.Presets;
+using C21_Ex02_Matan_304826811.Views;
+using C21_Ex02_Matan_304826811.Toolkit;
 using Ex02.ConsoleUtils;
 
 namespace C21_Ex02_Matan_304826811.UserInterface
 {
+	using C21_Ex02_Matan_304826811.Views;
+
 	public class UserInterfaceAdmin
 	{
 		public const string k_QuitKey = "Q";
@@ -18,6 +22,8 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 		public InputOutputHandler MyInputOutputHandler { get; set; }
 
 		public ViewOfInitialScreen MyInitialScreenView { get; set; }
+
+		public ViewOfBoardScreen MyBoardScreenView { get; set; }
 
 		public Game MyGameLogicUnit { get; set; }
 
@@ -53,6 +59,8 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 				return;
 			}
 
+			ScreenCreator.ScreenBoardRowWidthInChar = this.MyGameDisplayLogic.m_BoardDimensions.Width;
+			this.MyBoardScreenView = new ViewOfBoardScreen(this);
 			this.PhaseOfUserInterface = ePhaseOfUserInterface.InitialScreen;
 			this.MyGameLogicUnit = new Game(this.MyGameDisplayLogic.GameMode, this.MyGameDisplayLogic.m_BoardDimensions, this);
 
@@ -114,6 +122,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 
 		public bool DoesPlayerWantAnotherGame()
 		{
+			// TODO: Show point status
 			return this.askPlayerForAnotherGame();
 		}
 
