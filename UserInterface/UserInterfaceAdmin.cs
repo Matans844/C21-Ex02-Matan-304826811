@@ -11,6 +11,8 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 
 		public MessageCreator MyMessageCreator { get; set; }
 
+		public ScreenCreator MyScreenCreator { get; set; }
+
 		public InputOutputHandler MyInputOutputHandler { get; set; }
 
 		public ViewOfInitialScreen MyInitialScreenView { get; set; }
@@ -31,6 +33,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			this.MyInputOutputHandler = new InputOutputHandler(this);
 			this.MyInitialScreenView = new ViewOfInitialScreen(this);
 			this.MyMessageCreator = new MessageCreator(this);
+			this.MyScreenCreator = new ScreenCreator(this);
 		}
 
 		public void InitializeGame()
@@ -47,7 +50,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 				return;
 			}
 
-			ScreenCreator.ScreenBoardRowWidthInChar = this.MyGameDisplayLogic.m_BoardDimensions.Width;
+			MyScreenCreator.ScreenBoardRowWidthInChar = this.MyGameDisplayLogic.m_BoardDimensions.Width;
 			this.MyBoardScreenView = new ViewOfBoardScreen(this);
 			this.PhaseOfUserInterface = ePhaseOfUserInterface.InitialScreen;
 			this.MyGameLogicUnit = new Game(this.MyGameDisplayLogic.GameMode, this.MyGameDisplayLogic.m_BoardDimensions, this);

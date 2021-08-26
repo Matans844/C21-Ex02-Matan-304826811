@@ -12,7 +12,7 @@
 
 		public void DrawBoard()
 		{
-			ScreenCreator.PrintGameBoard();
+			this.GameUserInterfaceAdmin.MyScreenCreator.PrintGameBoard();
 		}
 	}
 }

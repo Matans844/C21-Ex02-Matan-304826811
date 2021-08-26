@@ -22,23 +22,23 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 
 		public static StringBuilder ScreenBoardBuilder { get; set; }
 
-		public static int ScreenBoardRowWidthInChar
+		public int ScreenBoardRowWidthInChar
 		{
 			get => s_ScreenBoardWidthInChar;
 			set => s_ScreenBoardWidthInChar = (k_HeaderSpaceWidth * value) + k_SpaceBetweenCellCenterAndSeparatingChar;
 		}
 
-		public static UserInterfaceAdmin GameUserInterfaceAdmin { get; set; }
+		public UserInterfaceAdmin GameUserInterfaceAdmin { get; set; }
 
 		public ScreenCreator(UserInterfaceAdmin i_MyUserInterfaceAdmin)
 		{
 			GameUserInterfaceAdmin = i_MyUserInterfaceAdmin;
 		}
 
-		private static string buildColumnHeaderRow()
+		private string buildColumnHeaderRow()
 		{
 			StringBuilder columnHeaderRow = new StringBuilder(k_SpaceColumnHeaderPrefix);
-			int numberOfColumnsInBoard = GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions.Width;
+			int numberOfColumnsInBoard = this.GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions.Width;
 			string nextColumnHeader;
 
 			for (int i = 0; i < numberOfColumnsInBoard; i++)
@@ -52,12 +52,12 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			return columnHeaderRow.ToString();
 		}
 
-		private static string buildSeparatingFillerRow()
+		private string buildSeparatingFillerRow()
 		{
 			return new string(k_HorizontalLineFillerChar, ScreenBoardRowWidthInChar);
 		}
 
-		private static string getCellStringIdentity(eBoardCellType i_CellType)
+		private string getCellStringIdentity(eBoardCellType i_CellType)
 		{
 			string cellString = k_EmptyDiscChar;
 
@@ -78,13 +78,13 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			return cellString;
 		}
 
-		private static string buildDiscRow(int i_RowOfBoard)
+		private string buildDiscRow(int i_RowOfBoard)
 		{
 			StringBuilder discRow = new StringBuilder(k_VerticalSeparatingChar);
 			string nextColumnDisk;
 
 			BoardCell[] cellRowFromGameBoard = EnumerationFor2DArrays<BoardCell>.GetRow(
-				GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.BoardCellMatrix, i_RowOfBoard);
+				this.GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.BoardCellMatrix, i_RowOfBoard);
 
 			foreach (BoardCell cell in cellRowFromGameBoard)
 			{
@@ -99,23 +99,23 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			return discRow.ToString();
 		}
 
-		private static string buildBoard()
+		private string buildBoard()
 		{
-			ScreenBoardBuilder = new StringBuilder(buildColumnHeaderRow());
-			int numberOfRowsInBoard = GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions.Height;
+			ScreenBoardBuilder = new StringBuilder(this.buildColumnHeaderRow());
+			int numberOfRowsInBoard = this.GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions.Height;
 
 			for (int i = 0; i < numberOfRowsInBoard; i++)
 			{
-				ScreenBoardBuilder.Append(buildDiscRow(i));
-				ScreenBoardBuilder.Append(buildSeparatingFillerRow());
+				ScreenBoardBuilder.Append(this.buildDiscRow(i));
+				ScreenBoardBuilder.Append(this.buildSeparatingFillerRow());
 			}
 
 			return ScreenBoardBuilder.ToString();
 		}
 
-		public static void PrintGameBoard()
+		public void PrintGameBoard()
 		{
-			Console.WriteLine(buildBoard());
+			Console.WriteLine(this.buildBoard());
 		}
 	}
 }
