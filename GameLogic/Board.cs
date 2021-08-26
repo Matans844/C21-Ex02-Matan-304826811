@@ -72,6 +72,16 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 			return this.BoardState;
 		}
+
+		private bool columnAvailabilityForDisc(int i_ChosenColumn)
+		{
+			return this.NumOfCellVacanciesInColumn[i_ChosenColumn] == 0;
+		}
+
+		public bool IsColumnAvailableForDisc(int i_ChosenColumn)
+		{
+			return this.columnAvailabilityForDisc(i_ChosenColumn)l
+		}
 	}
 
 	public enum eBoardState

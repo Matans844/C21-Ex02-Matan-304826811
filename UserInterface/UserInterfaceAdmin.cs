@@ -15,8 +15,6 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 
 	public class UserInterfaceAdmin
 	{
-		public const string k_QuitKey = "Q";
-
 		public DisplayLogic MyGameDisplayLogic { get; set; }
 
 		public InputOutputHandler MyInputOutputHandler { get; set; }
@@ -93,7 +91,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			switch (i_PhaseOfUserInterface)
 			{
 				case ePhaseOfUserInterface.BoardScreen:
-					if (this.DoesPlayerWantAnotherGame())
+					if (this.ConcludingSingleGame())
 					{
 						this.IsEscapeKeyOn = false;
 						}
@@ -120,9 +118,11 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			return this.hasPlayerQuitGame();
 		}
 
-		public bool DoesPlayerWantAnotherGame()
+		public bool ConcludingSingleGame()
 		{
-			// TODO: Show point status
+			this.MyInputOutputHandler.DeclareGameResult();
+			this.MyInputOutputHandler.DeclarePointStatus();
+
 			return this.askPlayerForAnotherGame();
 		}
 

@@ -19,6 +19,8 @@ namespace C21_Ex02_Matan_304826811.Views
 		{
 		}
 
+		// Unlike other views, this view is not under the responsibility of the ScreenCreator.
+		// This is because this is the first screen, and it contains only taking inputs.
 		public void GetInitialInputsFromUser()
 		{
 			this.GameUserInterfaceAdmin.MyInputOutputHandler.GetAndSetValidDimensionsFromUser();

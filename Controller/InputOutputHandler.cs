@@ -16,7 +16,12 @@ namespace C21_Ex02_Matan_304826811.Controller
 	{
 		public UserInterfaceAdmin GameUserInterfaceAdmin { get; }
 
+		public const string k_QuitKey = "Q";
+
 		private static readonly string sr_InvalidInputMessage = $"Invalid input!{Environment.NewLine}";
+
+		private static readonly string sr_PromptForNextMove =
+			$"Choose column to slide disk in, or press {k_QuitKey} to quit current game: ";
 
 		public InputOutputHandler(UserInterfaceAdmin i_GameUserInterfaceAdmin)
 		{
@@ -36,8 +41,11 @@ namespace C21_Ex02_Matan_304826811.Controller
 									? ScreenCreator.PromptForBoardHeight
 									: ScreenCreator.PromptForBoardWidth;
 
+			// Checking for null. We still have to validate type and value.
 			string responseFromUser = getFirstNotNullInputFromUser(promptToUser);
 
+			// We are updating a struct that guards our dimension constraints.
+			// Validation of type and value goes through the struct guards.
 			if (int.TryParse(responseFromUser, out var dimensionChosen))
 			{
 				io_BoardDimensions.SetterByChoice(i_DimensionToSet, dimensionChosen);
@@ -56,14 +64,49 @@ namespace C21_Ex02_Matan_304826811.Controller
 
 		public int PromptForMove()
 		{
-			return this.askForAnotherMove();
+			return this.getMove();
 		}
 
-		private int askForAnotherMove()
+		private int getMove()
 		{
+			int moveChosen;
+			string responseFromUser;
+			bool inputIsValidByNullTypeValue = false;
+
+			Screen.Clear();
 			this.GameUserInterfaceAdmin.MyBoardScreenView.DrawBoard();
 
-			// TODO: Before each move prompt, create draw (implement ScreenCreator) board screen (ViewOfBoardScreen). Get input. Checks required: null, int, validity (does board support this int?).
+			// Null validation.
+			responseFromUser = getFirstNotNullInputFromUser(sr_PromptForNextMove);
+
+			// Type and value validation.
+			if (!int.TryParse(responseFromUser, out var columnChosen)
+				|| !this.GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.IsColumnAvailableForDisc(columnChosen))
+			{
+				while (!inputIsValidByNullTypeValue)
+				{
+					responseFromUser = this.getNotNullInputFromUserAfterError(sr_PromptForNextMove);
+
+					if (int.TryParse(responseFromUser, out columnChosen)
+						&& this.GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.IsColumnAvailableForDisc(columnChosen))
+					{
+						inputIsValidByNullTypeValue = true;
+					}
+				}
+			}
+
+			return columnChosen;
+		}
+
+		internal void DeclarePointStatus()
+		{
+			// TODO: Points
+			throw new NotImplementedException();
+		}
+
+		internal void DeclareGameResult()
+		{
+			// TODO: Who won?
 			throw new NotImplementedException();
 		}
 
