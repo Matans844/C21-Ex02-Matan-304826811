@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using C21_Ex02_Matan_304826811.UserInterface;
+﻿using C21_Ex02_Matan_304826811.UserInterface;
 using C21_Ex02_Matan_304826811.Players;
-using C21_Ex02_Matan_304826811.Controller;
-using C21_Ex02_Matan_304826811.GameLogic;
-using C21_Ex02_Matan_304826811.Presets;
-using C21_Ex02_Matan_304826811.Views;
-using C21_Ex02_Matan_304826811.Toolkit;
-using Ex02.ConsoleUtils;
 
 namespace C21_Ex02_Matan_304826811.GameLogic
 {
@@ -30,7 +20,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		public eGameMode Mode { get; }
 
-		public uint GameNumber { get; set; } = 0;
+		public uint GameNumber { get; set; }
 
 		public Game(eGameMode i_ChosenGameMode, GameBoardDimensions i_ChosenGameDimensions, UserInterfaceAdmin i_MyUserInterfaceAdmin)
 		{
@@ -51,8 +41,8 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 				this.Player2WithOs = new PlayerComputer(this.GameBoard, eBoardCellType.ODisc, eTurnState.NotYourTurn);
 			}
 
-			this.BoxingPlayersInGame[0] = (object)this.Player1WithXs;
-			this.BoxingPlayersInGame[1] = (object)this.Player2WithOs;
+			this.BoxingPlayersInGame[0] = this.Player1WithXs;
+			this.BoxingPlayersInGame[1] = this.Player2WithOs;
 		}
 
 		private void continueWithAnotherGame()
@@ -80,10 +70,10 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 		}
 
 		// Not used.
-		private bool hasGameEndedInWin()
-		{
-			return this.hasGameEnded() && !this.hasGameEndedInDraw();
-		}
+		//private bool hasGameEndedInWin()
+		//{
+		//	return this.hasGameEnded() && !this.hasGameEndedInDraw();
+		//}
 
 		public void StartGame()
 		{
@@ -122,6 +112,4 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 		PlayerVsPlayer = 1,
 		PlayerVsComputer = 2
 	}
-
-
 }

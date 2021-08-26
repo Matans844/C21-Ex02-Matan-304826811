@@ -1,23 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 
 namespace C21_Ex02_Matan_304826811.Toolkit
 {
 	public static class EnumerationFor2DArrays<T>
 	{
+		private const int k_RowDimension = 0;
+		private const int k_ColumnDimension = 0;
+
 		public static T[] GetColumn(T[,] i_Matrix, int i_ColumnNumber)
 		{
-			return Enumerable.Range(0, i_Matrix.GetLength(0))
-				.Select(x => i_Matrix[x, i_ColumnNumber])
+			return Enumerable.Range(0, i_Matrix.GetLength(k_RowDimension))
+				.Select(i_IndexForEnumeration => i_Matrix[i_IndexForEnumeration, i_ColumnNumber])
 				.ToArray();
 		}
 
 		public static T[] GetRow(T[,] i_Matrix, int i_RowNumber)
 		{
-			return Enumerable.Range(0, i_Matrix.GetLength(1))
-				.Select(x => i_Matrix[i_RowNumber, x])
+			return Enumerable.Range(0, i_Matrix.GetLength(k_ColumnDimension))
+				.Select(i_IndexForEnumeration => i_Matrix[i_RowNumber, i_IndexForEnumeration])
 				.ToArray();
 		}
     }
