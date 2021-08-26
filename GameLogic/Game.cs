@@ -60,7 +60,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			this.GameBoard = new Board(this.GameBoard.Dimensions, this);
 			this.GameNumber++;
 
-			ScreenCreator.UpdateStatusOfPoints();
+			MessageCreator.UpdateStatusOfPoints();
 			this.StartGame();
 		}
 
