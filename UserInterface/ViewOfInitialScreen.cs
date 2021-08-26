@@ -24,18 +24,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 		public void GetInitialInputsFromUser()
 		{
 			this.GameUserInterfaceAdmin.MyInputOutputHandler.GetAndSetValidDimensionsFromUser();
-
-			if (this.GameUserInterfaceAdmin.HasPlayerQuitGame())
-			{
-				return;
-			}
-
 			this.GameUserInterfaceAdmin.MyInputOutputHandler.GetAndSetValidGameModeFromUser();
-
-			if (this.GameUserInterfaceAdmin.HasPlayerQuitGame())
-			{
-				return;
-			}
 		}
 	}
 }

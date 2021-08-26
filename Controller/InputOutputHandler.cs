@@ -29,11 +29,11 @@ namespace C21_Ex02_Matan_304826811.Controller
 			arg1: eGameMode.PlayerVsPlayer,
 			arg2: eGameMode.PlayerVsComputer);
 
-		public static readonly string sr_GoodbyeMessage = string.Format(
+		public static readonly string sr_GoodbyeMessageBeforeFirstGame = string.Format(
 			"I see You have chosen to postpone your defeat.{0}It is brave to be honest.{0}Goodbye, brave friend!{0}{0}",
 			Environment.NewLine);
 
-		public static readonly string sr_GoodbyeMessageAfterGameStart = string.Format(
+		public static readonly string sr_GoodbyeMessageAfterFirstGameStart = string.Format(
 			"It is no shame to admit defeat. Dust yourself up, and try again.{0}I will be waiting.{0}Goodbye for now!{0}{0}",
 			Environment.NewLine);
 
@@ -46,12 +46,6 @@ namespace C21_Ex02_Matan_304826811.Controller
 		public void GetAndSetValidDimensionsFromUser()
 		{
 			this.getAndSetValidDimensionsFromUser(ref this.GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions, eBoardDimension.Height);
-
-			if (this.GameUserInterfaceAdmin.HasPlayerQuitGame())
-			{
-				return;
-			}
-
 			this.getAndSetValidDimensionsFromUser(ref this.GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions, eBoardDimension.Width);
 		}
 
@@ -59,11 +53,6 @@ namespace C21_Ex02_Matan_304826811.Controller
 		{
 			string promptToUser = i_DimensionToSet == eBoardDimension.Height ? sr_PromptBoardHeightMessage : sr_PromptBoardWidthMessage;
 			string responseFromUser = getFirstNotNullInputFromUser(promptToUser);
-
-			if (this.GameUserInterfaceAdmin.HasPlayerQuitGame())
-			{
-				return;
-			}
 
 			if (int.TryParse(responseFromUser, out var dimensionChosen))
 			{
@@ -73,11 +62,6 @@ namespace C21_Ex02_Matan_304826811.Controller
 			while (io_BoardDimensions.GetterByChoice(i_DimensionToSet) == (int)eBoardDimension.NotInitiated)
 			{
 				responseFromUser = getNotNullInputFromUserAfterError(promptToUser);
-
-				if (this.GameUserInterfaceAdmin.HasPlayerQuitGame())
-				{
-					return;
-				}
 
 				if (int.TryParse(responseFromUser, out dimensionChosen))
 				{
@@ -100,7 +84,14 @@ namespace C21_Ex02_Matan_304826811.Controller
 		{
 			if (i_ResponseFromUser.ToUpper() == UserInterfaceAdmin.k_QuitKey)
 			{
-				this.GameUserInterfaceAdmin.PhaseOfUserInterface = ePhaseOfUserInterface.Terminated;
+				this.GameUserInterfaceAdmin.IsEscapeKeyOn = true;
+
+				if (this.GameUserInterfaceAdmin.IsPlayerQuittingGame())
+				{
+					Console.WriteLine("Press Enter to exit...");
+					Console.ReadLine();
+					Environment.Exit(0);
+				}
 			}
 
 			return i_ResponseFromUser;
@@ -116,11 +107,6 @@ namespace C21_Ex02_Matan_304826811.Controller
 		{
 			string responseFromUser = getFirstNotNullInputFromUser(sr_EnterModePromptMessage);
 
-			if (this.GameUserInterfaceAdmin.HasPlayerQuitGame())
-			{
-				return;
-			}
-
 			Screen.Clear();
 			Console.Write(sr_EnterModePromptMessage);
 
@@ -135,11 +121,6 @@ namespace C21_Ex02_Matan_304826811.Controller
 				do
 				{
 					responseFromUser = this.getNotNullInputFromUserAfterError(sr_EnterModePromptMessage);
-
-					if (this.GameUserInterfaceAdmin.HasPlayerQuitGame())
-					{
-						return;
-					}
 				}
 				while (!(int.TryParse(responseFromUser, out gameModeChosenByUser)
 						&& Enum.IsDefined(typeof(eGameMode), gameModeChosenByUser)
@@ -173,10 +154,19 @@ namespace C21_Ex02_Matan_304826811.Controller
 		{
 			Screen.Clear();
 
-			Console.Write(
-				i_PhaseOfUserInterface == ePhaseOfUserInterface.InitialScreen
-					? sr_GoodbyeMessageAfterGameStart
-					: sr_GoodbyeMessage);
+			switch (i_PhaseOfUserInterface)
+			{
+				case ePhaseOfUserInterface.InitialScreen:
+					Console.Write(sr_GoodbyeMessageBeforeFirstGame);
+					break;
+
+				case ePhaseOfUserInterface.BoardScreen:
+					Console.Write(sr_GoodbyeMessageAfterFirstGameStart);
+					break;
+
+				case ePhaseOfUserInterface.Terminated:
+					break;
+			}
 		}
 	}
 }

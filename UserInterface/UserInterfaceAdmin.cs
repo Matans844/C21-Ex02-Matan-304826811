@@ -21,9 +21,11 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 
 		public Game MyGameLogicUnit { get; set; }
 
-		public ePhaseOfUserInterface PhaseOfUserInterface { get; set; } = ePhaseOfUserInterface.Initiated;
+		public ePhaseOfUserInterface PhaseOfUserInterface { get; set; } = ePhaseOfUserInterface.InitialScreen;
 
-		public eQuitFlag QuitFlag { get; set; } = eQuitFlag.DoNotQuit;
+		public eQuitProcess QuitProcess { get; set; } = eQuitProcess.DoNotQuit;
+
+		public bool IsEscapeKeyOn { get; set; } = false;
 
 		public UserInterfaceAdmin()
 		{
@@ -36,7 +38,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 		{
 			this.initializeGame();
 
-			if (this.HasPlayerQuitGame())
+			if (this.IsPlayerQuittingGame())
 			{
 				return;
 			}
@@ -46,7 +48,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 		{
 			this.MyInitialScreenView.GetInitialInputsFromUser();
 
-			if (this.HasPlayerQuitGame())
+			if (this.IsPlayerQuittingGame())
 			{
 				return;
 			}
@@ -57,28 +59,66 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			this.MyGameLogicUnit.StartGame();
 		}
 
-		private bool isUserInterfaceTerminating()
+		private bool isUserAbandoningGame()
 		{
-			return this.PhaseOfUserInterface == ePhaseOfUserInterface.Terminated;
+			return this.QuitProcess == eQuitProcess.Quit;
 		}
 
-		public bool HasPlayerQuitGame()
+		private bool hasPlayerQuitGame()
 		{
-			if (this.isUserInterfaceTerminating())
+			if (this.IsEscapeKeyOn)
 			{
-				this.MyInputOutputHandler.SayGoodbye(this.PhaseOfUserInterface);
+				this.checkWhyPlayerQuitGame(this.PhaseOfUserInterface);
+
+				if (this.isUserAbandoningGame())
+				{
+					this.MyInputOutputHandler.SayGoodbye(this.PhaseOfUserInterface);
+					this.PhaseOfUserInterface = ePhaseOfUserInterface.Terminated;
+				}
 			}
 
-			return this.isUserInterfaceTerminating();
+			return this.IsEscapeKeyOn;
 		}
 
-		internal bool WantsAnotherGame()
+		private void checkWhyPlayerQuitGame(ePhaseOfUserInterface i_PhaseOfUserInterface)
+		{
+			switch (i_PhaseOfUserInterface)
+			{
+				case ePhaseOfUserInterface.BoardScreen:
+					if (this.doesPlayerWantAnotherGame())
+					{
+						this.IsEscapeKeyOn = false;
+						}
+					else
+					{
+						this.QuitProcess = eQuitProcess.Quit;
+						}
+
+					break;
+
+				case ePhaseOfUserInterface.InitialScreen:
+					this.QuitProcess = eQuitProcess.Quit;
+
+					break;
+
+				case ePhaseOfUserInterface.Terminated:
+
+					break;
+			}
+		}
+
+		public bool IsPlayerQuittingGame()
+		{
+			return this.hasPlayerQuitGame();
+		}
+
+		public bool doesPlayerWantAnotherGame()
 		{
 			throw new NotImplementedException();
 		}
 	}
 
-	public enum eQuitFlag
+	public enum eQuitProcess
 	{
 		DoNotQuit = 0,
 		Quit = 1
@@ -86,9 +126,8 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 
 	public enum ePhaseOfUserInterface
 	{
-		Initiated = 0,
-		InitialScreen = 1,
-		BoardScreen = 2,
-		Terminated = 3
+		InitialScreen = 0,
+		BoardScreen = 1,
+		Terminated = 2
 	}
 }
