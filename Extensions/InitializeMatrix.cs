@@ -1,11 +1,12 @@
-﻿namespace C21_Ex02_Matan_304826811.Extensions
-{
-	using C21_Ex02_Matan_304826811.GameLogic;
+﻿using System;
+using C21_Ex02_Matan_304826811.GameLogic;
 
+namespace C21_Ex02_Matan_304826811.Extensions
+{
 	public static class InitializeMatrix
 	{
 		public const int k_RowDimension = 0;
-		public const int k_ColumnDimension = 0;
+		public const int k_ColumnDimension = 1;
 
 		public static void InitWithEmptyCells<T>(this T[,] io_Matrix)
 			where T : new()
@@ -21,9 +22,15 @@
 
 		public static void InitWithBoardCells(this BoardCell[,] io_Matrix)
 		{
-			for (int i = 0; i < io_Matrix.GetLength(k_RowDimension); i++)
+			int heightOfMatrix = io_Matrix.GetLength(k_RowDimension);
+			int widthOfMatrix = io_Matrix.GetLength(k_ColumnDimension);
+
+			//TODO
+			// Console.ReadLine();
+
+			for (int i = 0; i < heightOfMatrix; i++)
 			{
-				for (int j = 0; j < io_Matrix.GetLength(k_ColumnDimension); j++)
+				for (int j = 0; j < widthOfMatrix; j++)
 				{
 					uint rowOfCell = (uint)i;
 					uint columnOfCell = (uint)j;

@@ -97,7 +97,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 				this.GameBoard.BoardReferee.Winner.PointsEarned++;
 			}
 
-			if (this.GameUserInterfaceAdmin.ConcludeSingleGame())
+			if (this.GameUserInterfaceAdmin.ConcludeSingleGameAndOfferAnotherGame())
 			{
 				this.continueWithAnotherGame();
 			}

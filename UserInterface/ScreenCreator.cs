@@ -8,10 +8,9 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 {
 	public class ScreenCreator
 	{
-		private const int k_SpaceColumnHeaderPrefix = 2;
-		private const int k_SpaceBetweenColumnHeaders = 3;
-		private const int k_HeaderSpaceWidth = 4;
-		private const int k_SpaceBetweenCellCenterAndSeparatingChar = 1;
+		private const int k_SpaceColumnHeaderExtraPrefix = 1;
+		private const int k_SpaceBetweenColumnHeaders = 4;
+		private const int k_SpaceBetweenCellCenterAndSeparatingChar = 2;
 		private const char k_HorizontalLineFillerChar = '=';
 		private const string k_VerticalSeparatingChar = "|";
 		private const string k_EmptyDiscChar = " ";
@@ -25,7 +24,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 		public int ScreenBoardRowWidthInChar
 		{
 			get => s_ScreenBoardWidthInChar;
-			set => s_ScreenBoardWidthInChar = (k_HeaderSpaceWidth * value) + k_SpaceBetweenCellCenterAndSeparatingChar;
+			set => s_ScreenBoardWidthInChar = k_SpaceColumnHeaderExtraPrefix + (k_SpaceBetweenColumnHeaders * value);
 		}
 
 		public UserInterfaceAdmin GameUserInterfaceAdmin { get; set; }
@@ -37,13 +36,21 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 
 		private string buildColumnHeaderRow()
 		{
-			StringBuilder columnHeaderRow = new StringBuilder(k_SpaceColumnHeaderPrefix);
+			StringBuilder columnHeaderRow = new StringBuilder();
 			int numberOfColumnsInBoard = this.GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions.Width;
 			string nextColumnHeader;
 
 			for (int i = 0; i < numberOfColumnsInBoard; i++)
 			{
-				nextColumnHeader = $"{(char)i,k_SpaceBetweenColumnHeaders}";
+				if (i == 0)
+				{
+					nextColumnHeader = $"{i,k_SpaceBetweenColumnHeaders - k_SpaceColumnHeaderExtraPrefix}";
+				}
+				else
+				{
+					nextColumnHeader = $"{i,k_SpaceBetweenColumnHeaders}";
+				}
+
 				columnHeaderRow.Append(nextColumnHeader);
 			}
 
@@ -54,7 +61,10 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 
 		private string buildSeparatingFillerRow()
 		{
-			return new string(k_HorizontalLineFillerChar, ScreenBoardRowWidthInChar);
+			StringBuilder fillerRow = new StringBuilder(new string(k_HorizontalLineFillerChar, this.ScreenBoardRowWidthInChar));
+			fillerRow.Append($"{Environment.NewLine}");
+
+			return fillerRow.ToString();
 		}
 
 		private string getCellStringIdentity(eBoardCellType i_CellType)
@@ -83,7 +93,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			StringBuilder discRow = new StringBuilder(k_VerticalSeparatingChar);
 			string nextColumnDisk;
 
-			BoardCell[] cellRowFromGameBoard = SlicingMatrices<BoardCell>.GetRow(
+			BoardCell[] cellRowFromGameBoard = SlicingMatrices<BoardCell>.GetDimension2Column(
 				this.GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.BoardCellMatrix, i_RowOfBoard);
 
 			foreach (BoardCell cell in cellRowFromGameBoard)
@@ -115,7 +125,9 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 
 		public void PrintGameBoard()
 		{
-			Console.WriteLine(this.buildBoard());
+			string gameBoardInString = this.buildBoard();
+
+			Console.WriteLine(gameBoardInString);
 		}
 	}
 }

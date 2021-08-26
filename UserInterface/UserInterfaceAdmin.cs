@@ -6,6 +6,8 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 {
 	public class UserInterfaceAdmin
 	{
+		public const int k_NumberOfGamesOnFirstGame = 1;
+
 		public DisplayLogic MyGameDisplayLogic { get; set; }
 
 		public MessageCreator MyMessageCreator { get; set; }
@@ -43,12 +45,6 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 		private void initializeGame()
 		{
 			this.MyInitialScreenView.GetInitialInputsFromUser();
-
-			if (this.IsPlayerQuittingGame())
-			{
-				return;
-			}
-
 			MyScreenCreator.ScreenBoardRowWidthInChar = this.MyGameDisplayLogic.m_BoardDimensions.Width;
 			this.MyBoardScreenView = new ViewOfBoardScreen(this);
 			this.PhaseOfUserInterface = ePhaseOfUserInterface.InitialScreen;
@@ -66,13 +62,14 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 		{
 			if (this.IsEscapeKeyOn)
 			{
-				this.checkWhyPlayerQuitGame(this.PhaseOfUserInterface);
-
-				if (this.isUserAbandoningGame())
+				// TODO
+				if (!this.isUserAbandoningGame())
 				{
-					this.MyInputOutputHandler.SayGoodbye(this.PhaseOfUserInterface);
-					this.PhaseOfUserInterface = ePhaseOfUserInterface.Terminated;
+					this.checkWhyPlayerQuitGame(this.PhaseOfUserInterface);
 				}
+
+				this.MyInputOutputHandler.SayGoodbye(this.PhaseOfUserInterface);
+				this.PhaseOfUserInterface = ePhaseOfUserInterface.Terminated;
 			}
 
 			return this.IsEscapeKeyOn;
@@ -83,14 +80,13 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			switch (i_PhaseOfUserInterface)
 			{
 				case ePhaseOfUserInterface.BoardScreen:
-					if (this.concludingSingleGame())
+					this.QuitProcess = eQuitProcess.Quit;
+
+					if (this.concludingSingleGameAndOfferAnother())
 					{
+						this.QuitProcess = eQuitProcess.DoNotQuit;
 						this.IsEscapeKeyOn = false;
-						}
-					else
-					{
-						this.QuitProcess = eQuitProcess.Quit;
-						}
+					}
 
 					break;
 
@@ -110,14 +106,14 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			return this.hasPlayerQuitGame();
 		}
 
-		public bool ConcludeSingleGame()
+		public bool ConcludeSingleGameAndOfferAnotherGame()
 		{
-			return this.concludingSingleGame();
+			return this.concludingSingleGameAndOfferAnother();
 		}
 
-		private bool concludingSingleGame()
+		private bool concludingSingleGameAndOfferAnother()
 		{
-			if (this.MyGameLogicUnit.GameNumber > 0)
+			if (this.MyGameLogicUnit.GameNumber > k_NumberOfGamesOnFirstGame)
 			{
 				this.MyInputOutputHandler.DeclarePointStatus();
 			}

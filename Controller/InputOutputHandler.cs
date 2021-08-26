@@ -9,14 +9,16 @@ namespace C21_Ex02_Matan_304826811.Controller
 {
 	public class InputOutputHandler
 	{
-		public UserInterfaceAdmin GameUserInterfaceAdmin { get; }
-
 		public const string k_QuitKey = "Q";
+		public const bool k_LoopUntilAllInputConditionsAreMetAndBreakByReturn = true;
 
 		private static readonly string sr_InvalidInputMessage = $"Invalid input!{Environment.NewLine}";
+		private static readonly string sr_ColumnIsFull = $"{Environment.NewLine}Chosen column is already full. Choose again.";
 
 		private static readonly string sr_PromptForNextMove =
 			$"Choose column to slide disk in, or press {k_QuitKey} to quit current game: ";
+
+		public UserInterfaceAdmin GameUserInterfaceAdmin { get; }
 
 		public InputOutputHandler(UserInterfaceAdmin i_GameUserInterfaceAdmin)
 		{
@@ -37,7 +39,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 									: MessageCreator.PromptForBoardWidth;
 
 			// Checking for null. We still have to validate type and value.
-			string responseFromUser = getFirstNotNullInputFromUser(promptToUser);
+			string responseFromUser = this.getNewInputAndCheckForExit(promptToUser, eErrorInFirstInput.No);
 
 			// We are updating a struct that guards our dimension constraints.
 			// Validation of type and value goes through the struct guards.
@@ -48,7 +50,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 
 			while (io_BoardDimensions.GetterByChoice(i_DimensionToSet) == (int)eBoardDimension.NotInitiated)
 			{
-				responseFromUser = getNotNullInputFromUserAfterError(promptToUser);
+				responseFromUser = this.getNewInputAndCheckForExit(promptToUser, eErrorInFirstInput.No);
 
 				if (int.TryParse(responseFromUser, out dimensionChosen))
 				{
@@ -65,40 +67,81 @@ namespace C21_Ex02_Matan_304826811.Controller
 		private int getMove()
 		{
 			string responseFromUser;
+			int returnedMove;
 			bool inputIsValidByNullTypeValue = false;
+			bool isInputParsedToInt;
+			bool isInputInRange;
+			eAttemptedOutOfRange moveOutOfRange = eAttemptedOutOfRange.No;
+			int columnChosen;
 
 			Screen.Clear();
 			this.GameUserInterfaceAdmin.MyBoardScreenView.DrawBoard();
 
-			// Null validation.
-			responseFromUser = this.getFirstNotNullInputFromUser(sr_PromptForNextMove);
+			// Exit key validation
+			responseFromUser = this.getNewInputAndCheckForExit(sr_PromptForNextMove, eErrorInFirstInput.No);
 
-			// Type and value validation.
-			if (!int.TryParse(responseFromUser, out var columnChosen)
-				|| !this.GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.IsColumnAvailableForDisc(columnChosen))
+			// Type validation
+			isInputParsedToInt = int.TryParse(responseFromUser, out columnChosen);
+
+			// Value validation
+			isInputInRange = this.isInputInRange(columnChosen, out moveOutOfRange);
+			// TODO debuggin this
+			if(isInputParsedToInt && isInputInRange)
 			{
+				// First input succeeded
+				returnedMove = columnChosen;
+			}
+			else if (!isInputParsedToInt)
+			{
+				// First input did not succeed because input had error.
 				while (!inputIsValidByNullTypeValue)
 				{
-					responseFromUser = this.getNotNullInputFromUserAfterError(sr_PromptForNextMove);
+					// Checking for exit key.
+					responseFromUser = this.getNewInputAndCheckForExit(sr_PromptForNextMove, eErrorInFirstInput.Yes);
 
 					if (int.TryParse(responseFromUser, out columnChosen)
-						&& this.GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.IsColumnAvailableForDisc(columnChosen))
+						&& this.GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.IsColumnAvailableForDisc(columnChosen, out moveOutOfRange))
 					{
+						returnedMove = columnChosen;
 						inputIsValidByNullTypeValue = true;
 					}
 				}
 			}
+			else
+			{
+				// First input did not succeed because move was out of range.
+				Console.WriteLine(sr_ColumnIsFull);
 
-			return columnChosen;
+				while (!inputIsValidByNullTypeValue)
+				{
+					// Checking for exit key.
+					responseFromUser = this.getNewInputAndCheckForExit(sr_PromptForNextMove, eErrorInFirstInput.No);
+
+					if (int.TryParse(responseFromUser, out columnChosen)
+						&& this.GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.IsColumnAvailableForDisc(columnChosen, out moveOutOfRange))
+					{
+						returnedMove = columnChosen;
+						inputIsValidByNullTypeValue = true;
+					}
+				}
+			}
+		}
+
+		private bool isInputInRange(int i_ColumnChosen, out eAttemptedOutOfRange o_ChosenMoveOutOfRange)
+		{
+			return this.GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.IsColumnAvailableForDisc(
+				i_ColumnChosen, out o_ChosenMoveOutOfRange);
 		}
 
 		internal void DeclarePointStatus()
 		{
+			Console.WriteLine();
 			Console.WriteLine(MessageCreator.StatusOfPoints);
 		}
 
 		internal void DeclareGameResult()
 		{
+			Console.WriteLine();
 			Console.WriteLine(MessageCreator.GameResultsMessage);
 		}
 
@@ -114,8 +157,8 @@ namespace C21_Ex02_Matan_304826811.Controller
 
 			Console.Write(MessageCreator.k_PromptForAnotherGame);
 
-			// Null validation.
-			responseFromUser = this.getFirstNotNullInputFromUser(sr_PromptForNextMove);
+			// Not empty validation.
+			responseFromUser = this.getNewInputAndCheckForExit(sr_PromptForNextMove, eErrorInFirstInput.No);
 
 			// Type and value validation.
 			if (!int.TryParse(responseFromUser, out var answerChosenAsInt)
@@ -123,7 +166,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 			{
 				while (!inputIsValidByNullTypeValue)
 				{
-					responseFromUser = this.getNotNullInputFromUserAfterError(sr_PromptForNextMove);
+					responseFromUser = this.getNewInputAndCheckForExit(sr_PromptForNextMove, eErrorInFirstInput.Yes);
 
 					if (int.TryParse(responseFromUser, out answerChosenAsInt)
 						&& (answerChosenAsInt == (int)eBooleanByInt.No || answerChosenAsInt == (int)eBooleanByInt.Yes))
@@ -161,7 +204,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 		// Updates DisplayLogic's GameMode field.
 		private void getAndSetValidGameModeFromUser()
 		{
-			string responseFromUser = getFirstNotNullInputFromUser(MessageCreator.PromptForGameMode);
+			string responseFromUser = this.getNewInputAndCheckForExit(MessageCreator.PromptForGameMode, eErrorInFirstInput.No);
 
 			Screen.Clear();
 			Console.Write(MessageCreator.PromptForGameMode);
@@ -176,7 +219,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 			{
 				do
 				{
-					responseFromUser = this.getNotNullInputFromUserAfterError(MessageCreator.PromptForGameMode);
+					responseFromUser = this.getNewInputAndCheckForExit(MessageCreator.PromptForGameMode, eErrorInFirstInput.Yes);
 				}
 				while (!(int.TryParse(responseFromUser, out gameModeChosenByUser)
 						&& Enum.IsDefined(typeof(eGameMode), gameModeChosenByUser)
@@ -186,24 +229,24 @@ namespace C21_Ex02_Matan_304826811.Controller
 			}
 		}
 
-		private string getNotNullInputFromUserAfterError(string i_PromptToUser)
+		private string getNewInputAndCheckForExit(string i_PromptToUser, eErrorInFirstInput i_ErrorInInput)
 		{
-			return this.getNewInputAfterError(i_PromptToUser) ?? getNotNullInputFromUserAfterError(i_PromptToUser);
-		}
+			string responseFromUser;
 
-		private string getNewInputAfterError(string i_PromptToUser)
-		{
-			Screen.Clear();
-			Console.WriteLine(sr_InvalidInputMessage);
-			Console.Write(i_PromptToUser);
-			return this.identifyExitKey(Console.ReadLine());
-		}
+			if (this.GameUserInterfaceAdmin.PhaseOfUserInterface == ePhaseOfUserInterface.InitialScreen)
+			{
+				Screen.Clear();
+			}
 
-		private string getFirstNotNullInputFromUser(string i_PromptToUser)
-		{
-			Screen.Clear();
+			if (i_ErrorInInput == eErrorInFirstInput.Yes)
+			{
+				Console.WriteLine(sr_InvalidInputMessage);
+			}
+
 			Console.Write(i_PromptToUser);
-			return this.identifyExitKey(Console.ReadLine()) ?? getNotNullInputFromUserAfterError(i_PromptToUser);
+			responseFromUser = Console.ReadLine();
+
+			return this.identifyExitKey(responseFromUser);
 		}
 
 		public void SayGoodbye(ePhaseOfUserInterface i_PhaseOfUserInterface)
@@ -224,11 +267,17 @@ namespace C21_Ex02_Matan_304826811.Controller
 					break;
 			}
 		}
-	}
 
-	public enum eBooleanByInt
-	{
-		No = 0,
-		Yes = 1
+		public enum eBooleanByInt
+		{
+			No = 0,
+			Yes = 1
+		}
+
+		public enum eErrorInFirstInput
+		{
+			No = 0,
+			Yes = 1
+		}
 	}
 }

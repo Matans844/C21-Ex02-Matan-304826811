@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using C21_Ex02_Matan_304826811.UserInterface;
 using C21_Ex02_Matan_304826811.Extensions;
@@ -7,7 +8,8 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 {
 	public class Board
 	{
-		// Auto properties are used. They contain class fields.
+		private const int k_TransformToIndicesWith1 = 1;
+
 		public Game GameForBoard { get; }
 
 		public eBoardState BoardState { get; set; } = eBoardState.NotFinished;
@@ -37,6 +39,12 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 				i_ChosenGameDimensions.Width, i_ChosenGameDimensions.Height).ToArray();
 		}
 
+		private static bool isChosenColumnInRange(int i_ChosenColumn, int i_NumOfColumnsInBoard)
+		{
+			return i_ChosenColumn < k_TransformToIndicesWith1
+					|| i_ChosenColumn > i_NumOfColumnsInBoard - k_TransformToIndicesWith1;
+		}
+
 		public eBoardState SlideDisk(int i_Column, eBoardCellType i_PlayerDiscType)
 		{
 			return insertToBoard(i_Column, ref i_PlayerDiscType);
@@ -44,7 +52,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		private eBoardState insertToBoard(int i_Column, ref eBoardCellType i_PlayerDiscType)
 		{
-			var lastVacantCellInColumn = this.Dimensions.Height - this.NumOfCellVacanciesInColumn[i_Column];
+			int lastVacantCellInColumn = this.Dimensions.Height - this.NumOfCellVacanciesInColumn[i_Column];
 
 			this.NumOfCellVacanciesInColumn[i_Column]--;
 			this.NumOfCellVacanciesInBoard--;
@@ -65,14 +73,28 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			return this.BoardState;
 		}
 
-		private bool columnAvailabilityForDisc(int i_ChosenColumn)
+		private bool columnAvailabilityForDisc(int i_ChosenColumn, out eAttemptedOutOfRange o_LastMoveOutOfRange)
 		{
-			return this.NumOfCellVacanciesInColumn[i_ChosenColumn] == 0;
+			int chosenColumnTranslatedToMatrixIndices = i_ChosenColumn - 1;
+			int numOfColumns = this.Dimensions.Width;
+			bool isValidChoice = false;
+
+			if (isChosenColumnInRange(i_ChosenColumn, numOfColumns))
+			{
+				o_LastMoveOutOfRange = eAttemptedOutOfRange.No;
+				isValidChoice = this.NumOfCellVacanciesInColumn[chosenColumnTranslatedToMatrixIndices] == 0;
+			}
+			else
+			{
+				o_LastMoveOutOfRange = eAttemptedOutOfRange.Yes;
+			}
+
+			return isValidChoice;
 		}
 
-		public bool IsColumnAvailableForDisc(int i_ChosenColumn)
+		public bool IsColumnAvailableForDisc(int i_ChosenColumn, out eAttemptedOutOfRange io_MoveOutOfRange)
 		{
-			return this.columnAvailabilityForDisc(i_ChosenColumn);
+			return this.columnAvailabilityForDisc(i_ChosenColumn, out io_MoveOutOfRange);
 		}
 	}
 
@@ -81,5 +103,11 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 		NotFinished = 0,
 		FinishedInDraw = 1,
 		FinishedInWin = 2
+	}
+
+	public enum eAttemptedOutOfRange
+	{
+		No = 0,
+		Yes = 1
 	}
 }
