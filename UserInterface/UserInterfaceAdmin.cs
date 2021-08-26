@@ -17,6 +17,8 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 	{
 		public DisplayLogic MyGameDisplayLogic { get; set; }
 
+		public MessageCreator MyMessageCreator { get; set; }
+
 		public InputOutputHandler MyInputOutputHandler { get; set; }
 
 		public ViewOfInitialScreen MyInitialScreenView { get; set; }
@@ -36,6 +38,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			this.MyGameDisplayLogic = new DisplayLogic(this);
 			this.MyInputOutputHandler = new InputOutputHandler(this);
 			this.MyInitialScreenView = new ViewOfInitialScreen(this);
+			this.MyMessageCreator = new MessageCreator(this);
 		}
 
 		public void InitializeGame()
@@ -61,7 +64,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			this.MyBoardScreenView = new ViewOfBoardScreen(this);
 			this.PhaseOfUserInterface = ePhaseOfUserInterface.InitialScreen;
 			this.MyGameLogicUnit = new Game(this.MyGameDisplayLogic.GameMode, this.MyGameDisplayLogic.m_BoardDimensions, this);
-			MessageCreator.UpdateStatusOfPoints();
+			this.MyMessageCreator.UpdateStatusOfPoints();
 			this.MyGameLogicUnit.StartGame();
 		}
 

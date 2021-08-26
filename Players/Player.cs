@@ -16,7 +16,9 @@ namespace C21_Ex02_Matan_304826811.Players
 {
 	public abstract class Player
 	{
-		public int PlayerID { get; } = 0;
+		private static int s_InstanceCounter;
+
+		public int PlayerID { get; }
 
 		public Board BoardOfPlayer { get; }
 
@@ -31,7 +33,7 @@ namespace C21_Ex02_Matan_304826811.Players
 			this.DiscType = i_DiscType;
 			this.BoardOfPlayer = i_BoardOfPlayer;
 			this.TurnState = i_TurnState;
-			this.PlayerID++;
+			this.PlayerID = ++s_InstanceCounter;
 		}
 
 		public abstract eBoardState MakeMove(int i_ChosenColumn);

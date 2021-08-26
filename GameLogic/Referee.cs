@@ -57,6 +57,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 					if (hasWinnerConnection)
 					{
 						this.updateWinner(i_LastDiscPlaced);
+						this.BoardToReferee.GameForBoard.GameUserInterfaceAdmin.MyMessageCreator.UpdateResultsMessage();
 					}
 				}
 			}
