@@ -26,27 +26,6 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 		private const string k_XDiscChar = "X";
 		private const string k_ODiscChar = "O";
 
-		private static readonly string sr_PromptBoardHeightMessage =
-			$"Enter board height, between {Constraints.BoardDimensions.HeightLowerLimit} and {Constraints.BoardDimensions.HeightUpperLimit}: ";
-
-		private static readonly string sr_PromptBoardWidthMessage =
-			$"Enter board width, between {Constraints.BoardDimensions.WidthLowerLimit} and {Constraints.BoardDimensions.WidthUpperLimit}: ";
-
-		private static readonly string sr_EnterModePromptMessage = string.Format(
-			format:
-			"Choose game mode: {0}Enter {1:D} to play against a human. {0}Enter {2:D} to play against a computer. {0}",
-			Environment.NewLine,
-			arg1: eGameMode.PlayerVsPlayer,
-			arg2: eGameMode.PlayerVsComputer);
-
-		private static readonly string sr_GoodbyeMessageBeforeFirstGame = string.Format(
-			"I see You have chosen to postpone your defeat.{0}It is brave to be honest.{0}Goodbye, brave friend!{0}{0}",
-			Environment.NewLine);
-
-		private static readonly string sr_GoodbyeMessageAfterFirstGameStart = string.Format(
-			"It is no shame to admit defeat. Dust yourself up, and try again.{0}I will be waiting.{0}Goodbye for now!{0}{0}",
-			Environment.NewLine);
-
 		private static int s_ScreenBoardWidthInChar;
 
 		public static StringBuilder ScreenBoardBuilder { get; set; }
@@ -58,18 +37,6 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 		}
 
 		public static UserInterfaceAdmin GameUserInterfaceAdmin { get; set; }
-
-		public static string GoodbyeMessageAfterFirstGameStart => sr_GoodbyeMessageAfterFirstGameStart;
-
-		public static string GoodbyeMessageBeforeFirstGame => sr_GoodbyeMessageBeforeFirstGame;
-
-		public static string PromptForGameMode => sr_EnterModePromptMessage;
-
-		public static string PromptForBoardWidth => sr_PromptBoardWidthMessage;
-
-		public static string PromptForBoardHeight => sr_PromptBoardHeightMessage;
-
-		public static string StatusOfPoints { get; set; }
 
 		public ScreenCreator(UserInterfaceAdmin i_MyUserInterfaceAdmin)
 		{
@@ -158,18 +125,5 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 		{
 			Console.WriteLine(buildBoard());
 		}
-
-		private static void setPointsStatus()
-		{
-			int player1Points = GameUserInterfaceAdmin.MyGameLogicUnit.Player1WithXs.PointsEarned;
-			int player2Points = GameUserInterfaceAdmin.MyGameLogicUnit.Player2WithOs.PointsEarned;
-			StatusOfPoints = string.Format("Points so far:{0}Player 1 has {1} points.{0}Player 2 has {2} points.", Environment.NewLine, player1Points, player2Points);
-		}
-
-		public static void UpdateStatusOfPoints()
-		{
-			setPointsStatus();
-		}
-
 	}
 }

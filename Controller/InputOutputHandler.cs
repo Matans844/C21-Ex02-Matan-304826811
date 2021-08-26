@@ -38,8 +38,8 @@ namespace C21_Ex02_Matan_304826811.Controller
 		private void getAndSetValidDimensionsFromUser(ref GameBoardDimensions io_BoardDimensions, eBoardDimension i_DimensionToSet)
 		{
 			string promptToUser = i_DimensionToSet == eBoardDimension.Height
-									? ScreenCreator.PromptForBoardHeight
-									: ScreenCreator.PromptForBoardWidth;
+									? MessageCreator.PromptForBoardHeight
+									: MessageCreator.PromptForBoardWidth;
 
 			// Checking for null. We still have to validate type and value.
 			string responseFromUser = getFirstNotNullInputFromUser(promptToUser);
@@ -76,7 +76,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 			this.GameUserInterfaceAdmin.MyBoardScreenView.DrawBoard();
 
 			// Null validation.
-			responseFromUser = getFirstNotNullInputFromUser(sr_PromptForNextMove);
+			responseFromUser = this.getFirstNotNullInputFromUser(sr_PromptForNextMove);
 
 			// Type and value validation.
 			if (!int.TryParse(responseFromUser, out var columnChosen)
@@ -99,13 +99,12 @@ namespace C21_Ex02_Matan_304826811.Controller
 
 		internal void DeclarePointStatus()
 		{
-			Console.WriteLine(ScreenCreator.StatusOfPoints);
+			Console.WriteLine(MessageCreator.StatusOfPoints);
 		}
 
 		internal void DeclareGameResult()
 		{
-			// TODO: Who won?
-			throw new NotImplementedException();
+			Console.WriteLine(MessageCreator.GameResultsMessage);
 		}
 
 		public bool PromptForAnotherGame()
@@ -115,8 +114,31 @@ namespace C21_Ex02_Matan_304826811.Controller
 
 		private bool askForAnotherGame()
 		{
-			// TODO: Prompt a message. Get Input. Checks required: null, bool. This was done with ints for dimensions.
-			throw new NotImplementedException();
+			string responseFromUser;
+			bool inputIsValidByNullTypeValue = false;
+
+			Console.Write(MessageCreator.k_PromptForAnotherGame);
+
+			// Null validation.
+			responseFromUser = this.getFirstNotNullInputFromUser(sr_PromptForNextMove);
+
+			// Type and value validation.
+			if (!int.TryParse(responseFromUser, out var answerChosenAsInt)
+				|| (answerChosenAsInt != (int)eBooleanByInt.No && answerChosenAsInt != (int)eBooleanByInt.Yes))
+			{
+				while (!inputIsValidByNullTypeValue)
+				{
+					responseFromUser = this.getNotNullInputFromUserAfterError(sr_PromptForNextMove);
+
+					if (int.TryParse(responseFromUser, out answerChosenAsInt)
+						&& (answerChosenAsInt == (int)eBooleanByInt.No || answerChosenAsInt == (int)eBooleanByInt.Yes))
+					{
+						inputIsValidByNullTypeValue = true;
+					}
+				}
+			}
+
+			return answerChosenAsInt == (int)eBooleanByInt.Yes;
 		}
 
 		private string identifyExitKey(string i_ResponseFromUser)
@@ -144,10 +166,10 @@ namespace C21_Ex02_Matan_304826811.Controller
 		// Updates DisplayLogic's GameMode field.
 		private void getAndSetValidGameModeFromUser()
 		{
-			string responseFromUser = getFirstNotNullInputFromUser(ScreenCreator.PromptForGameMode);
+			string responseFromUser = getFirstNotNullInputFromUser(MessageCreator.PromptForGameMode);
 
 			Screen.Clear();
-			Console.Write(ScreenCreator.PromptForGameMode);
+			Console.Write(MessageCreator.PromptForGameMode);
 
 			if (int.TryParse(responseFromUser, out var gameModeChosenByUser)
 				&& Enum.IsDefined(typeof(eGameMode), gameModeChosenByUser)
@@ -159,7 +181,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 			{
 				do
 				{
-					responseFromUser = this.getNotNullInputFromUserAfterError(ScreenCreator.PromptForGameMode);
+					responseFromUser = this.getNotNullInputFromUserAfterError(MessageCreator.PromptForGameMode);
 				}
 				while (!(int.TryParse(responseFromUser, out gameModeChosenByUser)
 						&& Enum.IsDefined(typeof(eGameMode), gameModeChosenByUser)
@@ -196,16 +218,22 @@ namespace C21_Ex02_Matan_304826811.Controller
 			switch (i_PhaseOfUserInterface)
 			{
 				case ePhaseOfUserInterface.InitialScreen:
-					Console.Write(ScreenCreator.GoodbyeMessageBeforeFirstGame);
+					Console.WriteLine(MessageCreator.GoodbyeMessageBeforeFirstGameStarts);
 					break;
 
 				case ePhaseOfUserInterface.BoardScreen:
-					Console.Write(ScreenCreator.GoodbyeMessageAfterFirstGameStart);
+					Console.WriteLine(MessageCreator.GoodbyeMessageAfterFirstGameStart);
 					break;
 
 				case ePhaseOfUserInterface.Terminated:
 					break;
 			}
 		}
+	}
+
+	public enum eBooleanByInt
+	{
+		No = 0,
+		Yes = 1
 	}
 }

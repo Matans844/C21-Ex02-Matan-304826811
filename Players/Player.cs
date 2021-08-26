@@ -16,6 +16,8 @@ namespace C21_Ex02_Matan_304826811.Players
 {
 	public abstract class Player
 	{
+		public int PlayerID { get; } = 0;
+
 		public Board BoardOfPlayer { get; }
 
 		public int PointsEarned { get; set; } = Game.k_ZeroPoints;
@@ -29,6 +31,7 @@ namespace C21_Ex02_Matan_304826811.Players
 			this.DiscType = i_DiscType;
 			this.BoardOfPlayer = i_BoardOfPlayer;
 			this.TurnState = i_TurnState;
+			this.PlayerID++;
 		}
 
 		public abstract eBoardState MakeMove(int i_ChosenColumn);

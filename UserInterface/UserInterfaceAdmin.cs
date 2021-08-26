@@ -61,7 +61,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			this.MyBoardScreenView = new ViewOfBoardScreen(this);
 			this.PhaseOfUserInterface = ePhaseOfUserInterface.InitialScreen;
 			this.MyGameLogicUnit = new Game(this.MyGameDisplayLogic.GameMode, this.MyGameDisplayLogic.m_BoardDimensions, this);
-			ScreenCreator.UpdateStatusOfPoints();
+			MessageCreator.UpdateStatusOfPoints();
 			this.MyGameLogicUnit.StartGame();
 		}
 
@@ -91,7 +91,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			switch (i_PhaseOfUserInterface)
 			{
 				case ePhaseOfUserInterface.BoardScreen:
-					if (this.ConcludingSingleGame())
+					if (this.concludingSingleGame())
 					{
 						this.IsEscapeKeyOn = false;
 						}
@@ -118,10 +118,22 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			return this.hasPlayerQuitGame();
 		}
 
-		public bool ConcludingSingleGame()
+		public bool ConcludeSingleGame()
 		{
-			this.MyInputOutputHandler.DeclareGameResult();
-			this.MyInputOutputHandler.DeclarePointStatus();
+			return this.concludingSingleGame();
+		}
+
+		private bool concludingSingleGame()
+		{
+			if (this.MyGameLogicUnit.GameNumber > 0)
+			{
+				this.MyInputOutputHandler.DeclarePointStatus();
+			}
+
+			if (this.MyGameLogicUnit.GameBoard.BoardState == eBoardState.FinishedInWin)
+			{
+				this.MyInputOutputHandler.DeclareGameResult();
+			}
 
 			return this.askPlayerForAnotherGame();
 		}

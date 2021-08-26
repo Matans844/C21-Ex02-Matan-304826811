@@ -58,6 +58,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 		private void continueWithAnotherGame()
 		{
 			this.GameBoard = new Board(this.GameBoard.Dimensions, this);
+			this.GameNumber++;
 
 			ScreenCreator.UpdateStatusOfPoints();
 			this.StartGame();
@@ -106,7 +107,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 				this.GameBoard.BoardReferee.Winner.PointsEarned++;
 			}
 
-			if (this.GameUserInterfaceAdmin.ConcludingSingleGame())
+			if (this.GameUserInterfaceAdmin.ConcludeSingleGame())
 			{
 				this.continueWithAnotherGame();
 			}

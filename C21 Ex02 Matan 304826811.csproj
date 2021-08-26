@@ -45,6 +45,7 @@
     <Compile Include="Players\PlayerHuman.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Toolkit\EnumerationFor2DArrays.cs" />
+    <Compile Include="UserInterface\MessageCreator.cs" />
     <Compile Include="UserInterface\ScreenCreator.cs" />
     <Compile Include="UserInterface\UserInterfaceAdmin.cs" />
     <Compile Include="Views\View.cs" />

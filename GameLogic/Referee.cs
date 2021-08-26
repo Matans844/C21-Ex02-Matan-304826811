@@ -87,42 +87,49 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 						BoardToReferee.BoardCellMatrix[focalRow, focalColumn + 2],
 						BoardToReferee.BoardCellMatrix[focalRow, focalColumn + 3]);
 					break;
+
 				case eDirectionOfDiscConnection.UpRight:
 					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
 						BoardToReferee.BoardCellMatrix[focalRow - 1, focalColumn + 1],
 						BoardToReferee.BoardCellMatrix[focalRow - 2, focalColumn + 2],
 						BoardToReferee.BoardCellMatrix[focalRow - 3, focalColumn + 3]);
 					break;
+
 				case eDirectionOfDiscConnection.Up:
 					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
 						BoardToReferee.BoardCellMatrix[focalRow - 1, focalColumn],
 						BoardToReferee.BoardCellMatrix[focalRow - 2, focalColumn],
 						BoardToReferee.BoardCellMatrix[focalRow - 3, focalColumn]);
 					break;
+
 				case eDirectionOfDiscConnection.UpLeft:
 					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
 						BoardToReferee.BoardCellMatrix[focalRow - 1, focalColumn - 1],
 						BoardToReferee.BoardCellMatrix[focalRow - 2, focalColumn - 2],
 						BoardToReferee.BoardCellMatrix[focalRow - 3, focalColumn - 3]);
 					break;
+
 				case eDirectionOfDiscConnection.Left:
 					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
 						BoardToReferee.BoardCellMatrix[focalRow, focalColumn - 1],
 						BoardToReferee.BoardCellMatrix[focalRow, focalColumn - 2],
 						BoardToReferee.BoardCellMatrix[focalRow, focalColumn - 3]);
 					break;
+
 				case eDirectionOfDiscConnection.DownLeft:
 					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
 						BoardToReferee.BoardCellMatrix[focalRow + 1, focalColumn - 1],
 						BoardToReferee.BoardCellMatrix[focalRow + 2, focalColumn - 2],
 						BoardToReferee.BoardCellMatrix[focalRow + 3, focalColumn - 3]);
 					break;
+
 				case eDirectionOfDiscConnection.Down:
 					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
 						BoardToReferee.BoardCellMatrix[focalRow + 1, focalColumn],
 						BoardToReferee.BoardCellMatrix[focalRow + 2, focalColumn],
 						BoardToReferee.BoardCellMatrix[focalRow + 3, focalColumn]);
 					break;
+
 				case eDirectionOfDiscConnection.DownRight:
 					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
 						BoardToReferee.BoardCellMatrix[focalRow + 1, focalColumn + 1],
@@ -147,24 +154,31 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 				case eDirectionOfDiscConnection.Right:
 					isDistantDiscAvailable = numOfMatrixColumns > focalColumn + Game.k_LengthOfWinningConnection;
 					break;
+
 				case eDirectionOfDiscConnection.UpRight:
 					isDistantDiscAvailable = (numOfMatrixColumns > focalColumn + Game.k_LengthOfWinningConnection) && (numOfMatrixRows > focalRow - Game.k_LengthOfWinningConnection);
 					break;
+
 				case eDirectionOfDiscConnection.Up:
 					isDistantDiscAvailable = numOfMatrixRows > focalRow - Game.k_LengthOfWinningConnection;
 					break;
+
 				case eDirectionOfDiscConnection.UpLeft:
 					isDistantDiscAvailable = (numOfMatrixColumns > focalColumn - Game.k_LengthOfWinningConnection) && (numOfMatrixRows > focalRow - Game.k_LengthOfWinningConnection);
 					break;
+
 				case eDirectionOfDiscConnection.Left:
 					isDistantDiscAvailable = numOfMatrixColumns > focalColumn - Game.k_LengthOfWinningConnection;
 					break;
+
 				case eDirectionOfDiscConnection.DownLeft:
 					isDistantDiscAvailable = (numOfMatrixColumns > focalColumn - Game.k_LengthOfWinningConnection) && (numOfMatrixRows > focalRow + Game.k_LengthOfWinningConnection);
 					break;
+
 				case eDirectionOfDiscConnection.Down:
 					isDistantDiscAvailable = numOfMatrixRows > focalRow + Game.k_LengthOfWinningConnection;
 					break;
+
 				case eDirectionOfDiscConnection.DownRight:
 					isDistantDiscAvailable = (numOfMatrixRows > focalRow + Game.k_LengthOfWinningConnection) && (numOfMatrixRows > focalRow + Game.k_LengthOfWinningConnection);
 					break;
