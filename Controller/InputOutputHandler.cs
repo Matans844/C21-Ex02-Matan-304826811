@@ -69,7 +69,6 @@ namespace C21_Ex02_Matan_304826811.Controller
 
 		private int getMove()
 		{
-			int moveChosen;
 			string responseFromUser;
 			bool inputIsValidByNullTypeValue = false;
 
@@ -100,8 +99,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 
 		internal void DeclarePointStatus()
 		{
-			// TODO: Points
-			throw new NotImplementedException();
+			Console.WriteLine(ScreenCreator.StatusOfPoints);
 		}
 
 		internal void DeclareGameResult()
@@ -123,7 +121,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 
 		private string identifyExitKey(string i_ResponseFromUser)
 		{
-			if (i_ResponseFromUser.ToUpper() == UserInterfaceAdmin.k_QuitKey)
+			if (i_ResponseFromUser.ToUpper() == k_QuitKey)
 			{
 				this.GameUserInterfaceAdmin.IsEscapeKeyOn = true;
 

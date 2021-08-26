@@ -58,13 +58,15 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 		private void continueWithAnotherGame()
 		{
 			this.GameBoard = new Board(this.GameBoard.Dimensions, this);
+
+			ScreenCreator.UpdateStatusOfPoints();
 			this.StartGame();
 		}
 
 		private eBoardState getGameState(Board i_BoardOfGame)
 		{
 			return i_BoardOfGame.BoardState;
-			}
+		}
 
 		private bool hasGameEnded()
 		{
@@ -101,7 +103,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 			if (!this.hasGameEndedInDraw())
 			{
-				this.GameBoard.BoardReferee.Winner.Point++;
+				this.GameBoard.BoardReferee.Winner.PointsEarned++;
 			}
 
 			if (this.GameUserInterfaceAdmin.ConcludingSingleGame())

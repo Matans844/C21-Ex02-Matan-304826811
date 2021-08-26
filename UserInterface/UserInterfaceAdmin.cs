@@ -61,7 +61,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			this.MyBoardScreenView = new ViewOfBoardScreen(this);
 			this.PhaseOfUserInterface = ePhaseOfUserInterface.InitialScreen;
 			this.MyGameLogicUnit = new Game(this.MyGameDisplayLogic.GameMode, this.MyGameDisplayLogic.m_BoardDimensions, this);
-
+			ScreenCreator.UpdateStatusOfPoints();
 			this.MyGameLogicUnit.StartGame();
 		}
 

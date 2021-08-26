@@ -69,6 +69,8 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 
 		public static string PromptForBoardHeight => sr_PromptBoardHeightMessage;
 
+		public static string StatusOfPoints { get; set; }
+
 		public ScreenCreator(UserInterfaceAdmin i_MyUserInterfaceAdmin)
 		{
 			GameUserInterfaceAdmin = i_MyUserInterfaceAdmin;
@@ -156,5 +158,18 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 		{
 			Console.WriteLine(buildBoard());
 		}
+
+		private static void setPointsStatus()
+		{
+			int player1Points = GameUserInterfaceAdmin.MyGameLogicUnit.Player1WithXs.PointsEarned;
+			int player2Points = GameUserInterfaceAdmin.MyGameLogicUnit.Player2WithOs.PointsEarned;
+			StatusOfPoints = string.Format("Points so far:{0}Player 1 has {1} points.{0}Player 2 has {2} points.", Environment.NewLine, player1Points, player2Points);
+		}
+
+		public static void UpdateStatusOfPoints()
+		{
+			setPointsStatus();
+		}
+
 	}
 }

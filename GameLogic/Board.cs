@@ -80,7 +80,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		public bool IsColumnAvailableForDisc(int i_ChosenColumn)
 		{
-			return this.columnAvailabilityForDisc(i_ChosenColumn)l
+			return this.columnAvailabilityForDisc(i_ChosenColumn);
 		}
 	}
 

@@ -18,7 +18,7 @@ namespace C21_Ex02_Matan_304826811.Players
 	{
 		public Board BoardOfPlayer { get; }
 
-		public int Point { get; set; } = Game.k_ZeroPoints;
+		public int PointsEarned { get; set; } = Game.k_ZeroPoints;
 
 		public eBoardCellType DiscType { get; }
 
