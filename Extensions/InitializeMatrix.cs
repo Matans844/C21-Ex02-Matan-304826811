@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using C21_Ex02_Matan_304826811.Extensions;
-
-namespace C21_Ex02_Matan_304826811.Extensions
+﻿namespace C21_Ex02_Matan_304826811.Extensions
 {
 	using C21_Ex02_Matan_304826811.GameLogic;
 

@@ -1,7 +1,7 @@
-﻿namespace C21_Ex02_Matan_304826811.Views
-{
-	using C21_Ex02_Matan_304826811.UserInterface;
+﻿using C21_Ex02_Matan_304826811.UserInterface;
 
+namespace C21_Ex02_Matan_304826811.Views
+{
 	// The initial screen is the Console
 	public class ViewOfBoardScreen : View
 	{
