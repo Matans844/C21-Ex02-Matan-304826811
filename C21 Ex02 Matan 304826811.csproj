@@ -32,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Extensions\InitializeMatrix.cs" />
     <Compile Include="GameLogic\Board.cs" />
     <Compile Include="GameLogic\Referee.cs" />
     <Compile Include="Players\IMoveChooser.cs" />
@@ -44,7 +45,7 @@
     <Compile Include="Players\PlayerComputer.cs" />
     <Compile Include="Players\PlayerHuman.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Toolkit\EnumerationFor2DArrays.cs" />
+    <Compile Include="Extensions\SlicingMatrices.cs" />
     <Compile Include="UserInterface\MessageCreator.cs" />
     <Compile Include="UserInterface\ScreenCreator.cs" />
     <Compile Include="UserInterface\UserInterfaceAdmin.cs" />

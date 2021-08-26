@@ -83,7 +83,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			StringBuilder discRow = new StringBuilder(k_VerticalSeparatingChar);
 			string nextColumnDisk;
 
-			BoardCell[] cellRowFromGameBoard = EnumerationFor2DArrays<BoardCell>.GetRow(
+			BoardCell[] cellRowFromGameBoard = SlicingMatrices<BoardCell>.GetRow(
 				this.GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.BoardCellMatrix, i_RowOfBoard);
 
 			foreach (BoardCell cell in cellRowFromGameBoard)

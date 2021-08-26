@@ -4,6 +4,8 @@ using C21_Ex02_Matan_304826811.UserInterface;
 
 namespace C21_Ex02_Matan_304826811.GameLogic
 {
+	using C21_Ex02_Matan_304826811.Extensions;
+
 	public class Board
 	{
 		// Auto properties are used. They contain class fields.
@@ -28,6 +30,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			this.GameForBoard = i_GameForBoard;
 			this.Dimensions = i_ChosenGameDimensions;
 			this.BoardCellMatrix = new BoardCell[i_ChosenGameDimensions.Height, i_ChosenGameDimensions.Width];
+			this.BoardCellMatrix.InitWithBoardCells();
 			this.BoardReferee = new Referee(this);
 			this.NumOfCellVacanciesInBoard = i_ChosenGameDimensions.Height * i_ChosenGameDimensions.Width;
 
