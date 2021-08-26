@@ -85,7 +85,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			switch (i_PhaseOfUserInterface)
 			{
 				case ePhaseOfUserInterface.BoardScreen:
-					if (this.doesPlayerWantAnotherGame())
+					if (this.DoesPlayerWantAnotherGame())
 					{
 						this.IsEscapeKeyOn = false;
 						}
@@ -112,9 +112,14 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			return this.hasPlayerQuitGame();
 		}
 
-		public bool doesPlayerWantAnotherGame()
+		public bool DoesPlayerWantAnotherGame()
 		{
-			throw new NotImplementedException();
+			return this.askPlayerForAnotherGame();
+		}
+
+		private bool askPlayerForAnotherGame()
+		{
+			return this.MyInputOutputHandler.PromptForAnotherGame();
 		}
 	}
 

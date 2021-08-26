@@ -7,7 +7,7 @@ using Ex02.ConsoleUtils;
 
 namespace C21_Ex02_Matan_304826811.Players
 {
-	public class PlayerComputer : Player
+	public class PlayerComputer : Player, IMoveChooser
 	{
 		private const ePlayerType k_PlayerType = ePlayerType.Computer;
 
@@ -23,8 +23,10 @@ namespace C21_Ex02_Matan_304826811.Players
 			return this.BoardOfPlayer.SlideDisk(this.ChooseColumnForMove(), this.DiscType);
 		}
 
-		protected override int ChooseColumnForMove()
+		public int ChooseColumnForMove()
 		{
+			// TODO: First choose int randomly, check that it works. Get input. Checks required: validity (does board support?).
+			// TODO: Try and write engine. This can be done through translation from Cpp in GitHub.
 			throw new System.NotImplementedException();
 		}
 	}

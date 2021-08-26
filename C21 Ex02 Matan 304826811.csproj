@@ -34,6 +34,7 @@
   <ItemGroup>
     <Compile Include="GameLogic\Board.cs" />
     <Compile Include="GameLogic\Referee.cs" />
+    <Compile Include="Players\IMoveChooser.cs" />
     <Compile Include="Players\Player.cs" />
     <Compile Include="Presets\Constraints.cs" />
     <Compile Include="Controller\InputOutputHandler.cs" />

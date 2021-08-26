@@ -82,16 +82,13 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		public void StartGame()
 		{
-			int moveChosenByPlayer;
 			this.GameUserInterfaceAdmin.PhaseOfUserInterface = ePhaseOfUserInterface.BoardScreen;
 
 			while (!this.GameUserInterfaceAdmin.IsPlayerQuittingGame())
 			{
 				foreach (Player playerOfGame in this.BoxingPlayersInGame)
 				{
-					moveChosenByPlayer = this.GameUserInterfaceAdmin.MyInputOutputHandler.PromptForMove();
-
-					playerOfGame.MakeMove(moveChosenByPlayer);
+					playerOfGame.MakeMove(this.GameUserInterfaceAdmin.MyInputOutputHandler.PromptForMove());
 
 					if (this.hasGameEnded())
 					{
@@ -105,7 +102,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 				this.GameBoard.BoardReferee.Winner.Point++;
 			}
 
-			if (this.GameUserInterfaceAdmin.doesPlayerWantAnotherGame())
+			if (this.GameUserInterfaceAdmin.DoesPlayerWantAnotherGame())
 			{
 				this.continueWithAnotherGame();
 			}

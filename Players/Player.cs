@@ -29,8 +29,6 @@ namespace C21_Ex02_Matan_304826811.Players
 		}
 
 		public abstract eBoardState MakeMove(int i_ChosenColumn);
-
-		protected abstract int ChooseColumnForMove();
 	}
 
 	public enum ePlayerType

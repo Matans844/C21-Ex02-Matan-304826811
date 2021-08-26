@@ -72,11 +72,23 @@ namespace C21_Ex02_Matan_304826811.Controller
 
 		public int PromptForMove()
 		{
-			return this.promptForMove();
+			return this.askForAnotherMove();
 		}
 
-		private int promptForMove()
+		private int askForAnotherMove()
 		{
+			// TODO: Before each move prompt, create draw (implement ScreenCreator) board screen (ViewOfBoardScreen). Get input. Checks required: null, int, validity (does board support this int?).
+			throw new NotImplementedException();
+		}
+
+		public bool PromptForAnotherGame()
+		{
+			return this.askForAnotherGame();
+		}
+
+		private bool askForAnotherGame()
+		{
+			// TODO: Prompt a message. Get Input. Checks required: null, bool. This was done with ints for dimensions.
 			throw new NotImplementedException();
 		}
 

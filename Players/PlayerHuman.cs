@@ -22,10 +22,5 @@ namespace C21_Ex02_Matan_304826811.Players
 		{
 			return this.BoardOfPlayer.SlideDisk(i_ChosenColumn, this.DiscType);
 		}
-
-		protected override int ChooseColumnForMove()
-		{
-			throw new System.NotImplementedException();
-		}
 	}
 }
