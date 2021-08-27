@@ -175,7 +175,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 
 			while (io_BoardDimensions.GetterByChoice(i_DimensionToSet) == (int)eBoardDimension.NotInitiated)
 			{
-				responseFromUser = this.getNewInputAndCheckForExit(promptToUser, eErrorInPreviousInput.No);
+				responseFromUser = this.getNewInputAndCheckForExit(promptToUser, eErrorInPreviousInput.Yes);
 
 				if (int.TryParse(responseFromUser, out dimensionChosen))
 				{
