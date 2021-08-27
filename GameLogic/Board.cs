@@ -73,7 +73,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			return this.BoardState;
 		}
 
-		private bool columnAvailabilityForDisc(int i_ChosenColumn, out eAttemptedOutOfRange o_LastMoveOutOfRange)
+		private bool columnAvailabilityForDisc(int i_ChosenColumn)
 		{
 			int chosenColumnTranslatedToMatrixIndices = i_ChosenColumn - 1;
 			int numOfColumns = this.Dimensions.Width;
@@ -81,20 +81,15 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 			if (isChosenColumnInRange(i_ChosenColumn, numOfColumns))
 			{
-				o_LastMoveOutOfRange = eAttemptedOutOfRange.No;
 				isValidChoice = this.NumOfCellVacanciesInColumn[chosenColumnTranslatedToMatrixIndices] == 0;
-			}
-			else
-			{
-				o_LastMoveOutOfRange = eAttemptedOutOfRange.Yes;
 			}
 
 			return isValidChoice;
 		}
 
-		public bool IsColumnAvailableForDisc(int i_ChosenColumn, out eAttemptedOutOfRange io_MoveOutOfRange)
+		public bool IsColumnAvailableForDisc(int i_ChosenColumn)
 		{
-			return this.columnAvailabilityForDisc(i_ChosenColumn, out io_MoveOutOfRange);
+			return this.columnAvailabilityForDisc(i_ChosenColumn);
 		}
 	}
 
