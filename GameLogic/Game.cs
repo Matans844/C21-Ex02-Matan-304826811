@@ -1,5 +1,5 @@
-﻿using C21_Ex02_Matan_304826811.UserInterface;
-using C21_Ex02_Matan_304826811.Players;
+﻿using C21_Ex02_Matan_304826811.Players;
+using C21_Ex02_Matan_304826811.UserInterface;
 
 namespace C21_Ex02_Matan_304826811.GameLogic
 {
@@ -25,7 +25,10 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		public uint GameNumber { get; set; }
 
-		public Game(eGameMode i_ChosenGameMode, GameBoardDimensions i_ChosenGameDimensions, UserInterfaceAdmin i_MyUserInterfaceAdmin)
+		public Game(
+			eGameMode i_ChosenGameMode,
+			GameBoardDimensions i_ChosenGameDimensions,
+			UserInterfaceAdmin i_MyUserInterfaceAdmin)
 		{
 			this.GameUserInterfaceAdmin = i_MyUserInterfaceAdmin;
 			this.Mode = i_ChosenGameMode;
@@ -78,7 +81,9 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 				foreach (IPlayer playerOfGame in this.BoxingPlayersInGame)
 				{
 					playerOfGame.TurnState = eTurnState.YourTurn;
-					chosenValidBoardMoveAdjustedToMatrix = this.GameUserInterfaceAdmin.MyInputOutputHandler.PromptForValidMoveOnDisplayedBoard();
+
+					chosenValidBoardMoveAdjustedToMatrix = this.GameUserInterfaceAdmin.MyInputOutputHandler
+						.PromptForValidMoveOnDisplayedBoard();
 					lastDiscPlayed = playerOfGame.MakeMove(chosenValidBoardMoveAdjustedToMatrix);
 					this.GameBoard.BoardReferee.CalculateBoardState(lastDiscPlayed);
 
@@ -91,17 +96,17 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 			GameEnded:
 
-				if (!this.hasGameEndedInDraw())
-				{
-					this.GameBoard.BoardReferee.Winner.PointsEarned++;
-				}
+			if (!this.hasGameEndedInDraw())
+			{
+				this.GameBoard.BoardReferee.Winner.PointsEarned++;
+			}
 
-				if (this.GameUserInterfaceAdmin.ConcludeSingleGameAndOfferAnotherGame())
-				{
-					this.continueWithAnotherGame();
-				}
+			if (this.GameUserInterfaceAdmin.ConcludeSingleGameAndOfferAnotherGame())
+			{
+				this.continueWithAnotherGame();
+			}
 
-				this.GameUserInterfaceAdmin.PhaseOfUserInterface = ePhaseOfUserInterface.Terminated;
+			this.GameUserInterfaceAdmin.PhaseOfUserInterface = ePhaseOfUserInterface.Terminated;
 		}
 	}
 

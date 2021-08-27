@@ -66,7 +66,9 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 
 		public int GetterByChoice(eBoardDimension i_Dimension)
 		{
-			return (i_Dimension == eBoardDimension.Height) ? this.Height : this.Width;
+			return (i_Dimension == eBoardDimension.Height)
+						? this.Height
+						: this.Width;
 		}
 
 		public GameBoardDimensions(int i_HeightToSet, int i_WidthToSet)

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 using C21_Ex02_Matan_304826811.UserInterface;
 using C21_Ex02_Matan_304826811.Extensions;
@@ -46,7 +45,10 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 				i_ChosenGameDimensions.Width, i_ChosenGameDimensions.Height).ToArray();
 		}
 
-		public static bool IsNumberInInclusiveRange(int i_NumberToFindInRange, int i_LowerRangeLimit, int i_UpperRangeLimit)
+		public static bool IsNumberInInclusiveRange(
+			int i_NumberToFindInRange,
+			int i_LowerRangeLimit,
+			int i_UpperRangeLimit)
 		{
 			return (i_NumberToFindInRange >= i_LowerRangeLimit) && (i_NumberToFindInRange <= i_UpperRangeLimit);
 		}
@@ -55,13 +57,18 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 		{
 			// TODO: Check
 			// int lastVacantCellInColumn = this.Dimensions.Height - this.NumOfCellVacanciesInColumn[i_ChosenBoardColumnAdjustedForMatrix];
-			int rowIndexOfLastVacantCellInChosenColumn = this.NumOfCellVacanciesInColumn[i_ChosenBoardColumnAdjustedForMatrix] - k_TransformBoardToMatrixIndicesWith1;
+			int rowIndexOfLastVacantCellInChosenColumn =
+				this.NumOfCellVacanciesInColumn[i_ChosenBoardColumnAdjustedForMatrix]
+				- k_TransformBoardToMatrixIndicesWith1;
 
 			this.NumOfCellVacanciesInColumn[i_ChosenBoardColumnAdjustedForMatrix]--;
 			this.NumOfCellVacanciesInBoard--;
-			this.BoardCellMatrix[rowIndexOfLastVacantCellInChosenColumn, i_ChosenBoardColumnAdjustedForMatrix].CellType = i_PlayerDiscType;
 
-			return this.BoardCellMatrix[rowIndexOfLastVacantCellInChosenColumn, i_ChosenBoardColumnAdjustedForMatrix].ShallowCopy();
+			this.BoardCellMatrix[rowIndexOfLastVacantCellInChosenColumn, i_ChosenBoardColumnAdjustedForMatrix]
+				.CellType = i_PlayerDiscType;
+
+			return this.BoardCellMatrix[rowIndexOfLastVacantCellInChosenColumn, i_ChosenBoardColumnAdjustedForMatrix]
+				.ShallowCopy();
 		}
 
 		public bool IsColumnIndexAvailableForDisc(int i_ChosenColumnIndex, out bool o_IsOutOfRange)

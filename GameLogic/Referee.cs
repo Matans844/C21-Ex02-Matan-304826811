@@ -1,11 +1,10 @@
 ﻿using System;
 
+using C21_Ex02_Matan_304826811.Extensions;
 using C21_Ex02_Matan_304826811.Players;
 
 namespace C21_Ex02_Matan_304826811.GameLogic
 {
-	using C21_Ex02_Matan_304826811.Extensions;
-
 	public class Referee
 	{
 		public const int k_DistanceBetweenWeightsInJaggedArray = 3;
@@ -13,39 +12,35 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		public static readonly int[][] sr_IndexWeightsForChangeByDiscIndexOfConnection = new int[4][]
 			{
-				new int[3] {1, 2, 3},
-				new int[3] {-1, 1, 2},
-				new int[3] {-1, 1, -2},
-				new int[3] {-1, -2, -3}
+				new int[3] { 1, 2, 3 }, new int[3] { -1, 1, 2 }, new int[3] { -1, 1, -2 }, new int[3] { -1, -2, -3 }
 			};
 
 		public static readonly int[][] sr_IndexWeightsForNegativeChangeByDiscIndexOfConnection = new int[4][]
 			{
-				new int[3] {-1, -2, -3},
-				new int[3] {1, -1, -2},
-				new int[3] {1, -1, 2},
-				new int[3] {1, 2, 3}
+				new int[3] { -1, -2, -3 }, new int[3] { 1, -1, -2 }, new int[3] { 1, -1, 2 }, new int[3] { 1, 2, 3 }
 			};
 
 		public static readonly int[][] sr_EmptyIndexWeights = new int[4][]
 			{
-				new int[3],
-				new int[3],
-				new int[3],
-				new int[3]
+				new int[3], new int[3], new int[3], new int[3]
 			};
 
 		public static readonly int[][] sr_IndexWeightsForHorizontalConnections =
-			OperateOn2DArrays.HorizontalConcatInsideJaggedArray(sr_EmptyIndexWeights, sr_IndexWeightsForChangeByDiscIndexOfConnection);
+			OperateOn2DArrays.HorizontalConcatInsideJaggedArray(
+				sr_EmptyIndexWeights, sr_IndexWeightsForChangeByDiscIndexOfConnection);
 
 		public static readonly int[][] sr_IndexWeightsForVerticalConnections =
-			OperateOn2DArrays.HorizontalConcatInsideJaggedArray(sr_IndexWeightsForChangeByDiscIndexOfConnection, sr_EmptyIndexWeights);
+			OperateOn2DArrays.HorizontalConcatInsideJaggedArray(
+				sr_IndexWeightsForChangeByDiscIndexOfConnection, sr_EmptyIndexWeights);
 
 		public static readonly int[][] sr_IndexWeightsForDiagonalNegativeSlope =
-			OperateOn2DArrays.HorizontalConcatInsideJaggedArray(sr_IndexWeightsForChangeByDiscIndexOfConnection, sr_IndexWeightsForChangeByDiscIndexOfConnection);
+			OperateOn2DArrays.HorizontalConcatInsideJaggedArray(
+				sr_IndexWeightsForChangeByDiscIndexOfConnection, sr_IndexWeightsForChangeByDiscIndexOfConnection);
 
 		public static readonly int[][] sr_IndexWeightsForDiagonalPositiveSlope =
-			OperateOn2DArrays.HorizontalConcatInsideJaggedArray(sr_IndexWeightsForNegativeChangeByDiscIndexOfConnection, sr_IndexWeightsForChangeByDiscIndexOfConnection);
+			OperateOn2DArrays.HorizontalConcatInsideJaggedArray(
+				sr_IndexWeightsForNegativeChangeByDiscIndexOfConnection,
+				sr_IndexWeightsForChangeByDiscIndexOfConnection);
 
 		public IPlayer Winner { get; set; }
 
@@ -100,8 +95,8 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			if (this.IsGameFinished(i_LastDiscPlayed))
 			{
 				this.BoardToReferee.BoardState = this.IsGameDrawn(i_LastDiscPlayed)
-									? eBoardState.FinishedInDraw
-									: eBoardState.FinishedInWin;
+													? eBoardState.FinishedInDraw
+													: eBoardState.FinishedInWin;
 			}
 
 			return this.BoardToReferee.BoardState;
@@ -127,11 +122,9 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			uint focalRowIndex = i_FocalBoardCell.Row;
 			uint focalColumnIndex = i_FocalBoardCell.Column;
 
-			this.setWeights(i_DirectionOfConnection,
-				out int[] weightsForIndex0,
-				out int[] weightsForIndex1,
-				out int[] weightsForIndex2,
-				out int[] weightsForIndex3);
+			this.setWeights(
+				i_DirectionOfConnection, out int[] weightsForIndex0, out int[] weightsForIndex1,
+				out int[] weightsForIndex2, out int[] weightsForIndex3);
 
 			return checkDirectionByIndex(i_FocalBoardCell, focalRowIndex, focalColumnIndex, weightsForIndex0)
 					|| checkDirectionByIndex(i_FocalBoardCell, focalRowIndex, focalColumnIndex, weightsForIndex1)
@@ -173,11 +166,16 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 					o_WeightsForIndex3 = sr_IndexWeightsForDiagonalNegativeSlope[3];
 					break;
 				default:
-					throw new ArgumentOutOfRangeException(nameof(i_DirectionOfConnection), i_DirectionOfConnection, null);
+					throw new ArgumentOutOfRangeException(
+						nameof(i_DirectionOfConnection), i_DirectionOfConnection, null);
 			}
 		}
 
-		private bool checkDirectionByIndex(BoardCell i_FocalBoardCell, uint i_FocalRow, uint i_FocalColumn, params int[] io_WeightsByDirection)
+		private bool checkDirectionByIndex(
+			BoardCell i_FocalBoardCell,
+			uint i_FocalRow,
+			uint i_FocalColumn,
+			params int[] io_WeightsByDirection)
 		{
 			bool isConnectionWinning = false;
 			int lastDiscFocalRowIndex = (int)i_FocalRow;
@@ -200,9 +198,6 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 				columnCoordinateInRange = Board.IsNumberInInclusiveRange(
 					lastDiscFocalColumnIndex + weightForColumn, Board.k_ZeroIndex, Board.NumberOfColumnIndices);
 
-				//// rowCoordinateInRange = (i_FocalRow + weightForRow >= 0) && (i_FocalRow + weightForRow < numberOfRowIndicesInBoardMatrix);
-				//// columnCoordinateInRange = (i_FocalColumn + weightForColumn >= 0) && (i_FocalColumn + weightForColumn < numberOfColumnIndicesInBoardMatrix);
-
 				if (!rowCoordinateInRange || !columnCoordinateInRange)
 				{
 					connectionIsInMatrixRange = false;
@@ -215,9 +210,12 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			if (connectionIsInMatrixRange)
 			{
 				isConnectionWinning = i_FocalBoardCell.HasSameTypeAs(
-					this.BoardToReferee.BoardCellMatrix[lastDiscFocalRowIndex + io_WeightsByDirection[0], lastDiscFocalColumnIndex + io_WeightsByDirection[3]],
-					this.BoardToReferee.BoardCellMatrix[lastDiscFocalRowIndex + io_WeightsByDirection[1], lastDiscFocalColumnIndex + io_WeightsByDirection[4]],
-					this.BoardToReferee.BoardCellMatrix[lastDiscFocalRowIndex + io_WeightsByDirection[2], lastDiscFocalColumnIndex + io_WeightsByDirection[5]]);
+					this.BoardToReferee.BoardCellMatrix[lastDiscFocalRowIndex + io_WeightsByDirection[0],
+						lastDiscFocalColumnIndex + io_WeightsByDirection[3]],
+					this.BoardToReferee.BoardCellMatrix[lastDiscFocalRowIndex + io_WeightsByDirection[1],
+						lastDiscFocalColumnIndex + io_WeightsByDirection[4]],
+					this.BoardToReferee.BoardCellMatrix[lastDiscFocalRowIndex + io_WeightsByDirection[2],
+						lastDiscFocalColumnIndex + io_WeightsByDirection[5]]);
 			}
 
 			return isConnectionWinning;

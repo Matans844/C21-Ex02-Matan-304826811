@@ -7,7 +7,8 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 {
 	public class MessageCreator
 	{
-		public const string k_PromptForAnotherGame = "Do you want to play another game?";
+		public static string s_PromptForAnotherGame = string.Format(
+			"{0}Do you want to play another game?{0}Press 1 for another game.{0}Press 0 to exit.", Environment.NewLine);
 
 		public static string GameResultsMessage { get; set; }
 
@@ -22,9 +23,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 		public static string PromptForGameMode { get; } = string.Format(
 			format:
 			"Choose game mode:{0}Enter {1:D} to play against a human.{0}Enter {2:D} to play against a computer.{0}",
-			Environment.NewLine,
-			arg1: eGameMode.PlayerVsPlayer,
-			arg2: eGameMode.PlayerVsComputer);
+			Environment.NewLine, arg1: eGameMode.PlayerVsPlayer, arg2: eGameMode.PlayerVsComputer);
 
 		public static string PromptForBoardWidth { get; } =
 			$"Enter board width, between {Constraints.BoardDimensions.WidthLowerLimit} and {Constraints.BoardDimensions.WidthUpperLimit}: ";
@@ -54,7 +53,8 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 
 		private void setResultsMessage()
 		{
-			GameResultsMessage = $"Player {this.GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.BoardReferee.Winner.PlayerID} won";
+			GameResultsMessage =
+				$"Player {this.GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.BoardReferee.Winner.PlayerID} won";
 		}
 
 		public void UpdateResultsMessage()

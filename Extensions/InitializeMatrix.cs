@@ -1,5 +1,4 @@
-﻿using System;
-using C21_Ex02_Matan_304826811.GameLogic;
+﻿using C21_Ex02_Matan_304826811.GameLogic;
 
 namespace C21_Ex02_Matan_304826811.Extensions
 {

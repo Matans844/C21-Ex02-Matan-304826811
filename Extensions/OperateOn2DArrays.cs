@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 using static System.Array;
 
 namespace C21_Ex02_Matan_304826811.Extensions
@@ -10,7 +8,7 @@ namespace C21_Ex02_Matan_304826811.Extensions
 	{
 		public static int[][] HorizontalConcatInsideJaggedArray(int[][] i_2DArray1, int[][] i_2DArray2)
 		{
-			int lengthOfInternalArray; 
+			int lengthOfInternalArray;
 			int[][] concatenatedArray = new int[i_2DArray1.Length][];
 
 			if (i_2DArray1.Length == i_2DArray2.Length)

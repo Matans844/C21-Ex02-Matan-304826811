@@ -15,7 +15,8 @@ namespace C21_Ex02_Matan_304826811.Players
 
 		public override BoardCell MakeMove(int i_ChosenBoardColumnAjustedForMatrix)
 		{
-			BoardCell myLastMove = this.BoardOfPlayer.SlideDiskToBoard(i_ChosenBoardColumnAjustedForMatrix, this.DiscType);
+			BoardCell myLastMove = this.BoardOfPlayer.SlideDiskToBoard(
+				i_ChosenBoardColumnAjustedForMatrix, this.DiscType);
 			this.TurnState = eTurnState.NotYourTurn;
 
 			return myLastMove;

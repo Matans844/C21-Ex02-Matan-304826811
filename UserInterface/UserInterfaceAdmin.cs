@@ -1,7 +1,8 @@
-﻿using C21_Ex02_Matan_304826811.Controller;
+﻿using Ex02.ConsoleUtils;
+
+using C21_Ex02_Matan_304826811.Controller;
 using C21_Ex02_Matan_304826811.GameLogic;
 using C21_Ex02_Matan_304826811.Views;
-using Ex02.ConsoleUtils;
 
 namespace C21_Ex02_Matan_304826811.UserInterface
 {
@@ -44,7 +45,9 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			MyScreenCreator.ScreenBoardRowWidthInChar = this.MyGameDisplayLogic.m_BoardDimensions.Width;
 			this.MyBoardScreenView = new ViewOfBoardScreen(this);
 			this.PhaseOfUserInterface = ePhaseOfUserInterface.InitialScreen;
-			this.MyGameLogicUnit = new Game(this.MyGameDisplayLogic.GameMode, this.MyGameDisplayLogic.m_BoardDimensions, this);
+
+			this.MyGameLogicUnit = new Game(
+				this.MyGameDisplayLogic.GameMode, this.MyGameDisplayLogic.m_BoardDimensions, this);
 			this.MyMessageCreator.UpdateStatusOfPoints();
 			this.MyGameLogicUnit.StartGame();
 		}

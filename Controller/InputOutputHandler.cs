@@ -1,9 +1,11 @@
 ﻿using System;
 
+using Ex02.ConsoleUtils;
+
 using C21_Ex02_Matan_304826811.UserInterface;
 using C21_Ex02_Matan_304826811.GameLogic;
 
-using Ex02.ConsoleUtils;
+
 
 namespace C21_Ex02_Matan_304826811.Controller
 {
@@ -13,8 +15,10 @@ namespace C21_Ex02_Matan_304826811.Controller
 		public const bool k_LoopUntilAllInputRequirementsAreMet = true;
 
 		private static readonly string sr_InvalidInputMessage = $"Invalid input!{Environment.NewLine}";
-		private static readonly string sr_ColumnIsFull = $"{Environment.NewLine}Chosen column is already full. Choose again.";
-		private static readonly string sr_ChooseInRange = $"{Environment.NewLine}Please choose a valid value for column";
+		private static readonly string sr_ColumnIsFull =
+			$"{Environment.NewLine}Chosen column is already full. Choose again.";
+		private static readonly string
+			sr_ChooseInRange = $"{Environment.NewLine}Please choose a valid value for column";
 
 		private static readonly string sr_PromptForNextMove =
 			$"{Environment.NewLine}Choose column to slide disk in, or press '{k_QuitKey}' to quit current game: ";
@@ -29,11 +33,19 @@ namespace C21_Ex02_Matan_304826811.Controller
 		// Updates DisplayLogic's GameDimensions struct.
 		public void GetAndSetValidDimensionsFromUser()
 		{
-			this.getAndSetValidDimensionsFromUser(ref this.GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions, eBoardDimension.Height);
-			this.getAndSetValidDimensionsFromUser(ref this.GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions, eBoardDimension.Width);
+			this.getAndSetValidDimensionsFromUser(
+				ref this.GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions, eBoardDimension.Height);
+
+			this.getAndSetValidDimensionsFromUser(
+				ref this.GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions, eBoardDimension.Width);
 		}
 
-		private void getIntegerAndCheck(out int io_ColumnChosenFromConsoleBoard, out bool o_IsInputParsedToInt, out bool o_IsInputValid, out bool o_IsOutOfRange, eErrorInPreviousInput i_PreviousInputError)
+		private void getIntegerAndCheck(
+			out int io_ColumnChosenFromConsoleBoard,
+			out bool o_IsInputParsedToInt,
+			out bool o_IsInputValid,
+			out bool o_IsOutOfRange,
+			eErrorInPreviousInput i_PreviousInputError)
 		{
 			bool hasLeadingZero;
 
@@ -48,7 +60,9 @@ namespace C21_Ex02_Matan_304826811.Controller
 			// Checking type and leading zeros (00 is not accepted)
 			if ((!o_IsInputParsedToInt)
 				|| (hasLeadingZero && io_ColumnChosenFromConsoleBoard != 0)
-				|| (hasLeadingZero && io_ColumnChosenFromConsoleBoard == 0 && responseFromUser.ToCharArray().Length > 1))
+				|| (hasLeadingZero
+					&& io_ColumnChosenFromConsoleBoard == 0
+					&& responseFromUser.ToCharArray().Length > 1))
 			{
 				// No need to proceed if type is does not match.
 				o_IsInputValid = false;
@@ -98,6 +112,9 @@ namespace C21_Ex02_Matan_304826811.Controller
 		{
 			string responseFromUser;
 
+			bool isGameFinished = this.GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.BoardState
+								!= eBoardState.NotFinished;
+
 			if (this.GameUserInterfaceAdmin.PhaseOfUserInterface == ePhaseOfUserInterface.InitialScreen)
 			{
 				Screen.Clear();
@@ -108,9 +125,13 @@ namespace C21_Ex02_Matan_304826811.Controller
 				Console.WriteLine(sr_InvalidInputMessage);
 			}
 
-			if (this.GameUserInterfaceAdmin.IsEscapeKeyOn == false && this.GameUserInterfaceAdmin.)
+			if (this.GameUserInterfaceAdmin.IsEscapeKeyOn == false && !isGameFinished)
 			{
 				Console.Write(i_PromptToUser);
+			}
+
+			if (isGameFinished)
+			{
 			}
 
 			responseFromUser = Console.ReadLine();
@@ -142,7 +163,9 @@ namespace C21_Ex02_Matan_304826811.Controller
 			Screen.Clear();
 			this.GameUserInterfaceAdmin.MyBoardScreenView.DrawBoard();
 
-			this.getIntegerAndCheck(out int columnChosen, out bool isInputParsedToInt, out bool isInputValid, out bool isOutOfRange, eErrorInPreviousInput.No);
+			this.getIntegerAndCheck(
+				out int columnChosen, out bool isInputParsedToInt, out bool isInputValid, out bool isOutOfRange,
+				eErrorInPreviousInput.No);
 
 			while (k_LoopUntilAllInputRequirementsAreMet)
 			{
@@ -151,15 +174,20 @@ namespace C21_Ex02_Matan_304826811.Controller
 					if (isInputParsedToInt)
 					{
 						// Move did not succeed because move was to a full column or out of range
-						Console.WriteLine(isOutOfRange ? sr_ChooseInRange : sr_ColumnIsFull);
+						Console.WriteLine(
+							isOutOfRange
+								? sr_ChooseInRange
+								: sr_ColumnIsFull);
 
-						this.getIntegerAndCheck(out columnChosen, out isInputParsedToInt, out isInputValid, out isOutOfRange,
+						this.getIntegerAndCheck(
+							out columnChosen, out isInputParsedToInt, out isInputValid, out isOutOfRange,
 							eErrorInPreviousInput.No);
 					}
 					else if (!isInputParsedToInt)
 					{
 						// Input did not succeed because input had error.
-						this.getIntegerAndCheck(out columnChosen, out isInputParsedToInt, out isInputValid, out isOutOfRange,
+						this.getIntegerAndCheck(
+							out columnChosen, out isInputParsedToInt, out isInputValid, out isOutOfRange,
 							eErrorInPreviousInput.Yes);
 					}
 				}
@@ -171,7 +199,9 @@ namespace C21_Ex02_Matan_304826811.Controller
 			}
 		}
 
-		private void getAndSetValidDimensionsFromUser(ref GameBoardDimensions io_BoardDimensions, eBoardDimension i_DimensionToSet)
+		private void getAndSetValidDimensionsFromUser(
+			ref GameBoardDimensions io_BoardDimensions,
+			eBoardDimension i_DimensionToSet)
 		{
 			string promptToUser = i_DimensionToSet == eBoardDimension.Height
 									? MessageCreator.PromptForBoardHeight
@@ -201,7 +231,8 @@ namespace C21_Ex02_Matan_304826811.Controller
 		// Updates DisplayLogic's GameMode field.
 		public void GetAndSetValidGameModeFromUser()
 		{
-			string responseFromUser = this.getNewInputAndCheckForExit(MessageCreator.PromptForGameMode, eErrorInPreviousInput.No);
+			string responseFromUser = this.getNewInputAndCheckForExit(
+				MessageCreator.PromptForGameMode, eErrorInPreviousInput.No);
 
 			Screen.Clear();
 			Console.Write(MessageCreator.PromptForGameMode);
@@ -216,7 +247,8 @@ namespace C21_Ex02_Matan_304826811.Controller
 			{
 				do
 				{
-					responseFromUser = this.getNewInputAndCheckForExit(MessageCreator.PromptForGameMode, eErrorInPreviousInput.Yes);
+					responseFromUser = this.getNewInputAndCheckForExit(
+						MessageCreator.PromptForGameMode, eErrorInPreviousInput.Yes);
 				}
 				while (!(int.TryParse(responseFromUser, out gameModeChosenByUser)
 						&& Enum.IsDefined(typeof(eGameMode), gameModeChosenByUser)
@@ -231,7 +263,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 			string responseFromUser;
 			bool inputIsValidByNullTypeValue = false;
 
-			Console.Write(MessageCreator.k_PromptForAnotherGame);
+			Console.WriteLine(MessageCreator.s_PromptForAnotherGame);
 
 			// Not empty validation.
 			responseFromUser = this.getNewInputAndCheckForExit(sr_PromptForNextMove, eErrorInPreviousInput.No);

@@ -10,15 +10,13 @@ namespace C21_Ex02_Matan_304826811.Extensions
 		public static T[] GetDimension1Row(T[,] i_Matrix, int i_ColumnNumber)
 		{
 			return Enumerable.Range(0, i_Matrix.GetLength(k_RowDimension))
-				.Select(indexForEnumeration => i_Matrix[indexForEnumeration, i_ColumnNumber])
-				.ToArray();
+				.Select(i_IndexForEnumeration => i_Matrix[i_IndexForEnumeration, i_ColumnNumber]).ToArray();
 		}
 
 		public static T[] GetDimension2Column(T[,] i_Matrix, int i_RowNumber)
 		{
 			return Enumerable.Range(0, i_Matrix.GetLength(k_ColumnDimension))
-				.Select(indexForEnumeration => i_Matrix[i_RowNumber, indexForEnumeration])
-				.ToArray();
+				.Select(i_IndexForEnumeration => i_Matrix[i_RowNumber, i_IndexForEnumeration]).ToArray();
 		}
 	}
 }

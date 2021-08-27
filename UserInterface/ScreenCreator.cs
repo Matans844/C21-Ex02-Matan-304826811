@@ -62,7 +62,8 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 
 		private string buildSeparatingFillerRow()
 		{
-			StringBuilder fillerRow = new StringBuilder(new string(k_HorizontalLineFillerChar, this.ScreenBoardRowWidthInChar));
+			StringBuilder fillerRow =
+				new StringBuilder(new string(k_HorizontalLineFillerChar, this.ScreenBoardRowWidthInChar));
 			fillerRow.Append($"{Environment.NewLine}");
 
 			return fillerRow.ToString();
