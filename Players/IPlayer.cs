@@ -2,7 +2,7 @@
 
 namespace C21_Ex02_Matan_304826811.Players
 {
-	public abstract class Player
+	public abstract class IPlayer
 	{
 		private static int s_InstanceCounter;
 
@@ -16,7 +16,7 @@ namespace C21_Ex02_Matan_304826811.Players
 
 		public eTurnState TurnState { get; set; }
 
-		protected Player(Board i_BoardOfPlayer, eBoardCellType i_DiscType, eTurnState i_TurnState)
+		protected IPlayer(Board i_BoardOfPlayer, eBoardCellType i_DiscType, eTurnState i_TurnState)
 		{
 			this.DiscType = i_DiscType;
 			this.BoardOfPlayer = i_BoardOfPlayer;
@@ -24,7 +24,7 @@ namespace C21_Ex02_Matan_304826811.Players
 			this.PlayerID = ++s_InstanceCounter;
 		}
 
-		public abstract eBoardState MakeMove(int i_ChosenColumnAfterIndexAdjustment);
+		public abstract BoardCell MakeMove(int i_ChosenColumnAfterIndexAdjustment);
 	}
 
 	public enum ePlayerType

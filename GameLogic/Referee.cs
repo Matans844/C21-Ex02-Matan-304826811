@@ -8,6 +8,9 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 	public class Referee
 	{
+		public const int k_DistanceBetweenWeightsInJaggedArray = 3;
+		public const int k_NumberOfWeightPairs = 3;
+
 		public static readonly int[][] sr_IndexWeightsForChangeByDiscIndexOfConnection = new int[4][]
 			{
 				new int[3] {1, 2, 3},
@@ -33,18 +36,18 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			};
 
 		public static readonly int[][] sr_IndexWeightsForHorizontalConnections =
-			OperateOn2DArrays.HorizontalConcat(sr_EmptyIndexWeights, sr_IndexWeightsForChangeByDiscIndexOfConnection);
+			OperateOn2DArrays.HorizontalConcatInsideJaggedArray(sr_EmptyIndexWeights, sr_IndexWeightsForChangeByDiscIndexOfConnection);
 
 		public static readonly int[][] sr_IndexWeightsForVerticalConnections =
-			OperateOn2DArrays.HorizontalConcat(sr_IndexWeightsForChangeByDiscIndexOfConnection, sr_EmptyIndexWeights);
+			OperateOn2DArrays.HorizontalConcatInsideJaggedArray(sr_IndexWeightsForChangeByDiscIndexOfConnection, sr_EmptyIndexWeights);
 
 		public static readonly int[][] sr_IndexWeightsForDiagonalNegativeSlope =
-			OperateOn2DArrays.HorizontalConcat(sr_IndexWeightsForChangeByDiscIndexOfConnection, sr_IndexWeightsForChangeByDiscIndexOfConnection);
+			OperateOn2DArrays.HorizontalConcatInsideJaggedArray(sr_IndexWeightsForChangeByDiscIndexOfConnection, sr_IndexWeightsForChangeByDiscIndexOfConnection);
 
 		public static readonly int[][] sr_IndexWeightsForDiagonalPositiveSlope =
-			OperateOn2DArrays.HorizontalConcat(sr_IndexWeightsForNegativeChangeByDiscIndexOfConnection, sr_IndexWeightsForChangeByDiscIndexOfConnection);
+			OperateOn2DArrays.HorizontalConcatInsideJaggedArray(sr_IndexWeightsForNegativeChangeByDiscIndexOfConnection, sr_IndexWeightsForChangeByDiscIndexOfConnection);
 
-		public Player Winner { get; set; }
+		public IPlayer Winner { get; set; }
 
 		public Board BoardToReferee { get; }
 
@@ -78,10 +81,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 			foreach (eDirectionOfDiscConnection direction in Enum.GetValues(typeof(eDirectionOfDiscConnection)))
 			{
-				// if (isLastDiscInConnectionValid(i_LastDiscPlaced, direction))
-				// {
-				// }
-				hasWinnerConnection = isWinningConnection(i_LastDiscPlaced, direction);
+				hasWinnerConnection = this.isWinningConnection(i_LastDiscPlaced, direction);
 
 				if (hasWinnerConnection)
 				{
@@ -93,6 +93,18 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			}
 
 			return hasWinnerConnection;
+		}
+
+		public eBoardState CalculateBoardState(BoardCell i_LastDiscPlayed)
+		{
+			if (this.IsGameFinished(i_LastDiscPlayed))
+			{
+				this.BoardToReferee.BoardState = this.IsGameDrawn(i_LastDiscPlayed)
+									? eBoardState.FinishedInDraw
+									: eBoardState.FinishedInWin;
+			}
+
+			return this.BoardToReferee.BoardState;
 		}
 
 		private void updateWinner(BoardCell i_WinningDiscPlaced)
@@ -167,73 +179,51 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		private bool checkDirectionByIndex(BoardCell i_FocalBoardCell, uint i_FocalRow, uint i_FocalColumn, params int[] io_WeightsByDirection)
 		{
-			return i_FocalBoardCell.HasSameTypeAs(
-										this.BoardToReferee.BoardCellMatrix[i_FocalRow + io_WeightsByDirection[0], i_FocalColumn + io_WeightsByDirection[3]],
-										this.BoardToReferee.BoardCellMatrix[i_FocalRow + io_WeightsByDirection[1], i_FocalColumn + io_WeightsByDirection[4]],
-										this.BoardToReferee.BoardCellMatrix[i_FocalRow + io_WeightsByDirection[2], i_FocalColumn + io_WeightsByDirection[5]]);
-		}
+			bool isConnectionWinning = false;
+			int lastDiscFocalRowIndex = (int)i_FocalRow;
+			int lastDiscFocalColumnIndex = (int)i_FocalColumn;
+			bool connectionIsInMatrixRange = true;
+			bool rowCoordinateInRange;
+			bool columnCoordinateInRange;
+			int weightForRow;
+			int weightForColumn;
 
-		/*private bool isLastDiscInConnectionValid(BoardCell i_FocalBoardCell, eDirectionOfDiscConnection i_DirectionOfConnection)
-		{
-
-		// This method is wrong.
-		// I can insert a winning disc in the middle of a combination.
-		// Checking what happens in radius 4 is not good enough
-
-			bool isDistantDiscAvailable = false;
-			uint focalRow = i_FocalBoardCell.Row;
-			uint focalColumn = i_FocalBoardCell.Column;
-			int indexOfLastMatrixRow = BoardToReferee.BoardCellMatrix.GetLength(0) - Board.k_TransformBoardToMatrixIndicesWith1;
-			int indexOfLastMatrixColumn = BoardToReferee.BoardCellMatrix.GetLength(1) - Board.k_TransformBoardToMatrixIndicesWith1;
-
-			switch (i_DirectionOfConnection)
+			// Checking that all coordinates for the 4 discs in connection are in range
+			for (int i = 0; i < k_NumberOfWeightPairs; i++)
 			{
-				case eDirectionOfDiscConnection.Horizontal:
-					isDistantDiscAvailable = indexOfLastMatrixColumn > focalColumn + Game.k_LengthOfWinningConnectionFromFirstDisk;
-					break;
+				weightForRow = io_WeightsByDirection[i];
+				weightForColumn = io_WeightsByDirection[i + k_DistanceBetweenWeightsInJaggedArray];
 
-				case eDirectionOfDiscConnection.Vertical:
-					isDistantDiscAvailable =
-						(indexOfLastMatrixColumn > focalColumn + Game.k_LengthOfWinningConnectionFromFirstDisk)
-						&& (indexOfLastMatrixRow > focalRow - Game.k_LengthOfWinningConnectionFromFirstDisk);
-					break;
+				rowCoordinateInRange = Board.IsNumberInInclusiveRange(
+					lastDiscFocalRowIndex + weightForRow, Board.k_ZeroIndex, Board.NumberOfRowIndices);
 
-				case eDirectionOfDiscConnection.DiagonalPositiveSlope:
-					isDistantDiscAvailable = indexOfLastMatrixRow > focalRow - Game.k_LengthOfWinningConnectionFromFirstDisk;
-					break;
+				columnCoordinateInRange = Board.IsNumberInInclusiveRange(
+					lastDiscFocalColumnIndex + weightForColumn, Board.k_ZeroIndex, Board.NumberOfColumnIndices);
 
-				case eDirectionOfDiscConnection.DiagonalNegativeSlope:
-					isDistantDiscAvailable =
-						(indexOfLastMatrixColumn > focalColumn - Game.k_LengthOfWinningConnectionFromFirstDisk)
-						&& (indexOfLastMatrixRow > focalRow - Game.k_LengthOfWinningConnectionFromFirstDisk);
-					break;
+				//// rowCoordinateInRange = (i_FocalRow + weightForRow >= 0) && (i_FocalRow + weightForRow < numberOfRowIndicesInBoardMatrix);
+				//// columnCoordinateInRange = (i_FocalColumn + weightForColumn >= 0) && (i_FocalColumn + weightForColumn < numberOfColumnIndicesInBoardMatrix);
 
-				case eDirectionOfDiscConnection.Left:
-					isDistantDiscAvailable = indexOfLastMatrixColumn > focalColumn - Game.k_LengthOfWinningConnectionFromFirstDisk;
-					break;
+				if (!rowCoordinateInRange || !columnCoordinateInRange)
+				{
+					connectionIsInMatrixRange = false;
 
-				case eDirectionOfDiscConnection.DownLeft:
-					isDistantDiscAvailable =
-						(indexOfLastMatrixColumn > focalColumn - Game.k_LengthOfWinningConnectionFromFirstDisk)
-						&& (indexOfLastMatrixRow > focalRow + Game.k_LengthOfWinningConnectionFromFirstDisk);
 					break;
-
-				case eDirectionOfDiscConnection.Down:
-					isDistantDiscAvailable = indexOfLastMatrixRow > focalRow + Game.k_LengthOfWinningConnectionFromFirstDisk;
-					break;
-
-				case eDirectionOfDiscConnection.DownRight:
-					isDistantDiscAvailable =
-						(indexOfLastMatrixRow > focalRow + Game.k_LengthOfWinningConnectionFromFirstDisk)
-						&& (indexOfLastMatrixRow > focalRow + Game.k_LengthOfWinningConnectionFromFirstDisk);
-					break;
+				}
 			}
 
-			return isDistantDiscAvailable;
-		}*/
+			// All conditions are in range. We can safely check for connection inside Matrix without stepping out of bounds.
+			if (connectionIsInMatrixRange)
+			{
+				isConnectionWinning = i_FocalBoardCell.HasSameTypeAs(
+					this.BoardToReferee.BoardCellMatrix[lastDiscFocalRowIndex + io_WeightsByDirection[0], lastDiscFocalColumnIndex + io_WeightsByDirection[3]],
+					this.BoardToReferee.BoardCellMatrix[lastDiscFocalRowIndex + io_WeightsByDirection[1], lastDiscFocalColumnIndex + io_WeightsByDirection[4]],
+					this.BoardToReferee.BoardCellMatrix[lastDiscFocalRowIndex + io_WeightsByDirection[2], lastDiscFocalColumnIndex + io_WeightsByDirection[5]]);
+			}
+
+			return isConnectionWinning;
+		}
 	}
 
-	// Counterclockwise
 	public enum eDirectionOfDiscConnection
 	{
 		Horizontal = 0,

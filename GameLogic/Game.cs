@@ -10,7 +10,6 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 		// This field determines the length of the winning connection.
 		// For generality, we need to make sure this field does not exceed the length (or height) of the board.
 		public const int k_LengthOfWinningConnection = 4;
-		public const int k_LengthOfWinningConnectionFromFirstDisk = k_LengthOfWinningConnection - 1;
 
 		public UserInterfaceAdmin GameUserInterfaceAdmin { get; }
 
@@ -18,9 +17,9 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		public Board GameBoard { get; set; }
 
-		public Player Player1WithXs { get; }
+		public IPlayer Player1WithXs { get; }
 
-		public Player Player2WithOs { get; }
+		public IPlayer Player2WithOs { get; }
 
 		public eGameMode Mode { get; }
 
@@ -68,42 +67,41 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			return this.GameBoard.BoardState == eBoardState.FinishedInDraw;
 		}
 
-		// Not used.
-		//private bool hasGameEndedInWin()
-		//{
-		//	return this.hasGameEndedAfterMove() && !this.hasGameEndedInDraw();
-		//}
-
 		public void StartGame()
 		{
-			int chosenBoardMoveAdjustedToMatrix; 
+			int chosenValidBoardMoveAdjustedToMatrix;
+			BoardCell lastDiscPlayed;
 			this.GameUserInterfaceAdmin.PhaseOfUserInterface = ePhaseOfUserInterface.BoardScreen;
 
 			while (!this.GameUserInterfaceAdmin.IsPlayerQuittingGame())
 			{
-				foreach (Player playerOfGame in this.BoxingPlayersInGame)
+				foreach (IPlayer playerOfGame in this.BoxingPlayersInGame)
 				{
-					chosenBoardMoveAdjustedToMatrix = this.GameUserInterfaceAdmin.MyInputOutputHandler.PromptForMoveOnDisplayedBoard();
-					playerOfGame.MakeMove(chosenBoardMoveAdjustedToMatrix);
+					playerOfGame.TurnState = eTurnState.YourTurn;
+					chosenValidBoardMoveAdjustedToMatrix = this.GameUserInterfaceAdmin.MyInputOutputHandler.PromptForValidMoveOnDisplayedBoard();
+					lastDiscPlayed = playerOfGame.MakeMove(chosenValidBoardMoveAdjustedToMatrix);
+					this.GameBoard.BoardReferee.CalculateBoardState(lastDiscPlayed);
 
 					if (this.hasGameEndedAfterMove())
 					{
-						break;
+						goto GameEnded;
 					}
 				}
 			}
 
-			if (!this.hasGameEndedInDraw())
-			{
-				this.GameBoard.BoardReferee.Winner.PointsEarned++;
-			}
+			GameEnded:
 
-			if (this.GameUserInterfaceAdmin.ConcludeSingleGameAndOfferAnotherGame())
-			{
-				this.continueWithAnotherGame();
-			}
+				if (!this.hasGameEndedInDraw())
+				{
+					this.GameBoard.BoardReferee.Winner.PointsEarned++;
+				}
 
-			this.GameUserInterfaceAdmin.PhaseOfUserInterface = ePhaseOfUserInterface.Terminated;
+				if (this.GameUserInterfaceAdmin.ConcludeSingleGameAndOfferAnotherGame())
+				{
+					this.continueWithAnotherGame();
+				}
+
+				this.GameUserInterfaceAdmin.PhaseOfUserInterface = ePhaseOfUserInterface.Terminated;
 		}
 	}
 

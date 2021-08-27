@@ -25,9 +25,6 @@ namespace C21_Ex02_Matan_304826811.Extensions
 			int heightOfMatrix = io_Matrix.GetLength(k_RowDimension);
 			int widthOfMatrix = io_Matrix.GetLength(k_ColumnDimension);
 
-			//TODO
-			// Console.ReadLine();
-
 			for (int i = 0; i < heightOfMatrix; i++)
 			{
 				for (int j = 0; j < widthOfMatrix; j++)

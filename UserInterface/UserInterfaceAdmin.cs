@@ -1,6 +1,7 @@
 ﻿using C21_Ex02_Matan_304826811.Controller;
 using C21_Ex02_Matan_304826811.GameLogic;
 using C21_Ex02_Matan_304826811.Views;
+using Ex02.ConsoleUtils;
 
 namespace C21_Ex02_Matan_304826811.UserInterface
 {
@@ -39,11 +40,6 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 
 		public void InitializeGame()
 		{
-			this.initializeGame();
-		}
-
-		private void initializeGame()
-		{
 			this.MyInitialScreenView.GetInitialInputsFromUser();
 			MyScreenCreator.ScreenBoardRowWidthInChar = this.MyGameDisplayLogic.m_BoardDimensions.Width;
 			this.MyBoardScreenView = new ViewOfBoardScreen(this);
@@ -58,7 +54,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			return this.QuitProcess == eQuitProcess.Quit;
 		}
 
-		private bool hasPlayerQuitGame()
+		public bool IsPlayerQuittingGame()
 		{
 			if (this.IsEscapeKeyOn)
 			{
@@ -82,7 +78,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 				case ePhaseOfUserInterface.BoardScreen:
 					this.QuitProcess = eQuitProcess.Quit;
 
-					if (this.concludingSingleGameAndOfferAnother())
+					if (this.ConcludeSingleGameAndOfferAnotherGame())
 					{
 						this.QuitProcess = eQuitProcess.DoNotQuit;
 						this.IsEscapeKeyOn = false;
@@ -101,18 +97,11 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			}
 		}
 
-		public bool IsPlayerQuittingGame()
-		{
-			return this.hasPlayerQuitGame();
-		}
-
 		public bool ConcludeSingleGameAndOfferAnotherGame()
 		{
-			return this.concludingSingleGameAndOfferAnother();
-		}
+			Screen.Clear();
+			this.MyBoardScreenView.DrawBoard();
 
-		private bool concludingSingleGameAndOfferAnother()
-		{
 			if (this.MyGameLogicUnit.GameNumber > k_NumberOfGamesOnFirstGame)
 			{
 				this.MyInputOutputHandler.DeclarePointStatus();
@@ -123,11 +112,6 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 				this.MyInputOutputHandler.DeclareGameResult();
 			}
 
-			return this.askPlayerForAnotherGame();
-		}
-
-		private bool askPlayerForAnotherGame()
-		{
 			return this.MyInputOutputHandler.PromptForAnotherGame();
 		}
 	}

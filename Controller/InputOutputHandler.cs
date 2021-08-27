@@ -33,11 +33,6 @@ namespace C21_Ex02_Matan_304826811.Controller
 			this.getAndSetValidDimensionsFromUser(ref this.GameUserInterfaceAdmin.MyGameDisplayLogic.m_BoardDimensions, eBoardDimension.Width);
 		}
 
-		public int PromptForMoveOnDisplayedBoard()
-		{
-			return this.getMove();
-		}
-
 		private void getIntegerAndCheck(out int io_ColumnChosenFromConsoleBoard, out bool o_IsInputParsedToInt, out bool o_IsInputValid, out bool o_IsOutOfRange, eErrorInPreviousInput i_PreviousInputError)
 		{
 			bool hasLeadingZero;
@@ -65,7 +60,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 				io_ColumnChosenFromConsoleBoard--;
 
 				// Validation: Value is in range
-				o_IsInputValid = this.GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.IsColumnAvailableForDisc(
+				o_IsInputValid = this.GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.IsColumnIndexAvailableForDisc(
 					io_ColumnChosenFromConsoleBoard, out o_IsOutOfRange);
 			}
 		}
@@ -80,11 +75,6 @@ namespace C21_Ex02_Matan_304826811.Controller
 		{
 			Console.WriteLine();
 			Console.WriteLine(MessageCreator.GameResultsMessage);
-		}
-
-		public bool PromptForAnotherGame()
-		{
-			return this.askForAnotherGame();
 		}
 
 		private string identifyExitKey(string i_ResponseFromUser)
@@ -104,11 +94,6 @@ namespace C21_Ex02_Matan_304826811.Controller
 			return i_ResponseFromUser;
 		}
 
-		public void GetAndSetValidGameModeFromUser()
-		{
-			this.getAndSetValidGameModeFromUser();
-		}
-
 		private string getNewInputAndCheckForExit(string i_PromptToUser, eErrorInPreviousInput i_ErrorInInput)
 		{
 			string responseFromUser;
@@ -123,7 +108,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 				Console.WriteLine(sr_InvalidInputMessage);
 			}
 
-			if (this.GameUserInterfaceAdmin.IsEscapeKeyOn == false)
+			if (this.GameUserInterfaceAdmin.IsEscapeKeyOn == false && this.GameUserInterfaceAdmin.)
 			{
 				Console.Write(i_PromptToUser);
 			}
@@ -152,7 +137,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 			}
 		}
 
-		private int getMove()
+		public int PromptForValidMoveOnDisplayedBoard()
 		{
 			Screen.Clear();
 			this.GameUserInterfaceAdmin.MyBoardScreenView.DrawBoard();
@@ -161,22 +146,27 @@ namespace C21_Ex02_Matan_304826811.Controller
 
 			while (k_LoopUntilAllInputRequirementsAreMet)
 			{
-				switch (isInputParsedToInt)
+				if (!isInputParsedToInt || !isInputValid)
 				{
-					// TODO debugging this
-					case true when isInputValid:
-						// Move is valid
-						return columnChosen;
-					case true:
+					if (isInputParsedToInt)
+					{
 						// Move did not succeed because move was to a full column or out of range
 						Console.WriteLine(isOutOfRange ? sr_ChooseInRange : sr_ColumnIsFull);
 
-						this.getIntegerAndCheck(out columnChosen, out isInputParsedToInt, out isInputValid, out isOutOfRange, eErrorInPreviousInput.No);
-						break;
-					case false:
+						this.getIntegerAndCheck(out columnChosen, out isInputParsedToInt, out isInputValid, out isOutOfRange,
+							eErrorInPreviousInput.No);
+					}
+					else if (!isInputParsedToInt)
+					{
 						// Input did not succeed because input had error.
-						this.getIntegerAndCheck(out columnChosen, out isInputParsedToInt, out isInputValid, out isOutOfRange, eErrorInPreviousInput.Yes);
-						break;
+						this.getIntegerAndCheck(out columnChosen, out isInputParsedToInt, out isInputValid, out isOutOfRange,
+							eErrorInPreviousInput.Yes);
+					}
+				}
+				else
+				{
+					// Move is valid
+					return columnChosen;
 				}
 			}
 		}
@@ -209,7 +199,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 		}
 
 		// Updates DisplayLogic's GameMode field.
-		private void getAndSetValidGameModeFromUser()
+		public void GetAndSetValidGameModeFromUser()
 		{
 			string responseFromUser = this.getNewInputAndCheckForExit(MessageCreator.PromptForGameMode, eErrorInPreviousInput.No);
 
@@ -236,7 +226,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 			}
 		}
 
-		private bool askForAnotherGame()
+		public bool PromptForAnotherGame()
 		{
 			string responseFromUser;
 			bool inputIsValidByNullTypeValue = false;

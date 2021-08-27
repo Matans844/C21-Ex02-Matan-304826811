@@ -31,7 +31,9 @@
 
 			foreach (BoardCell disc in i_OtherBoardCell)
 			{
-				if (!this.HasSameTypeAs(disc))
+				bool flagSameType = this.HasSameTypeAs(disc);
+
+				if (!flagSameType)
 				{
 					hasSameType = false;
 					break;
