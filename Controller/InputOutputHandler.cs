@@ -5,8 +5,6 @@ using Ex02.ConsoleUtils;
 using C21_Ex02_Matan_304826811.UserInterface;
 using C21_Ex02_Matan_304826811.GameLogic;
 
-
-
 namespace C21_Ex02_Matan_304826811.Controller
 {
 	public class InputOutputHandler
@@ -79,16 +77,24 @@ namespace C21_Ex02_Matan_304826811.Controller
 			}
 		}
 
-		public void DeclarePointStatus()
+		public void ShowStatusOfPoints()
 		{
 			Console.WriteLine();
 			Console.WriteLine(MessageCreator.StatusOfPoints);
 		}
 
-		public void DeclareGameResult()
+		public void DeclareGameResult(eBoardState i_FinalGameBoardState)
 		{
 			Console.WriteLine();
-			Console.WriteLine(MessageCreator.GameResultsMessage);
+
+			if (i_FinalGameBoardState == eBoardState.FinishedInWin)
+			{
+				Console.WriteLine(MessageCreator.GameResultsMessageForWonGame);
+			}
+			else
+			{
+				Console.WriteLine(MessageCreator.k_GameResultsMessageDrawn);
+			}
 		}
 
 		private string identifyExitKey(string i_ResponseFromUser)
@@ -112,8 +118,9 @@ namespace C21_Ex02_Matan_304826811.Controller
 		{
 			string responseFromUser;
 
-			bool isGameFinished = this.GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.BoardState
-								!= eBoardState.NotFinished;
+			bool isGameFinished =
+				(this.GameUserInterfaceAdmin.PhaseOfUserInterface != ePhaseOfUserInterface.InitialScreen)
+				&& this.GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.BoardState != eBoardState.NotFinished;
 
 			if (this.GameUserInterfaceAdmin.PhaseOfUserInterface == ePhaseOfUserInterface.InitialScreen)
 			{

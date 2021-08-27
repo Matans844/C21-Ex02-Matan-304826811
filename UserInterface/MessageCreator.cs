@@ -7,10 +7,19 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 {
 	public class MessageCreator
 	{
+		public const string k_GameResultsMessageDrawn = "The game ended in a draw!";
+
 		public static string s_PromptForAnotherGame = string.Format(
 			"{0}Do you want to play another game?{0}Press 1 for another game.{0}Press 0 to exit.", Environment.NewLine);
 
-		public static string GameResultsMessage { get; set; }
+		private static string s_GameResultsMessageForWonGame;
+		private static string s_StatusOfPoints;
+
+		public static string GameResultsMessageForWonGame
+		{
+			get => s_GameResultsMessageForWonGame;
+			set => s_GameResultsMessageForWonGame = $"Player {value} won! Congratulations!";
+		}
 
 		public static string GoodbyeMessageAfterFirstGameStart { get; } = string.Format(
 			"It is no shame to admit defeat. Dust yourself up, and try again.{0}I will be waiting.{0}Goodbye for now!{0}",
@@ -31,7 +40,7 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 		public static string PromptForBoardHeight { get; } =
 			$"Enter board height, between {Constraints.BoardDimensions.HeightLowerLimit} and {Constraints.BoardDimensions.HeightUpperLimit}: ";
 
-		public static string StatusOfPoints { get; set; }
+		public static string StatusOfPoints => s_StatusOfPoints;
 
 		public UserInterfaceAdmin GameUserInterfaceAdmin { get; set; }
 
@@ -40,31 +49,16 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			this.GameUserInterfaceAdmin = i_MyUserInterfaceAdmin;
 		}
 
-		private void setPointsStatus()
+		public void UpdateStatusOfPointsAndPrepareMessage()
 		{
-			int player1ID = this.GameUserInterfaceAdmin.MyGameLogicUnit.Player1WithXs.PlayerID;
+			string player1ID = this.GameUserInterfaceAdmin.MyGameLogicUnit.Player1WithXs.PlayerID;
 			int player1Points = this.GameUserInterfaceAdmin.MyGameLogicUnit.Player1WithXs.PointsEarned;
-			int player2ID = this.GameUserInterfaceAdmin.MyGameLogicUnit.Player2WithOs.PlayerID;
+			string player2ID = this.GameUserInterfaceAdmin.MyGameLogicUnit.Player2WithOs.PlayerID;
 			int player2Points = this.GameUserInterfaceAdmin.MyGameLogicUnit.Player2WithOs.PointsEarned;
 
-			StatusOfPoints =
-				$"Points so far:{Environment.NewLine}Player {player1ID} has {player1Points} points.{Environment.NewLine}Player {player2ID} has {player2Points} points.";
-		}
-
-		private void setResultsMessage()
-		{
-			GameResultsMessage =
-				$"Player {this.GameUserInterfaceAdmin.MyGameLogicUnit.GameBoard.BoardReferee.Winner.PlayerID} won";
-		}
-
-		public void UpdateResultsMessage()
-		{
-			this.setResultsMessage();
-		}
-
-		public void UpdateStatusOfPoints()
-		{
-			this.setPointsStatus();
+			s_StatusOfPoints = string.Format(
+				"Points so far:{0}Player {1} has {2} points.{0}Player {3} has {4} points.{0}Very well! Very very well!", Environment.NewLine,
+				player1ID, player1Points, player2ID, player2Points);
 		}
 	}
 }

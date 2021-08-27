@@ -48,7 +48,8 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 
 			this.MyGameLogicUnit = new Game(
 				this.MyGameDisplayLogic.GameMode, this.MyGameDisplayLogic.m_BoardDimensions, this);
-			this.MyMessageCreator.UpdateStatusOfPoints();
+			//// TODO: check withoutline
+			//// this.MyMessageCreator.UpdateStatusOfPointsAndPrepareMessage();
 			this.MyGameLogicUnit.StartGame();
 		}
 
@@ -104,15 +105,12 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 		{
 			Screen.Clear();
 			this.MyBoardScreenView.DrawBoard();
+			this.MyMessageCreator.UpdateStatusOfPointsAndPrepareMessage();
+			this.MyInputOutputHandler.DeclareGameResult(this.MyGameLogicUnit.GameBoard.BoardState);
 
 			if (this.MyGameLogicUnit.GameNumber > k_NumberOfGamesOnFirstGame)
 			{
-				this.MyInputOutputHandler.DeclarePointStatus();
-			}
-
-			if (this.MyGameLogicUnit.GameBoard.BoardState == eBoardState.FinishedInWin)
-			{
-				this.MyInputOutputHandler.DeclareGameResult();
+				this.MyInputOutputHandler.ShowStatusOfPoints();
 			}
 
 			return this.MyInputOutputHandler.PromptForAnotherGame();

@@ -15,7 +15,7 @@ namespace C21_Ex02_Matan_304826811.Players
 
 		public override BoardCell MakeMove(int i_ChosenColumn)
 		{
-			return this.BoardOfPlayer.SlideDiskToBoard(this.ChooseColumnForMove(), this.DiscType);
+			return IPlayer.BoardOfPlayer.SlideDiskToBoard(this.ChooseColumnForMove(), this.DiscType);
 		}
 
 		public int ChooseColumnForMove()

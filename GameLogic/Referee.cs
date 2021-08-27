@@ -2,6 +2,7 @@
 
 using C21_Ex02_Matan_304826811.Extensions;
 using C21_Ex02_Matan_304826811.Players;
+using C21_Ex02_Matan_304826811.UserInterface;
 
 namespace C21_Ex02_Matan_304826811.GameLogic
 {
@@ -81,7 +82,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 				if (hasWinnerConnection)
 				{
 					this.updateWinner(i_LastDiscPlaced);
-					this.BoardToReferee.GameForBoard.GameUserInterfaceAdmin.MyMessageCreator.UpdateResultsMessage();
+					MessageCreator.GameResultsMessageForWonGame = this.Winner.PlayerID;
 
 					break;
 				}

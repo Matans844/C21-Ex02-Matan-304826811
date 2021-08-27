@@ -6,9 +6,9 @@ namespace C21_Ex02_Matan_304826811.Players
 	{
 		private static int s_InstanceCounter;
 
-		public int PlayerID { get; }
+		public static Board BoardOfPlayer { get; set; }
 
-		public Board BoardOfPlayer { get; }
+		public string PlayerID { get; }
 
 		public int PointsEarned { get; set; } = Game.k_ZeroPoints;
 
@@ -19,9 +19,10 @@ namespace C21_Ex02_Matan_304826811.Players
 		protected IPlayer(Board i_BoardOfPlayer, eBoardCellType i_DiscType, eTurnState i_TurnState)
 		{
 			this.DiscType = i_DiscType;
-			this.BoardOfPlayer = i_BoardOfPlayer;
+			BoardOfPlayer = i_BoardOfPlayer;
 			this.TurnState = i_TurnState;
-			this.PlayerID = ++s_InstanceCounter;
+			this.PlayerID = s_InstanceCounter.ToString();
+			s_InstanceCounter++;
 		}
 
 		public abstract BoardCell MakeMove(int i_ChosenColumnAfterIndexAdjustment);

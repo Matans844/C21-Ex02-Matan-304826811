@@ -56,7 +56,10 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			this.GameBoard = new Board(this.GameBoard.Dimensions, this);
 			this.GameNumber++;
 
-			this.GameUserInterfaceAdmin.MyMessageCreator.UpdateStatusOfPoints();
+			this.Player1WithXs.TurnState = eTurnState.YourTurn;
+			this.Player2WithOs.TurnState = eTurnState.NotYourTurn;
+			IPlayer.BoardOfPlayer = this.GameBoard;
+
 			this.StartGame();
 		}
 
@@ -101,6 +104,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 				this.GameBoard.BoardReferee.Winner.PointsEarned++;
 			}
 
+			// Declare game results, show general results and prompt for another game
 			if (this.GameUserInterfaceAdmin.ConcludeSingleGameAndOfferAnotherGame())
 			{
 				this.continueWithAnotherGame();

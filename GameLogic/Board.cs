@@ -28,8 +28,6 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		public Referee BoardReferee { get; }
 
-		public BoardCell LastCellOccupied { get; set; }
-
 		public Board(GameBoardDimensions i_ChosenGameDimensions, Game i_GameForBoard)
 		{
 			this.GameForBoard = i_GameForBoard;
