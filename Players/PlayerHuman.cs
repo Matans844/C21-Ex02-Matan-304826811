@@ -13,9 +13,9 @@ namespace C21_Ex02_Matan_304826811.Players
 		{
 		}
 
-		public override eBoardState MakeMove(int i_ChosenColumn)
+		public override eBoardState MakeMove(int i_ChosenBoardColumnAjustedForMatrix)
 		{
-			return this.BoardOfPlayer.SlideDisk(i_ChosenColumn, this.DiscType);
+			return this.BoardOfPlayer.SlideDisk(i_ChosenBoardColumnAjustedForMatrix, this.DiscType);
 		}
 	}
 }

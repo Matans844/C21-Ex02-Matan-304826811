@@ -8,10 +8,10 @@
 
 		public eBoardCellType CellType { get; set; }
 
-		public BoardCell(uint i_Column, uint i_Row, eBoardCellType i_CellType)
+		public BoardCell(uint i_Row, uint i_Column, eBoardCellType i_CellType)
 		{
-			this.Column = i_Column;
 			this.Row = i_Row;
+			this.Column = i_Column;
 			this.CellType = i_CellType;
 		}
 

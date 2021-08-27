@@ -8,7 +8,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 {
 	public class Board
 	{
-		private const int k_TransformToIndicesWith1 = 1;
+		public const int k_TransformBoardToMatrixIndicesWith1 = 1;
 
 		public Game GameForBoard { get; }
 
@@ -41,23 +41,26 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		private static bool isChosenColumnInRange(int i_ChosenColumn, int i_NumOfColumnsInBoard)
 		{
-			return i_ChosenColumn < k_TransformToIndicesWith1
-					|| i_ChosenColumn > i_NumOfColumnsInBoard - k_TransformToIndicesWith1;
+			// TODO: Change this to fit dimensions
+			return (i_ChosenColumn >= 0)
+					&& (i_ChosenColumn <= i_NumOfColumnsInBoard - k_TransformBoardToMatrixIndicesWith1);
 		}
 
-		public eBoardState SlideDisk(int i_Column, eBoardCellType i_PlayerDiscType)
+		public eBoardState SlideDisk(int i_ChosenBoardColumnAdjustedForMatrix, eBoardCellType i_PlayerDiscType)
 		{
-			return insertToBoard(i_Column, ref i_PlayerDiscType);
+			return insertToBoard(i_ChosenBoardColumnAdjustedForMatrix, ref i_PlayerDiscType);
 		}
 
-		private eBoardState insertToBoard(int i_Column, ref eBoardCellType i_PlayerDiscType)
+		private eBoardState insertToBoard(int i_ColumnInMatrixToInsert, ref eBoardCellType i_PlayerDiscType)
 		{
-			int lastVacantCellInColumn = this.Dimensions.Height - this.NumOfCellVacanciesInColumn[i_Column];
+			// TODO: Check
+			// int lastVacantCellInColumn = this.Dimensions.Height - this.NumOfCellVacanciesInColumn[i_ColumnInMatrixToInsert];
+			int rowIndexOfLastVacantCellInChosenColumn = this.NumOfCellVacanciesInColumn[i_ColumnInMatrixToInsert] - k_TransformBoardToMatrixIndicesWith1;
 
-			this.NumOfCellVacanciesInColumn[i_Column]--;
+			this.NumOfCellVacanciesInColumn[i_ColumnInMatrixToInsert]--;
 			this.NumOfCellVacanciesInBoard--;
-			this.BoardCellMatrix[lastVacantCellInColumn, i_Column].CellType = i_PlayerDiscType;
-			this.LastCellOccupied = this.BoardCellMatrix[lastVacantCellInColumn, i_Column].ShallowCopy();
+			this.BoardCellMatrix[rowIndexOfLastVacantCellInChosenColumn, i_ColumnInMatrixToInsert].CellType = i_PlayerDiscType;
+			this.LastCellOccupied = this.BoardCellMatrix[rowIndexOfLastVacantCellInChosenColumn, i_ColumnInMatrixToInsert].ShallowCopy();
 			return this.calculateBoardState(LastCellOccupied);
 		}
 
@@ -73,23 +76,25 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			return this.BoardState;
 		}
 
-		private bool columnAvailabilityForDisc(int i_ChosenColumn)
+		private bool columnAvailabilityForDisc(int i_ChosenColumn, out bool o_IsOutOfRange)
 		{
-			int chosenColumnTranslatedToMatrixIndices = i_ChosenColumn - 1;
+			int chosenColumnTranslatedToMatrixIndices = i_ChosenColumn;
+			o_IsOutOfRange = true;
 			int numOfColumns = this.Dimensions.Width;
 			bool isValidChoice = false;
 
 			if (isChosenColumnInRange(i_ChosenColumn, numOfColumns))
 			{
-				isValidChoice = this.NumOfCellVacanciesInColumn[chosenColumnTranslatedToMatrixIndices] == 0;
+				o_IsOutOfRange = false;
+				isValidChoice = this.NumOfCellVacanciesInColumn[chosenColumnTranslatedToMatrixIndices] != 0;
 			}
 
 			return isValidChoice;
 		}
 
-		public bool IsColumnAvailableForDisc(int i_ChosenColumn)
+		public bool IsColumnAvailableForDisc(int i_ChosenColumn, out bool o_IsOutOfRange)
 		{
-			return this.columnAvailabilityForDisc(i_ChosenColumn);
+			return this.columnAvailabilityForDisc(i_ChosenColumn, out o_IsOutOfRange);
 		}
 	}
 

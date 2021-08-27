@@ -6,7 +6,11 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 	public class Game
 	{
 		public const int k_ZeroPoints = 0;
+
+		// This field determines the length of the winning connection.
+		// For generality, we need to make sure this field does not exceed the length (or height) of the board.
 		public const int k_LengthOfWinningConnection = 4;
+		public const int k_LengthOfWinningConnectionFromFirstDisk = k_LengthOfWinningConnection - 1;
 
 		public UserInterfaceAdmin GameUserInterfaceAdmin { get; }
 
@@ -54,38 +58,37 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			this.StartGame();
 		}
 
-		private eBoardState getGameState(Board i_BoardOfGame)
+		private bool hasGameEndedAfterMove()
 		{
-			return i_BoardOfGame.BoardState;
-		}
-
-		private bool hasGameEnded()
-		{
-			return this.getGameState(this.GameBoard) != eBoardState.NotFinished;
+			return this.GameBoard.BoardState != eBoardState.NotFinished;
 		}
 
 		private bool hasGameEndedInDraw()
 		{
-			return this.getGameState(this.GameBoard) == eBoardState.FinishedInDraw;
+			return this.GameBoard.BoardState == eBoardState.FinishedInDraw;
 		}
 
 		// Not used.
 		//private bool hasGameEndedInWin()
 		//{
-		//	return this.hasGameEnded() && !this.hasGameEndedInDraw();
+		//	return this.hasGameEndedAfterMove() && !this.hasGameEndedInDraw();
 		//}
 
 		public void StartGame()
 		{
+			int chosenBoardMoveAdjustedToMatrix; 
+			int adjustedMoveForIndices;
+
 			this.GameUserInterfaceAdmin.PhaseOfUserInterface = ePhaseOfUserInterface.BoardScreen;
 
 			while (!this.GameUserInterfaceAdmin.IsPlayerQuittingGame())
 			{
 				foreach (Player playerOfGame in this.BoxingPlayersInGame)
 				{
-					playerOfGame.MakeMove(this.GameUserInterfaceAdmin.MyInputOutputHandler.PromptForMove());
+					chosenBoardMoveAdjustedToMatrix = this.GameUserInterfaceAdmin.MyInputOutputHandler.PromptForMoveOnDisplayedBoard();
+					playerOfGame.MakeMove(chosenBoardMoveAdjustedToMatrix);
 
-					if (this.hasGameEnded())
+					if (this.hasGameEndedAfterMove())
 					{
 						break;
 					}

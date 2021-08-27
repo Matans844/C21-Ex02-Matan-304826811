@@ -40,15 +40,15 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 			foreach (eDirectionOfDiscConnection direction in Enum.GetValues(typeof(eDirectionOfDiscConnection)))
 			{
-				if (isLastDiscInConnectionValid(i_LastDiscPlaced, direction))
-				{
-					hasWinnerConnection = isWinningConnection(i_LastDiscPlaced, direction);
+				// if (isLastDiscInConnectionValid(i_LastDiscPlaced, direction))
+				// {
+				// }
+				hasWinnerConnection = isWinningConnection(i_LastDiscPlaced, direction);
 
-					if (hasWinnerConnection)
-					{
-						this.updateWinner(i_LastDiscPlaced);
-						this.BoardToReferee.GameForBoard.GameUserInterfaceAdmin.MyMessageCreator.UpdateResultsMessage();
-					}
+				if (hasWinnerConnection)
+				{
+					this.updateWinner(i_LastDiscPlaced);
+					this.BoardToReferee.GameForBoard.GameUserInterfaceAdmin.MyMessageCreator.UpdateResultsMessage();
 				}
 			}
 
@@ -57,18 +57,24 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		private void updateWinner(BoardCell i_WinningDiscPlaced)
 		{
+			this.BoardToReferee.BoardState = eBoardState.FinishedInWin;
+
 			this.Winner = (i_WinningDiscPlaced.CellType == eBoardCellType.XDisc)
 							? this.BoardToReferee.GameForBoard.Player1WithXs
 							: this.BoardToReferee.GameForBoard.Player2WithOs;
-			this.BoardToReferee.BoardState = eBoardState.FinishedInWin;
 		}
 
 		private bool isWinningConnection(BoardCell i_FocalBoardCell, eDirectionOfDiscConnection i_DirectionOfConnection)
 		{
-			// To improve readability, 'var' type is used instead of the built-in types 'bool', 'uint'.
-			var hasWinningConnection = false;
-			var focalRow = i_FocalBoardCell.Row;
-			var focalColumn = i_FocalBoardCell.Column;
+			// The Console board is a rotation of the CellBoard Matrix:
+			// 1. The matrix has cell 0,0 in the upper left.
+			// 2. The console board has cell 0,0 in the bottom left.
+			// Also consider that:
+			// 1. A player receives indices from 1 to the width of the board.
+			// 2. The matrix has column indices from 0 to with of the board minus 1.
+			bool hasWinningConnection = false;
+			uint focalRow = i_FocalBoardCell.Row;
+			uint focalColumn = i_FocalBoardCell.Column;
 
 			switch (i_DirectionOfConnection)
 			{
@@ -132,51 +138,64 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			return hasWinningConnection;
 		}
 
-		private bool isLastDiscInConnectionValid(BoardCell i_FocalBoardCell, eDirectionOfDiscConnection i_DirectionOfConnection)
+		/*private bool isLastDiscInConnectionValid(BoardCell i_FocalBoardCell, eDirectionOfDiscConnection i_DirectionOfConnection)
 		{
+
+		// This method is wrong.
+		// I can insert a winning disc in the middle of a combination.
+		// Checking what happens in radius 4 is not good enough
+
 			bool isDistantDiscAvailable = false;
 			uint focalRow = i_FocalBoardCell.Row;
 			uint focalColumn = i_FocalBoardCell.Column;
-			int numOfMatrixRows = BoardToReferee.BoardCellMatrix.GetLength(0);
-			int numOfMatrixColumns = BoardToReferee.BoardCellMatrix.GetLength(1);
+			int indexOfLastMatrixRow = BoardToReferee.BoardCellMatrix.GetLength(0) - Board.k_TransformBoardToMatrixIndicesWith1;
+			int indexOfLastMatrixColumn = BoardToReferee.BoardCellMatrix.GetLength(1) - Board.k_TransformBoardToMatrixIndicesWith1;
 
 			switch (i_DirectionOfConnection)
 			{
 				case eDirectionOfDiscConnection.Right:
-					isDistantDiscAvailable = numOfMatrixColumns > focalColumn + Game.k_LengthOfWinningConnection;
+					isDistantDiscAvailable = indexOfLastMatrixColumn > focalColumn + Game.k_LengthOfWinningConnectionFromFirstDisk;
 					break;
 
 				case eDirectionOfDiscConnection.UpRight:
-					isDistantDiscAvailable = (numOfMatrixColumns > focalColumn + Game.k_LengthOfWinningConnection) && (numOfMatrixRows > focalRow - Game.k_LengthOfWinningConnection);
+					isDistantDiscAvailable =
+						(indexOfLastMatrixColumn > focalColumn + Game.k_LengthOfWinningConnectionFromFirstDisk)
+						&& (indexOfLastMatrixRow > focalRow - Game.k_LengthOfWinningConnectionFromFirstDisk);
 					break;
 
 				case eDirectionOfDiscConnection.Up:
-					isDistantDiscAvailable = numOfMatrixRows > focalRow - Game.k_LengthOfWinningConnection;
+					isDistantDiscAvailable = indexOfLastMatrixRow > focalRow - Game.k_LengthOfWinningConnectionFromFirstDisk;
 					break;
 
 				case eDirectionOfDiscConnection.UpLeft:
-					isDistantDiscAvailable = (numOfMatrixColumns > focalColumn - Game.k_LengthOfWinningConnection) && (numOfMatrixRows > focalRow - Game.k_LengthOfWinningConnection);
+					isDistantDiscAvailable =
+						(indexOfLastMatrixColumn > focalColumn - Game.k_LengthOfWinningConnectionFromFirstDisk)
+						&& (indexOfLastMatrixRow > focalRow - Game.k_LengthOfWinningConnectionFromFirstDisk);
 					break;
 
 				case eDirectionOfDiscConnection.Left:
-					isDistantDiscAvailable = numOfMatrixColumns > focalColumn - Game.k_LengthOfWinningConnection;
+					isDistantDiscAvailable = indexOfLastMatrixColumn > focalColumn - Game.k_LengthOfWinningConnectionFromFirstDisk;
 					break;
 
 				case eDirectionOfDiscConnection.DownLeft:
-					isDistantDiscAvailable = (numOfMatrixColumns > focalColumn - Game.k_LengthOfWinningConnection) && (numOfMatrixRows > focalRow + Game.k_LengthOfWinningConnection);
+					isDistantDiscAvailable =
+						(indexOfLastMatrixColumn > focalColumn - Game.k_LengthOfWinningConnectionFromFirstDisk)
+						&& (indexOfLastMatrixRow > focalRow + Game.k_LengthOfWinningConnectionFromFirstDisk);
 					break;
 
 				case eDirectionOfDiscConnection.Down:
-					isDistantDiscAvailable = numOfMatrixRows > focalRow + Game.k_LengthOfWinningConnection;
+					isDistantDiscAvailable = indexOfLastMatrixRow > focalRow + Game.k_LengthOfWinningConnectionFromFirstDisk;
 					break;
 
 				case eDirectionOfDiscConnection.DownRight:
-					isDistantDiscAvailable = (numOfMatrixRows > focalRow + Game.k_LengthOfWinningConnection) && (numOfMatrixRows > focalRow + Game.k_LengthOfWinningConnection);
+					isDistantDiscAvailable =
+						(indexOfLastMatrixRow > focalRow + Game.k_LengthOfWinningConnectionFromFirstDisk)
+						&& (indexOfLastMatrixRow > focalRow + Game.k_LengthOfWinningConnectionFromFirstDisk);
 					break;
 			}
 
 			return isDistantDiscAvailable;
-		}
+		}*/
 	}
 
 	// Counterclockwise

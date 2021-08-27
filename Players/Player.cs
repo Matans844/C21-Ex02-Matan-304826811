@@ -24,7 +24,7 @@ namespace C21_Ex02_Matan_304826811.Players
 			this.PlayerID = ++s_InstanceCounter;
 		}
 
-		public abstract eBoardState MakeMove(int i_ChosenColumn);
+		public abstract eBoardState MakeMove(int i_ChosenColumnAfterIndexAdjustment);
 	}
 
 	public enum ePlayerType

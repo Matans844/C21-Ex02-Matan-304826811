@@ -44,11 +44,12 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			{
 				if (i == 0)
 				{
-					nextColumnHeader = $"{i,k_SpaceBetweenColumnHeaders - k_SpaceColumnHeaderExtraPrefix}";
+					nextColumnHeader =
+						$"{i + Board.k_TransformBoardToMatrixIndicesWith1,k_SpaceBetweenColumnHeaders - k_SpaceColumnHeaderExtraPrefix}";
 				}
 				else
 				{
-					nextColumnHeader = $"{i,k_SpaceBetweenColumnHeaders}";
+					nextColumnHeader = $"{i + Board.k_TransformBoardToMatrixIndicesWith1,k_SpaceBetweenColumnHeaders}";
 				}
 
 				columnHeaderRow.Append(nextColumnHeader);
