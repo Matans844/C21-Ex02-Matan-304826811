@@ -77,8 +77,6 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 		public void StartGame()
 		{
 			int chosenBoardMoveAdjustedToMatrix; 
-			int adjustedMoveForIndices;
-
 			this.GameUserInterfaceAdmin.PhaseOfUserInterface = ePhaseOfUserInterface.BoardScreen;
 
 			while (!this.GameUserInterfaceAdmin.IsPlayerQuittingGame())

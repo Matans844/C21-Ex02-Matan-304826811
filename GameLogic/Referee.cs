@@ -4,8 +4,46 @@ using C21_Ex02_Matan_304826811.Players;
 
 namespace C21_Ex02_Matan_304826811.GameLogic
 {
+	using C21_Ex02_Matan_304826811.Extensions;
+
 	public class Referee
 	{
+		public static readonly int[][] sr_IndexWeightsForChangeByDiscIndexOfConnection = new int[4][]
+			{
+				new int[3] {1, 2, 3},
+				new int[3] {-1, 1, 2},
+				new int[3] {-1, 1, -2},
+				new int[3] {-1, -2, -3}
+			};
+
+		public static readonly int[][] sr_IndexWeightsForNegativeChangeByDiscIndexOfConnection = new int[4][]
+			{
+				new int[3] {-1, -2, -3},
+				new int[3] {1, -1, -2},
+				new int[3] {1, -1, 2},
+				new int[3] {1, 2, 3}
+			};
+
+		public static readonly int[][] sr_EmptyIndexWeights = new int[4][]
+			{
+				new int[3],
+				new int[3],
+				new int[3],
+				new int[3]
+			};
+
+		public static readonly int[][] sr_IndexWeightsForHorizontalConnections =
+			OperateOn2DArrays.HorizontalConcat(sr_EmptyIndexWeights, sr_IndexWeightsForChangeByDiscIndexOfConnection);
+
+		public static readonly int[][] sr_IndexWeightsForVerticalConnections =
+			OperateOn2DArrays.HorizontalConcat(sr_IndexWeightsForChangeByDiscIndexOfConnection, sr_EmptyIndexWeights);
+
+		public static readonly int[][] sr_IndexWeightsForDiagonalNegativeSlope =
+			OperateOn2DArrays.HorizontalConcat(sr_IndexWeightsForChangeByDiscIndexOfConnection, sr_IndexWeightsForChangeByDiscIndexOfConnection);
+
+		public static readonly int[][] sr_IndexWeightsForDiagonalPositiveSlope =
+			OperateOn2DArrays.HorizontalConcat(sr_IndexWeightsForNegativeChangeByDiscIndexOfConnection, sr_IndexWeightsForChangeByDiscIndexOfConnection);
+
 		public Player Winner { get; set; }
 
 		public Board BoardToReferee { get; }
@@ -49,6 +87,8 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 				{
 					this.updateWinner(i_LastDiscPlaced);
 					this.BoardToReferee.GameForBoard.GameUserInterfaceAdmin.MyMessageCreator.UpdateResultsMessage();
+
+					break;
 				}
 			}
 
@@ -72,70 +112,65 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			// Also consider that:
 			// 1. A player receives indices from 1 to the width of the board.
 			// 2. The matrix has column indices from 0 to with of the board minus 1.
-			bool hasWinningConnection = false;
-			uint focalRow = i_FocalBoardCell.Row;
-			uint focalColumn = i_FocalBoardCell.Column;
+			uint focalRowIndex = i_FocalBoardCell.Row;
+			uint focalColumnIndex = i_FocalBoardCell.Column;
 
+			this.setWeights(i_DirectionOfConnection,
+				out int[] weightsForIndex0,
+				out int[] weightsForIndex1,
+				out int[] weightsForIndex2,
+				out int[] weightsForIndex3);
+
+			return checkDirectionByIndex(i_FocalBoardCell, focalRowIndex, focalColumnIndex, weightsForIndex0)
+					|| checkDirectionByIndex(i_FocalBoardCell, focalRowIndex, focalColumnIndex, weightsForIndex1)
+					|| checkDirectionByIndex(i_FocalBoardCell, focalRowIndex, focalColumnIndex, weightsForIndex2)
+					|| checkDirectionByIndex(i_FocalBoardCell, focalRowIndex, focalColumnIndex, weightsForIndex3);
+		}
+
+		private void setWeights(
+			eDirectionOfDiscConnection i_DirectionOfConnection,
+			out int[] o_WeightsForIndex0,
+			out int[] o_WeightsForIndex1,
+			out int[] o_WeightsForIndex2,
+			out int[] o_WeightsForIndex3)
+		{
 			switch (i_DirectionOfConnection)
 			{
-				case eDirectionOfDiscConnection.Right:
-					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
-						BoardToReferee.BoardCellMatrix[focalRow, focalColumn + 1],
-						BoardToReferee.BoardCellMatrix[focalRow, focalColumn + 2],
-						BoardToReferee.BoardCellMatrix[focalRow, focalColumn + 3]);
+				case eDirectionOfDiscConnection.Horizontal:
+					o_WeightsForIndex0 = sr_IndexWeightsForHorizontalConnections[0];
+					o_WeightsForIndex1 = sr_IndexWeightsForHorizontalConnections[1];
+					o_WeightsForIndex2 = sr_IndexWeightsForHorizontalConnections[2];
+					o_WeightsForIndex3 = sr_IndexWeightsForHorizontalConnections[3];
 					break;
-
-				case eDirectionOfDiscConnection.UpRight:
-					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
-						BoardToReferee.BoardCellMatrix[focalRow - 1, focalColumn + 1],
-						BoardToReferee.BoardCellMatrix[focalRow - 2, focalColumn + 2],
-						BoardToReferee.BoardCellMatrix[focalRow - 3, focalColumn + 3]);
+				case eDirectionOfDiscConnection.Vertical:
+					o_WeightsForIndex0 = sr_IndexWeightsForVerticalConnections[0];
+					o_WeightsForIndex1 = sr_IndexWeightsForVerticalConnections[1];
+					o_WeightsForIndex2 = sr_IndexWeightsForVerticalConnections[2];
+					o_WeightsForIndex3 = sr_IndexWeightsForVerticalConnections[3];
 					break;
-
-				case eDirectionOfDiscConnection.Up:
-					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
-						BoardToReferee.BoardCellMatrix[focalRow - 1, focalColumn],
-						BoardToReferee.BoardCellMatrix[focalRow - 2, focalColumn],
-						BoardToReferee.BoardCellMatrix[focalRow - 3, focalColumn]);
+				case eDirectionOfDiscConnection.DiagonalPositiveSlope:
+					o_WeightsForIndex0 = sr_IndexWeightsForDiagonalPositiveSlope[0];
+					o_WeightsForIndex1 = sr_IndexWeightsForDiagonalPositiveSlope[1];
+					o_WeightsForIndex2 = sr_IndexWeightsForDiagonalPositiveSlope[2];
+					o_WeightsForIndex3 = sr_IndexWeightsForDiagonalPositiveSlope[3];
 					break;
-
-				case eDirectionOfDiscConnection.UpLeft:
-					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
-						BoardToReferee.BoardCellMatrix[focalRow - 1, focalColumn - 1],
-						BoardToReferee.BoardCellMatrix[focalRow - 2, focalColumn - 2],
-						BoardToReferee.BoardCellMatrix[focalRow - 3, focalColumn - 3]);
+				case eDirectionOfDiscConnection.DiagonalNegativeSlope:
+					o_WeightsForIndex0 = sr_IndexWeightsForDiagonalNegativeSlope[0];
+					o_WeightsForIndex1 = sr_IndexWeightsForDiagonalNegativeSlope[1];
+					o_WeightsForIndex2 = sr_IndexWeightsForDiagonalNegativeSlope[2];
+					o_WeightsForIndex3 = sr_IndexWeightsForDiagonalNegativeSlope[3];
 					break;
-
-				case eDirectionOfDiscConnection.Left:
-					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
-						BoardToReferee.BoardCellMatrix[focalRow, focalColumn - 1],
-						BoardToReferee.BoardCellMatrix[focalRow, focalColumn - 2],
-						BoardToReferee.BoardCellMatrix[focalRow, focalColumn - 3]);
-					break;
-
-				case eDirectionOfDiscConnection.DownLeft:
-					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
-						BoardToReferee.BoardCellMatrix[focalRow + 1, focalColumn - 1],
-						BoardToReferee.BoardCellMatrix[focalRow + 2, focalColumn - 2],
-						BoardToReferee.BoardCellMatrix[focalRow + 3, focalColumn - 3]);
-					break;
-
-				case eDirectionOfDiscConnection.Down:
-					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
-						BoardToReferee.BoardCellMatrix[focalRow + 1, focalColumn],
-						BoardToReferee.BoardCellMatrix[focalRow + 2, focalColumn],
-						BoardToReferee.BoardCellMatrix[focalRow + 3, focalColumn]);
-					break;
-
-				case eDirectionOfDiscConnection.DownRight:
-					hasWinningConnection = i_FocalBoardCell.HasSameTypeAs(
-						BoardToReferee.BoardCellMatrix[focalRow + 1, focalColumn + 1],
-						BoardToReferee.BoardCellMatrix[focalRow + 2, focalColumn + 2],
-						BoardToReferee.BoardCellMatrix[focalRow + 3, focalColumn + 3]);
-					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(i_DirectionOfConnection), i_DirectionOfConnection, null);
 			}
+		}
 
-			return hasWinningConnection;
+		private bool checkDirectionByIndex(BoardCell i_FocalBoardCell, uint i_FocalRow, uint i_FocalColumn, params int[] io_WeightsByDirection)
+		{
+			return i_FocalBoardCell.HasSameTypeAs(
+										this.BoardToReferee.BoardCellMatrix[i_FocalRow + io_WeightsByDirection[0], i_FocalColumn + io_WeightsByDirection[3]],
+										this.BoardToReferee.BoardCellMatrix[i_FocalRow + io_WeightsByDirection[1], i_FocalColumn + io_WeightsByDirection[4]],
+										this.BoardToReferee.BoardCellMatrix[i_FocalRow + io_WeightsByDirection[2], i_FocalColumn + io_WeightsByDirection[5]]);
 		}
 
 		/*private bool isLastDiscInConnectionValid(BoardCell i_FocalBoardCell, eDirectionOfDiscConnection i_DirectionOfConnection)
@@ -153,21 +188,21 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 			switch (i_DirectionOfConnection)
 			{
-				case eDirectionOfDiscConnection.Right:
+				case eDirectionOfDiscConnection.Horizontal:
 					isDistantDiscAvailable = indexOfLastMatrixColumn > focalColumn + Game.k_LengthOfWinningConnectionFromFirstDisk;
 					break;
 
-				case eDirectionOfDiscConnection.UpRight:
+				case eDirectionOfDiscConnection.Vertical:
 					isDistantDiscAvailable =
 						(indexOfLastMatrixColumn > focalColumn + Game.k_LengthOfWinningConnectionFromFirstDisk)
 						&& (indexOfLastMatrixRow > focalRow - Game.k_LengthOfWinningConnectionFromFirstDisk);
 					break;
 
-				case eDirectionOfDiscConnection.Up:
+				case eDirectionOfDiscConnection.DiagonalPositiveSlope:
 					isDistantDiscAvailable = indexOfLastMatrixRow > focalRow - Game.k_LengthOfWinningConnectionFromFirstDisk;
 					break;
 
-				case eDirectionOfDiscConnection.UpLeft:
+				case eDirectionOfDiscConnection.DiagonalNegativeSlope:
 					isDistantDiscAvailable =
 						(indexOfLastMatrixColumn > focalColumn - Game.k_LengthOfWinningConnectionFromFirstDisk)
 						&& (indexOfLastMatrixRow > focalRow - Game.k_LengthOfWinningConnectionFromFirstDisk);
@@ -201,13 +236,9 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 	// Counterclockwise
 	public enum eDirectionOfDiscConnection
 	{
-		Right = 0,
-		UpRight = 1,
-		Up = 2,
-		UpLeft = 3,
-		Left = 4,
-		DownLeft = 5,
-		Down = 6,
-		DownRight = 7
+		Horizontal = 0,
+		Vertical = 1,
+		DiagonalPositiveSlope = 2,
+		DiagonalNegativeSlope = 3
 	}
 }

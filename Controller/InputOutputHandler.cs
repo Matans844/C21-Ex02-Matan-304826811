@@ -40,7 +40,7 @@ namespace C21_Ex02_Matan_304826811.Controller
 
 		private void getIntegerAndCheck(out int io_ColumnChosenFromConsoleBoard, out bool o_IsInputParsedToInt, out bool o_IsInputValid, out bool o_IsOutOfRange, eErrorInPreviousInput i_PreviousInputError)
 		{
-			bool hasLeadingZero = false;
+			bool hasLeadingZero;
 
 			// Validation: Exit key. We proceed only if we got a valid string.
 			string responseFromUser = this.getNewInputAndCheckForExit(sr_PromptForNextMove, i_PreviousInputError);

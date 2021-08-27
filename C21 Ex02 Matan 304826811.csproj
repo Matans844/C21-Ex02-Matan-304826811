@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Extensions\InitializeMatrix.cs" />
+    <Compile Include="Extensions\OperateOn2DArrays.cs" />
     <Compile Include="GameLogic\Board.cs" />
     <Compile Include="GameLogic\Referee.cs" />
     <Compile Include="Players\IMoveChooser.cs" />
