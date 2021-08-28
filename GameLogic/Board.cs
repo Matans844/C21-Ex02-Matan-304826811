@@ -53,8 +53,6 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		public BoardCell SlideDiskToBoard(int i_ChosenBoardColumnAdjustedForMatrix, eBoardCellType i_PlayerDiscType)
 		{
-			// TODO: Check
-			// int lastVacantCellInColumn = this.Dimensions.Height - this.NumOfCellVacanciesInColumn[i_ChosenBoardColumnAdjustedForMatrix];
 			int rowIndexOfLastVacantCellInChosenColumn =
 				this.NumOfCellVacanciesInColumn[i_ChosenBoardColumnAdjustedForMatrix]
 				- k_TransformBoardToMatrixIndicesWith1;
@@ -90,7 +88,8 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 	{
 		NotFinished = 0,
 		FinishedInDraw = 1,
-		FinishedInWin = 2
+		FinishedInWinByBoard = 2,
+		FinishedInWinByQuit = 3
 	}
 
 	public enum eAttemptedOutOfRange

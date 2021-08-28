@@ -13,8 +13,10 @@ namespace C21_Ex02_Matan_304826811.Controller
 		public const bool k_LoopUntilAllInputRequirementsAreMet = true;
 
 		private static readonly string sr_InvalidInputMessage = $"Invalid input!{Environment.NewLine}";
+
 		private static readonly string sr_ColumnIsFull =
 			$"{Environment.NewLine}Chosen column is already full. Choose again.";
+
 		private static readonly string
 			sr_ChooseInRange = $"{Environment.NewLine}Please choose a valid value for column";
 
@@ -87,13 +89,17 @@ namespace C21_Ex02_Matan_304826811.Controller
 		{
 			Console.WriteLine();
 
-			if (i_FinalGameBoardState == eBoardState.FinishedInWin)
+			if (i_FinalGameBoardState == eBoardState.FinishedInWinByBoard)
 			{
-				Console.WriteLine(MessageCreator.GameResultsMessageForWonGame);
+				Console.WriteLine(MessageCreator.GameResultsMessageForWonGameByPlay);
+			}
+			else if (i_FinalGameBoardState == eBoardState.FinishedInDraw)
+			{
+				Console.WriteLine(MessageCreator.k_GameResultsMessageDrawn);
 			}
 			else
 			{
-				Console.WriteLine(MessageCreator.k_GameResultsMessageDrawn);
+				Console.WriteLine(MessageCreator.GameResultsMessageForWonGameByQuit);
 			}
 		}
 
@@ -127,18 +133,21 @@ namespace C21_Ex02_Matan_304826811.Controller
 				Screen.Clear();
 			}
 
-			if (i_ErrorInInput == eErrorInPreviousInput.Yes)
+			if (!isGameFinished)
 			{
-				Console.WriteLine(sr_InvalidInputMessage);
-			}
+				if (i_ErrorInInput == eErrorInPreviousInput.Yes)
+				{
+					Console.WriteLine(sr_InvalidInputMessage);
+				}
 
-			if (this.GameUserInterfaceAdmin.IsEscapeKeyOn == false && !isGameFinished)
-			{
-				Console.Write(i_PromptToUser);
+				if (this.GameUserInterfaceAdmin.IsEscapeKeyOn == false)
+				{
+					Console.Write(i_PromptToUser);
+				}
 			}
-
-			if (isGameFinished)
+			else
 			{
+				int hello = 1;
 			}
 
 			responseFromUser = Console.ReadLine();

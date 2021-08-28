@@ -2,7 +2,7 @@
 
 namespace C21_Ex02_Matan_304826811.Players
 {
-	public class PlayerComputer : IPlayer
+	public class PlayerComputer : Player
 	{
 		private const ePlayerType k_PlayerType = ePlayerType.Computer;
 
@@ -15,7 +15,7 @@ namespace C21_Ex02_Matan_304826811.Players
 
 		public override BoardCell MakeMove(int i_ChosenColumn)
 		{
-			return IPlayer.BoardOfPlayer.SlideDiskToBoard(this.ChooseColumnForMove(), this.DiscType);
+			return Player.BoardOfPlayer.SlideDiskToBoard(this.ChooseColumnForMove(), this.DiscType);
 		}
 
 		public int ChooseColumnForMove()

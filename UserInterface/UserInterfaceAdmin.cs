@@ -48,8 +48,6 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 
 			this.MyGameLogicUnit = new Game(
 				this.MyGameDisplayLogic.GameMode, this.MyGameDisplayLogic.m_BoardDimensions, this);
-			//// TODO: check withoutline
-			//// this.MyMessageCreator.UpdateStatusOfPointsAndPrepareMessage();
 			this.MyGameLogicUnit.StartGame();
 		}
 
@@ -89,14 +87,10 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 					}
 
 					break;
-
 				case ePhaseOfUserInterface.InitialScreen:
 					this.QuitProcess = eQuitProcess.Quit;
-
 					break;
-
 				case ePhaseOfUserInterface.Terminated:
-
 					break;
 			}
 		}

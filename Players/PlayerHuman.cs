@@ -2,7 +2,7 @@
 
 namespace C21_Ex02_Matan_304826811.Players
 {
-	public class PlayerHuman : IPlayer
+	public class PlayerHuman : Player
 	{
 		private const ePlayerType k_PlayerType = ePlayerType.Human;
 
@@ -15,7 +15,7 @@ namespace C21_Ex02_Matan_304826811.Players
 
 		public override BoardCell MakeMove(int i_ChosenBoardColumnAjustedForMatrix)
 		{
-			BoardCell myLastMove = IPlayer.BoardOfPlayer.SlideDiskToBoard(
+			BoardCell myLastMove = Player.BoardOfPlayer.SlideDiskToBoard(
 				i_ChosenBoardColumnAjustedForMatrix, this.DiscType);
 			this.TurnState = eTurnState.NotYourTurn;
 

@@ -17,9 +17,9 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 		public Board GameBoard { get; set; }
 
-		public IPlayer Player1WithXs { get; }
+		public Player Player1WithXs { get; }
 
-		public IPlayer Player2WithOs { get; }
+		public Player Player2WithOs { get; }
 
 		public eGameMode Mode { get; }
 
@@ -58,7 +58,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 			this.Player1WithXs.TurnState = eTurnState.YourTurn;
 			this.Player2WithOs.TurnState = eTurnState.NotYourTurn;
-			IPlayer.BoardOfPlayer = this.GameBoard;
+			Player.BoardOfPlayer = this.GameBoard;
 
 			this.StartGame();
 		}
@@ -81,7 +81,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 			while (!this.GameUserInterfaceAdmin.IsPlayerQuittingGame())
 			{
-				foreach (IPlayer playerOfGame in this.BoxingPlayersInGame)
+				foreach (Player playerOfGame in this.BoxingPlayersInGame)
 				{
 					playerOfGame.TurnState = eTurnState.YourTurn;
 
@@ -101,7 +101,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 			if (!this.hasGameEndedInDraw())
 			{
-				this.GameBoard.BoardReferee.Winner.PointsEarned++;
+				this.GameBoard.BoardReferee.WinnerOfLastGame.PointsEarned++;
 			}
 
 			// Declare game results, show general results and prompt for another game

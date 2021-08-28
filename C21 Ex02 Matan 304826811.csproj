@@ -36,7 +36,7 @@
     <Compile Include="Extensions\OperateOn2DArrays.cs" />
     <Compile Include="GameLogic\Board.cs" />
     <Compile Include="GameLogic\Referee.cs" />
-    <Compile Include="Players\IPlayer.cs" />
+    <Compile Include="Players\Player.cs" />
     <Compile Include="Presets\Constraints.cs" />
     <Compile Include="Controller\InputOutputHandler.cs" />
     <Compile Include="GameLogic\BoardCell.cs" />

@@ -2,9 +2,9 @@
 
 namespace C21_Ex02_Matan_304826811.Players
 {
-	public abstract class IPlayer
+	public abstract class Player
 	{
-		private static int s_InstanceCounter;
+		private static int s_InstanceCounter = 1;
 
 		public static Board BoardOfPlayer { get; set; }
 
@@ -16,12 +16,12 @@ namespace C21_Ex02_Matan_304826811.Players
 
 		public eTurnState TurnState { get; set; }
 
-		protected IPlayer(Board i_BoardOfPlayer, eBoardCellType i_DiscType, eTurnState i_TurnState)
+		protected Player(Board i_BoardOfPlayer, eBoardCellType i_DiscType, eTurnState i_TurnState)
 		{
 			this.DiscType = i_DiscType;
 			BoardOfPlayer = i_BoardOfPlayer;
 			this.TurnState = i_TurnState;
-			this.PlayerID = s_InstanceCounter.ToString();
+			this.PlayerID = string.Format("John {0} of Streadonlitica", s_InstanceCounter.ToString());
 			s_InstanceCounter++;
 		}
 

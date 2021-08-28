@@ -12,13 +12,22 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 		public static string s_PromptForAnotherGame = string.Format(
 			"{0}Do you want to play another game?{0}Press 1 for another game.{0}Press 0 to exit.", Environment.NewLine);
 
-		private static string s_GameResultsMessageForWonGame;
+		private static string s_GameResultsMessageForWonGameByPlay;
+
 		private static string s_StatusOfPoints;
 
-		public static string GameResultsMessageForWonGame
+		public static string GameResultsMessageForWonGameByPlay
 		{
-			get => s_GameResultsMessageForWonGame;
-			set => s_GameResultsMessageForWonGame = $"Player {value} won! Congratulations!";
+			get => s_GameResultsMessageForWonGameByPlay;
+			set => s_GameResultsMessageForWonGameByPlay = $"{value} won! Congratulations!";
+		}
+
+		private static string s_GameResultsMessageForWonGameByQuit;
+
+		public static string GameResultsMessageForWonGameByQuit
+		{
+			get => s_GameResultsMessageForWonGameByQuit;
+			set => s_GameResultsMessageForWonGameByQuit = $"{value} won due to abandonment! Congratulations!";
 		}
 
 		public static string GoodbyeMessageAfterFirstGameStart { get; } = string.Format(
