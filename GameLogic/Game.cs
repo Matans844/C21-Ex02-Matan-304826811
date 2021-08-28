@@ -11,6 +11,8 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 		// For generality, we need to make sure this field does not exceed the length (or height) of the board.
 		public const int k_LengthOfWinningConnection = 4;
 
+		public static BoardCell LastMovePlayed { get; set; }
+
 		public UserInterfaceAdmin GameUserInterfaceAdmin { get; }
 
 		public object[] BoxingPlayersInGame { get; } = new object[2];
@@ -49,6 +51,10 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 			this.BoxingPlayersInGame[0] = this.Player1WithXs;
 			this.BoxingPlayersInGame[1] = this.Player2WithOs;
+
+			// Because the first player has to start.
+			// I could also look whose turn it is, if there were more than 12 players.
+			Referee.PlayerToWinInCaseOfQuit = this.Player2WithOs;
 		}
 
 		private void continueWithAnotherGame()
@@ -76,10 +82,12 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 		public void StartGame()
 		{
 			int chosenValidBoardMoveAdjustedToMatrix;
-			BoardCell lastDiscPlayed;
 			this.GameUserInterfaceAdmin.PhaseOfUserInterface = ePhaseOfUserInterface.BoardScreen;
 
-			while (!this.GameUserInterfaceAdmin.IsPlayerQuittingGame())
+			// !this.GameUserInterfaceAdmin.IsPlayerQuittingGame()
+
+			//TODO
+			while (true)
 			{
 				foreach (Player playerOfGame in this.BoxingPlayersInGame)
 				{
@@ -87,8 +95,9 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 					chosenValidBoardMoveAdjustedToMatrix = this.GameUserInterfaceAdmin.MyInputOutputHandler
 						.PromptForValidMoveOnDisplayedBoard();
-					lastDiscPlayed = playerOfGame.MakeMove(chosenValidBoardMoveAdjustedToMatrix);
-					this.GameBoard.BoardReferee.CalculateBoardState(lastDiscPlayed);
+
+					LastMovePlayed = playerOfGame.MakeMove(chosenValidBoardMoveAdjustedToMatrix);
+					this.GameBoard.BoardReferee.CalculateBoardState();
 
 					if (this.hasGameEndedAfterMove())
 					{
@@ -101,7 +110,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 			if (!this.hasGameEndedInDraw())
 			{
-				this.GameBoard.BoardReferee.WinnerOfLastGame.PointsEarned++;
+				Referee.WinnerOfLastGame.PointsEarned++;
 			}
 
 			// Declare game results, show general results and prompt for another game

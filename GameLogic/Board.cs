@@ -37,6 +37,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			NumberOfRowIndices = BoardCellMatrix.GetLength(0) - Board.k_TransformBoardToMatrixIndicesWith1;
 			NumberOfColumnIndices = BoardCellMatrix.GetLength(1) - Board.k_TransformBoardToMatrixIndicesWith1;
 			this.BoardReferee = new Referee(this);
+
 			this.NumOfCellVacanciesInBoard = i_ChosenGameDimensions.Height * i_ChosenGameDimensions.Width;
 
 			this.NumOfCellVacanciesInColumn = Enumerable.Repeat(

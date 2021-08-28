@@ -13,7 +13,9 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 		public const int k_DistanceBetweenWeightsInJaggedArray = 3;
 		public const int k_NumberOfWeightPairs = 3;
 
-		public Player LastPlayerToMove { get; set; }
+		public static Player PlayerToWinInCaseOfQuit { get; set; }
+
+		public static Player WinnerOfLastGame { get; set; }
 
 		public static readonly int[][] sr_IndexWeightsForChangeByDiscIndexOfConnection = new int[4][]
 			{
@@ -47,8 +49,6 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 				sr_IndexWeightsForNegativeChangeByDiscIndexOfConnection,
 				sr_IndexWeightsForChangeByDiscIndexOfConnection);
 
-		public Player WinnerOfLastGame { get; set; }
-
 		public Board BoardToReferee { get; }
 
 		public Referee(Board i_Board)
@@ -79,11 +79,12 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 		{
 			bool hasWinner = false;
 
-			if (this.isGameWonByQuit())
+			if (!this.isGameWonByQuit())
 			{
-				this.LastPlayerToMove = (i_LastDiscPlaced.CellType == eBoardCellType.XDisc)
-											? this.BoardToReferee.GameForBoard.Player1WithXs
-											: this.BoardToReferee.GameForBoard.Player2WithOs;
+				// Updating player by identity of the player who put disc last
+				PlayerToWinInCaseOfQuit = (i_LastDiscPlaced.CellType == eBoardCellType.XDisc)
+												? this.BoardToReferee.GameForBoard.Player1WithXs
+												: this.BoardToReferee.GameForBoard.Player2WithOs;
 
 				foreach (eDirectionOfDiscConnection direction in Enum.GetValues(typeof(eDirectionOfDiscConnection)))
 				{
@@ -91,8 +92,8 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 
 					if (hasWinner)
 					{
-						this.updateWinner(this.LastPlayerToMove);
-						MessageCreator.GameResultsMessageForWonGameByPlay = this.WinnerOfLastGame.PlayerID;
+						this.updateWinner(PlayerToWinInCaseOfQuit);
+						MessageCreator.GameResultsMessageForWonGameByPlay = Referee.WinnerOfLastGame.PlayerID;
 
 						break;
 					}
@@ -101,8 +102,8 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			else
 			{
 				hasWinner = true;
-				this.updateWinner(this.LastPlayerToMove);
-				MessageCreator.GameResultsMessageForWonGameByQuit = this.WinnerOfLastGame.PlayerID;
+				this.updateWinner(PlayerToWinInCaseOfQuit);
+				MessageCreator.GameResultsMessageForWonGameByQuit = Referee.PlayerToWinInCaseOfQuit.PlayerID;
 			}
 
 			return hasWinner;
@@ -113,11 +114,13 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 			return this.BoardToReferee.GameForBoard.GameUserInterfaceAdmin.IsEscapeKeyOn;
 		}
 
-		public eBoardState CalculateBoardState(BoardCell i_LastDiscPlayed)
+		public eBoardState CalculateBoardState()
 		{
-			if (this.IsGameFinished(i_LastDiscPlayed))
+			BoardCell lastDiscPlayed = Game.LastMovePlayed;
+
+			if (this.IsGameFinished(lastDiscPlayed))
 			{
-				this.BoardToReferee.BoardState = this.IsGameDrawn(i_LastDiscPlayed)
+				this.BoardToReferee.BoardState = this.IsGameDrawn(lastDiscPlayed)
 													? eBoardState.FinishedInDraw
 													: this.isGameWonByQuit()
 														? eBoardState.FinishedInWinByQuit
@@ -130,7 +133,7 @@ namespace C21_Ex02_Matan_304826811.GameLogic
 		private void updateWinner(Player i_Winner)
 		{
 			this.BoardToReferee.BoardState = eBoardState.FinishedInWinByBoard;
-			this.WinnerOfLastGame = i_Winner;
+			WinnerOfLastGame = i_Winner;
 		}
 
 		private bool isWinningConnection(BoardCell i_FocalBoardCell, eDirectionOfDiscConnection i_DirectionOfConnection)

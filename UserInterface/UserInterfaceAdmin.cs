@@ -61,13 +61,18 @@ namespace C21_Ex02_Matan_304826811.UserInterface
 			if (this.IsEscapeKeyOn)
 			{
 				// TODO
+				this.MyGameLogicUnit.GameBoard.BoardReferee.CalculateBoardState();
+				this.MyMessageCreator.UpdateStatusOfPointsAndPrepareMessage();
+
 				if (!this.isUserAbandoningGame())
 				{
 					this.checkWhyPlayerQuitGame(this.PhaseOfUserInterface);
 				}
-
-				this.MyInputOutputHandler.SayGoodbye(this.PhaseOfUserInterface);
-				this.PhaseOfUserInterface = ePhaseOfUserInterface.Terminated;
+				else
+				{
+					this.MyInputOutputHandler.SayGoodbye(this.PhaseOfUserInterface);
+					this.PhaseOfUserInterface = ePhaseOfUserInterface.Terminated;
+				}
 			}
 
 			return this.IsEscapeKeyOn;

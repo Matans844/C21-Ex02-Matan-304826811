@@ -87,8 +87,6 @@ namespace C21_Ex02_Matan_304826811.Controller
 
 		public void DeclareGameResult(eBoardState i_FinalGameBoardState)
 		{
-			Console.WriteLine();
-
 			if (i_FinalGameBoardState == eBoardState.FinishedInWinByBoard)
 			{
 				Console.WriteLine(MessageCreator.GameResultsMessageForWonGameByPlay);
@@ -108,6 +106,8 @@ namespace C21_Ex02_Matan_304826811.Controller
 			if (i_ResponseFromUser.ToUpper() == k_QuitKey)
 			{
 				this.GameUserInterfaceAdmin.IsEscapeKeyOn = true;
+
+				//TODO
 
 				if (this.GameUserInterfaceAdmin.IsPlayerQuittingGame())
 				{
@@ -145,10 +145,8 @@ namespace C21_Ex02_Matan_304826811.Controller
 					Console.Write(i_PromptToUser);
 				}
 			}
-			else
-			{
-				int hello = 1;
-			}
+
+			//TODO
 
 			responseFromUser = Console.ReadLine();
 
